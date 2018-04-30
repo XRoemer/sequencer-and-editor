@@ -1,7 +1,9 @@
 # Sequencer and (Midi) Editor
 
 Uses nw.js for the editor. nw can be downloaded from here:
+
 https://nwjs.io/
+
 It's preferable to use the sdk version to see the commands exchanged between pd and nw.
 Console can be opened by F12.
 
