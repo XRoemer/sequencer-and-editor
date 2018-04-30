@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>sequencer</title>
+
+    <link rel="stylesheet" href="gui/styles.css">
+
+    <script>
+      var log = console.log
+      var dir = console.dir
+    </script>
+
+    <script type="text/javascript" src='init/variables.js'></script>
+    <script type="text/javascript" src='init/init.js'></script>
+    <script type="text/javascript" src='tools.js'></script>
+
+    <script type="text/javascript" src='window_handling.js'></script>
+    <script type="text/javascript" src='items.js'></script>
+    <!-- <script type="text/javascript" src='Notes.js'></script> -->
+    <!-- <script type="text/javascript" src='menu/menu.js'></script> -->
+
+    <script type="text/javascript" src='gui/gui_elements.js'></script>
+    <script type="text/javascript" src='gui/Pointer.js'></script>
+    <script type="text/javascript" src='gui/create_ctrl.js'></script>
+    <script type="text/javascript" src='gui/player.js'></script>
+    <script type="text/javascript" src='midi/create_midi_dialog.js'></script>
+
+
+  </head>
+
+  <body style="margin:0; padding:0; font-family:verdana;" onload='init()' >
+
+    <!-- <script>
+      create_menu()
+    </script> -->
+
+    <div id="ctrl" class="ctrl">
+      <canvas id="canvas_ctrl" class="cnv_ctrl"></canvas>
+    </div>
+
+    <div id="player_div" class="player">
+      <canvas id="player_bg" class="player_bg"></canvas>
+    </div>
+
+    <div id="seq_container" class="seq_cont">
+      <div    id="top_left_div" class="top_left"><canvas id="top_left" class="top_left_cnv"></canvas></div>
+      <div    id="div_scale_x"  class="scale scaleX"> <canvas id="scale_x_bg"></canvas> </div>
+      <div    id="div_scale_y"  class="scale scaleY"> <canvas id="scale_y_bg"></canvas> </div>
+      <canvas id="canvas_bg"    class="seq"></canvas>
+      <div    id="sequencer_bg" class="seq"></div>
+      <div    id="pointer_div"      class="seq pointer"></div>
+      <div    id="loop_bounds_div"  class="seq pointer loop_bounds"></div>
+      <div    id="sequencer"    class="seq"> <canvas id="seq_div_extend"></canvas> </div>
+    </div>
+
+  </body>
+</html>

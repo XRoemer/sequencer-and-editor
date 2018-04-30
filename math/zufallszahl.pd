@@ -1,0 +1,59 @@
+#N canvas 666 393 527 553 10;
+#X obj 169 82 cnv 15 124 71 empty empty Zufallszahl 20 12 0 10 -225280
+-66577 0;
+#X floatatom 198 315 5 0 0 0 - - -, f 5;
+#X obj 247 214 metro;
+#X obj 176 137 tgl 15 0 empty empty metro 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 239 139 nbx 4 14 20 1e+037 0 1 empty empty empty 0 -8 0 11 -262144
+-1 -1 440 256 0;
+#X obj 198 248 random 100;
+#X obj 198 336 <;
+#X floatatom 198 358 5 0 0 0 - - -, f 5;
+#X obj 235 114 nbx 4 14 0 100 0 1 empty empty % 0 -8 0 11 -262144 -1
+-1 100 256 0;
+#X obj 121 306 random 100;
+#X obj 177 116 nbx 4 14 0 100 0 1 empty empty Umfang 0 -8 0 11 -262144
+-1 -1 17 256 0;
+#X obj 198 270 t b f;
+#X obj 198 410 outlet;
+#X obj 121 386 spigot;
+#X obj 121 412 outlet;
+#X obj 343 41 inlet bang;
+#X obj 199 214 spigot;
+#X obj 262 41 inlet geschw;
+#X obj 175 41 inlet prozent;
+#X floatatom 78 400 5 0 0 0 - - -, f 5;
+#X obj 233 190 == 0;
+#X obj 198 193 t b;
+#X obj 130 88 - 1;
+#X obj 62 41 inlet list_length;
+#X obj 335 160 loadbang;
+#X msg 335 182 1;
+#X connect 1 0 6 0;
+#X connect 2 0 5 0;
+#X connect 3 0 2 0;
+#X connect 3 0 20 0;
+#X connect 4 0 2 1;
+#X connect 5 0 11 0;
+#X connect 6 0 7 0;
+#X connect 7 0 12 0;
+#X connect 7 0 13 1;
+#X connect 8 0 6 1;
+#X connect 9 0 13 0;
+#X connect 10 0 9 1;
+#X connect 11 0 9 0;
+#X connect 11 1 1 0;
+#X connect 13 0 14 0;
+#X connect 13 0 19 0;
+#X connect 15 0 21 0;
+#X connect 16 0 5 0;
+#X connect 17 0 4 0;
+#X connect 18 0 8 0;
+#X connect 20 0 16 1;
+#X connect 21 0 16 0;
+#X connect 22 0 10 0;
+#X connect 23 0 22 0;
+#X connect 24 0 25 0;
+#X connect 25 0 16 1;
+#X coords 0 0 1 1 128 79 0;

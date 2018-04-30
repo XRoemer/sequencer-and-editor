@@ -1,0 +1,15 @@
+#N canvas 2609 143 568 475 10;
+#X obj 68 264 pd_scopes;
+#X obj 231 43 r msg;
+#X msg 312 108 open;
+#X obj 93 45 adc~ 1 2 3 4 5;
+#X obj 456 333 loadbang;
+#X msg 456 355 \; pd dsp 1;
+#X connect 1 0 0 5;
+#X connect 2 0 0 5;
+#X connect 3 0 0 0;
+#X connect 3 1 0 1;
+#X connect 3 2 0 2;
+#X connect 3 3 0 3;
+#X connect 3 4 0 4;
+#X connect 4 0 5 0;

@@ -1,0 +1,26 @@
+#N canvas 774 437 457 428 10;
+#X obj 100 100 cnv 15 103 18 empty empty empty 20 12 0 14 -233017 -66577
+0;
+#X obj 146 213 +;
+#X msg 146 131 1;
+#X floatatom 102 102 5 0 0 0 - #0-wert_in #0-wert_aus, f 5;
+#X msg 176 153 -1;
+#X obj 143 316 outlet;
+#X obj 144 103 bng 12 250 50 0 \$0-qweqwe \$0-asdasd +1 15 7 0 10 -262144
+-1 -1;
+#X obj 174 103 bng 12 250 50 0 \$0-_ertert \$0-_dfgdfg -1 15 7 0 10
+-262144 -1 -1;
+#X obj 101 12 inlet;
+#X obj 101 34 s \$0-wert_in;
+#X obj 143 293 r \$0-wert_aus;
+#X obj 146 236 s \$0-wert_in;
+#X obj 169 189 r \$0-wert_aus;
+#X connect 1 0 11 0;
+#X connect 2 0 1 0;
+#X connect 4 0 1 0;
+#X connect 6 0 2 0;
+#X connect 7 0 4 0;
+#X connect 8 0 9 0;
+#X connect 10 0 5 0;
+#X connect 12 0 1 1;
+#X coords 0 -1 1 1 103 18 2 100 100;

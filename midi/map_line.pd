@@ -1,0 +1,55 @@
+#N canvas 1054 79 519 610 10;
+#X obj 143 250 cnv 14 188 14 empty \$0-cnv empty 20 12 0 14 -233017
+-66577 0;
+#X obj 171 19 inlet;
+#X obj 171 77 route;
+#X floatatom 365 96 5 0 0 0 - - -, f 5;
+#X obj 365 74 float \$1;
+#X msg 296 206 -1;
+#X obj 191 221 +;
+#X obj 171 250 nbx 3 14 -1e+037 1e+037 0 0 empty empty orig -27 5 0
+10 -262144 -1 -1 36 256 0;
+#X obj 231 250 nbx 3 14 0 200 0 0 empty empty map -21 5 0 10 -262144
+-1 -1 179 256 0;
+#X obj 295 250 nbx 3 14 -1 200 0 0 empty empty free -28 5 0 10 -262144
+-1 -1 -1 256 0;
+#X obj 259 192 f;
+#X obj 318 489 outlet;
+#X obj 216 316 f;
+#X obj 171 114 route orig nr plus clear get;
+#X obj 318 435 pack f f;
+#X msg 318 457 \$2 \$1;
+#X obj 280 316 f;
+#X obj 280 342 moses 0;
+#X obj 280 367 t b;
+#X obj 171 41 route init;
+#X connect 1 0 19 0;
+#X connect 2 0 13 0;
+#X connect 3 0 2 1;
+#X connect 3 0 14 1;
+#X connect 4 0 3 0;
+#X connect 5 0 9 0;
+#X connect 6 0 8 0;
+#X connect 8 0 12 1;
+#X connect 9 0 16 1;
+#X connect 10 0 8 0;
+#X connect 12 0 14 0;
+#X connect 13 0 7 0;
+#X connect 13 0 8 0;
+#X connect 13 0 10 1;
+#X connect 13 0 6 1;
+#X connect 13 1 8 0;
+#X connect 13 2 6 0;
+#X connect 13 3 5 0;
+#X connect 13 3 10 0;
+#X connect 13 4 16 0;
+#X connect 14 0 15 0;
+#X connect 15 0 11 0;
+#X connect 16 0 17 0;
+#X connect 17 0 18 0;
+#X connect 17 1 14 0;
+#X connect 18 0 12 0;
+#X connect 19 0 4 0;
+#X connect 19 0 5 0;
+#X connect 19 1 2 0;
+#X coords 0 -1 1 1 188 14 2 143 250;

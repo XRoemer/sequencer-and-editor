@@ -1,0 +1,40 @@
+#N struct 1663-col_0 float x float y float col;
+#N canvas 1434 252 486 375 10;
+#X obj 174 79 color_draw;
+#X obj 111 308 outlet;
+#X floatatom 177 80 3 0 255 1 red - -, f 3;
+#X floatatom 177 96 3 0 255 1 green - -, f 3;
+#X floatatom 177 112 3 0 255 1 blue - -, f 3;
+#X obj 230 82 hsl 128 12 1 255 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 230 98 hsl 128 12 1 255 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 230 114 hsl 128 12 1 255 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 116 253 pack f f f, f 22;
+#X obj 156 190 t b f;
+#X obj 201 191 t b f;
+#X obj 117 228 f;
+#X obj 177 11 inlet;
+#X obj 177 33 unpack f f f;
+#X connect 2 0 11 0;
+#X connect 3 0 9 0;
+#X connect 4 0 10 0;
+#X connect 5 0 2 0;
+#X connect 6 0 3 0;
+#X connect 7 0 4 0;
+#X connect 8 0 0 0;
+#X connect 8 0 1 0;
+#X connect 9 0 11 0;
+#X connect 9 1 8 1;
+#X connect 10 0 11 0;
+#X connect 10 1 8 2;
+#X connect 11 0 8 0;
+#X connect 12 0 13 0;
+#X connect 13 0 2 0;
+#X connect 13 0 5 0;
+#X connect 13 1 3 0;
+#X connect 13 1 6 0;
+#X connect 13 2 4 0;
+#X connect 13 2 7 0;
+#X coords 0 -1 1 1 192 50 2 174 79;

@@ -1,0 +1,101 @@
+.ctrl {
+  z-index: 40;
+  user-select: none;
+  position:fixed;
+  top:0px;
+  margin:0px;
+  width: 100%;
+}
+.cnv_ctrl {
+  width:1000px;
+  height:50px;
+}
+
+.player {
+  top:50px;
+  height:30px;
+  position: fixed;
+  z-index: 40;
+}
+.player_bg {
+  height:30px;
+  width: 100%;
+}
+
+.seq_cont {
+  position:absolute;
+  top:30px;
+}
+
+.seq {
+  top:70px;
+  position:absolute;
+  z-index: 1;
+  left:40px;
+  opacity:0.5;
+}
+#sequencer {
+  opacity: 1;
+}
+
+.pointer {
+  z-index: 15;
+  opacity:1;
+}
+.loop_bounds {
+  z-index: 45;
+  opacity:0.65;
+}
+
+.scale {
+  user-select: none;
+  z-index: 10;
+  position:absolute;
+}
+.scaleY {
+  top:70px;
+  height:80px;
+  z-index: 20;
+}
+.scaleX {
+  top:50px;
+  left:40px;
+}
+.top_left {
+  width:40px;
+  height:20px;
+  z-index: 25;
+  position:absolute;
+  top:50px;
+}
+.top_left_cnv {
+  width:40px;
+  height:20px;
+  z-index: 25;
+  position:absolute;
+  top:0px;
+}
+
+
+.player_svg {
+  transition: 100ms;
+  transition-timing-function: ease-in-out;
+  -webkit-transition: 100ms;
+  -webkit-transition-timing-function: ease-in-out;
+}
+.player_svg{
+  fill: rgb(128,0,64);
+  stroke: black;
+}
+.player_svg:hover{
+  stroke: orange;
+}
+.player_click {
+  transition: 100ms;
+  transition-timing-function: ease-in-out;
+  -webkit-transition: 100ms;
+  -webkit-transition-timing-function: ease-in-out;
+}
+.player_click:active{
+  fill: orange;
+}
