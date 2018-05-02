@@ -21,7 +21,7 @@ shift + wheel: scroll x-axis
  
 ctrl + click / doubleclick: set item
 
-![alt tag](gui/sequencer.png)
+![alt tag](gui/sequencer.jpg)
 
 
 
