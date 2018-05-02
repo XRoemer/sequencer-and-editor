@@ -56,6 +56,12 @@ class Player {
     btn.addEventListener("click", e => {this.btn_triggered('loop_bounds')});
     player_div.appendChild(btn)
 
+    x += xx + xx
+    var btn = create_play_btn(x, h, 300 ,300, w, scroll_btn_str,'scroll_window','player_svg')
+    btn.setAttribute("transform", "translate(-135 -135) scale(0.1)");
+    btn.addEventListener("click", e => {this.btn_triggered('scroll_window')});
+    player_div.appendChild(btn)
+
     // HIDE Button
     var btn = create_play_btn(2,-4, 300 ,300, 1, eject_btn_str,'hide','player_svg player_click')
     btn.setAttribute("transform", attr);
@@ -123,6 +129,12 @@ class Player {
     else if(type == "hide") {
       //toggle_player()
       toggle_ctrl()
+    }
+
+    else if(type == "scroll_window") {
+      pointer.scroll_window = !pointer.scroll_window
+      if (pointer.scroll_window) {this.set_col_active(type)}
+      else {this.set_col_inactive(type)}
     }
   }
 }

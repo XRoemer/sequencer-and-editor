@@ -3,6 +3,7 @@ window.onkeydown = get_key;
 window.onkeyup = end_key;
 window.onmousemove = window_mousemove;
 window.onmouseup = window_mouseup;
+window.onwheel = window_scroll;
 
 var win = gui.Window.get()
 
@@ -51,6 +52,19 @@ function window_mouseup(e) {
   if (loop_bound_left_clicked || loop_bound_right_clicked) {
     loop_bound_left_clicked = false
     loop_bound_right_clicked = false
+  }
+}
+
+function window_scroll(e) {
+  if(ctrl_pressed) {
+    var scrollX_old = window.scrollX
+    var rel = win_w / scrollX_old
+    win_w += e.deltaY
+    win_w = Math.max(600,win_w)
+    var scrollX_new = win_w / rel
+    scale_seqgui()
+    window.scrollTo(scrollX_new, window.srollY)
+    send_data('settings win_size_w ' + win_w, window.win_nr)
   }
 }
 

@@ -10,6 +10,7 @@ class Pointer {
     this.scale_x_pos = 0
     this.loop_start = null
     this.loop_end = null
+    this.scroll_window = true
   }
 
   create_pointer(){
@@ -77,10 +78,12 @@ class Pointer {
     p.set_position(p.pointer_x)
     var x_scroll = p.pointer_x - window_w / 2
 
-    if (x_scroll > window.scrollX ) {
-      window.scrollTo(x_scroll, window.scrollY)
-    } else if(p.pointer_x < window.scrollX){
-      window.scrollTo(p.pointer_x, window.scrollY)
+    if (this.scroll_window) {
+      if (x_scroll > window.scrollX ) {
+        window.scrollTo(x_scroll, window.scrollY)
+      } else if(p.pointer_x < window.scrollX){
+        window.scrollTo(p.pointer_x, window.scrollY)
+      }
     }
   }
 

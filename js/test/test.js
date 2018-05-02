@@ -1,20 +1,20 @@
 function test() {
 
-
-
-
-  // var cont = window.document.getElementById('container')
-  // cont.style.zoom="80%"
   try {
 
 
-    var btn = hide
-
-    var attr =  "translate(-135 -135) scale(0.1) rotate(180)"
-    hide.setAttribute("transform", attr);
-    log(hide)
-
+    log(items_by_row[0][0])
+    log(items_by_row[0].length)
+    // for (var i = 0; i < items_by_row[row].length ; i++) {
+    //   log
+    // }
 
   }
   catch(e){log(e)}
+}
+
+
+
+function my_fkt(id) {
+  log('toggle',id)
 }

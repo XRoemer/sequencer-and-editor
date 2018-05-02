@@ -211,6 +211,7 @@ function create_h_lines(){
     // to get sharp lines, xy-values must not be plain integers
     y = Math.trunc(y) + 0.5
     create_stroke(0,y,win_w,y,0.3,'rgb(0, 0, 0)')
+    //var stroke = create_stroke_svg(x2, 0, stroke_w, win_h, stroke_w,'rgb(0, 0, 0)',id)
   }
 }
 
@@ -239,11 +240,11 @@ function set_quantisation(){
   for (i = 0; i < amount_bars * micro  ; i++) {
     x = i * elem_w
     // to get sharp lines, xy-values must not be plain integers
-    x = Math.trunc(x) + 0.5
+    x = Math.trunc(x) //+ 0.5
 
-    stroke_w = 1
+    var stroke_w = 1
     for (j = 0; j < q ; j++) {
-      var x2 = Math.trunc(x + j * item_w + item_w) + 0.5
+      var x2 = Math.trunc(x + j * item_w + item_w) //+ 0.5
       var id = 'q' + i.toString()
       var stroke = create_stroke_svg(x2, 0, stroke_w, win_h, stroke_w,'rgb(255, 0, 0)',id)
       div.appendChild(stroke)
@@ -298,27 +299,26 @@ function create_label_scale_y (x,y,txt,font_size, id) {
 function create_scale_x(){
   var c = document.getElementById("div_scale_x");
   for (i = 0; i < amount_bars * micro ; i++) {
-    x = i * elem_w
-    // to get sharp lines, xy-values must not be plain integers
+    var x = i * elem_w
     x = Math.trunc(x)
     if (i % micro === 0) {
-      stroke_w = 2
+      var stroke_w = 2
       stroke_h = 10
-      fs = 12
-      hight = 20 - fs
+      var fs = 12
+      var hight = 20 - fs
     }
     else {
-      stroke_w = 0.5
-      stroke_h = 15
-      fs = 10
-      hight = 20 - fs
+      var stroke_w = 0.5
+      var stroke_h = 15
+      var fs = 10
+      var hight = 20 - fs
     }
-    var str = create_stroke_svg(x, hight, stroke_w, fs, stroke_w, 'black', 'cnv_scale_x')
+    var str = create_stroke_svg(x, hight, stroke_w, fs, stroke_w, 'black', 'cnv_scale_x' + i)
     c.appendChild(str)
-    mic = i % micro + 1
-    bar = Math.trunc(i / micro) + 1
-    txt = bar.toString() + '.' + mic.toString()
-    lbl = create_label (x + 4, hight - 1 ,txt, fs )
+    var mic = i % micro + 1
+    var bar = Math.trunc(i / micro) + 1
+    var txt = bar.toString() + '.' + mic.toString()
+    var lbl = create_label (x + 4, hight - 1 ,txt, fs , 'scale_lbl' + i)
     c.appendChild(lbl)
   }
 }
@@ -330,8 +330,171 @@ function get_scroll(){
  }
  else{
   var sx, sy, d= document, r= d.documentElement, b= d.body;
-  sx= r.scrollLeft || b.scrollLeft || 0;
-  sy= r.scrollTop || b.scrollTop || 0;
+  var sx = r.scrollLeft || b.scrollLeft || 0;
+  var sy = r.scrollTop || b.scrollTop || 0;
   return [sx, sy];
  }
+}
+
+
+function scale_seqgui(dx) {
+
+  try {
+    set_widths_and_heights()
+
+    var c=document.getElementById("canvas_bg");
+    c.height = win_h + 1
+    c.width = win_w + 2
+    c=document.getElementById("canvas_ctrl");
+    c.style.width = win_w + 42
+    var ctx = c.getContext('2d')
+    ctx.fillStyle = 'rgba(245, 245, 215, 1)'
+    ctx.fillRect(0,0, c.width, c.height)
+    c=document.getElementById("sequencer_bg");
+    c.height = win_h + 1
+    c.width = win_w + 2
+    c=document.getElementById("seq_div_extend");
+    c.height = win_h + 1
+    c.width = win_w + 2
+    c=document.getElementById("sequencer");
+    c.height = win_h + 1
+    c.width = win_w + 2
+
+
+    c=document.getElementById("div_scale_y");
+    c.style.height = win_h
+    c=document.getElementById("div_scale_x");
+    c.style.width = win_w +2
+
+    c=document.getElementById("scale_x_bg");
+    c.width = win_w + 2
+    ctx = c.getContext('2d')
+    ctx.fillStyle = 'rgba(220, 215, 215, 1)'
+    ctx.fillRect(0,0, c.width, c.height)
+
+    c=document.getElementById("scale_y_bg");
+    c.height = win_h
+    c.width = 40
+    ctx = c.getContext('2d')
+    ctx.fillStyle = 'rgba(220, 215, 215, 1)'
+    ctx.fillRect(0,0, c.width, c.height)
+
+    c=document.getElementById("top_left");
+    ctx = c.getContext('2d')
+    ctx.fillStyle = 'rgba(220, 215, 215, 1)'
+    ctx.fillRect(0,0, c.width, c.height)
+
+    c=document.getElementById("player_bg");
+    c.width = win_w + 42
+    ctx = c.getContext('2d')
+    ctx.fillStyle = 'rgba(160,140, 140, 1)'
+    ctx.fillRect(0,0, c.width, c.height)
+
+    create_h_lines_bg()
+    create_h_lines()
+    create_v_lines()
+    scale_sequencer_bg(dx)
+
+  } catch(err) {
+    log(err)
+  }
+}
+
+
+function scale_sequencer_bg(dx) {
+  try {
+    scale_quantisation(dx)
+    scale_scale_x()
+    scale_items()
+  }
+  catch(e){log(e)}
+
+}
+
+function scale_quantisation(dx){
+
+  if (quant < 8) return
+  var q = quant / 4 - 1
+  q = use_triplets ? q + q/2 : q
+
+  for (i = 0; i < amount_bars * micro  ; i++) {
+    var x = i * elem_w
+    x = Math.trunc(x)
+    var stroke_w = 1
+    for (j = 0; j < q ; j++) {
+      var x2 = Math.trunc(x + j * item_w + item_w)
+      var id = 'q' + i.toString()
+      var child = sequencer_bg.children[id]
+      child.style.left = x2
+    }
+  }
+}
+
+function scale_scale_x(){
+  for (i = 0; i < amount_bars * micro ; i++) {
+    var x = i * elem_w
+    x = Math.trunc(x)
+    if (i % micro === 0) {
+      var stroke_w = 2
+      var stroke_h = 10
+      var fs = 12
+      var hight = 20 - fs
+    }
+    else {
+      var stroke_w = 0.5
+      var stroke_h = 15
+      var fs = 10
+      var hight = 20 - fs
+    }
+    div_scale_x.children['cnv_scale_x' + i].style.left = x.toString() + 'px'
+    div_scale_x.children['scale_lbl' + i ].style.left = x + 4
+  }
+}
+
+
+function scale_items() {
+
+  try{
+
+    for (var i = 0; i < val_array.length ; i++) {
+
+      var val = val_array[i]
+      var rect1 = items[i]
+
+      var id = Number(val[0])
+      var row = Number(val[1])
+      var bar = Number(val[2]) - 1
+      if (row > amount_rows - 1 || bar > amount_bars - 1) continue
+      var micro = Number(val[3]) - 1
+      var cent = Number(val[4])
+      var len_bar = Number(val[5])
+      var len_micro = Number(val[6])
+      var len_cent = Number(val[7])
+
+      var x = midi2posX(bar, micro, cent)
+      var w = midi2posX(len_bar, len_micro, len_cent)
+
+      rect1.info.len_bar = len_bar
+      rect1.info.len_micro = len_micro
+      rect1.info.len_cent = len_cent
+      rect1.info.x = x
+      rect1.info.w = w
+      rect1.id = i
+      rect1.style.width = w
+      rect1.firstChild.style.width = w
+
+      rect1.style.left = x
+      items[i] = rect1
+
+      for (var j = 0; j < items_by_row[row].length ; j++) {
+        if (parseInt(items_by_row[row][j][2]) == id){
+          items_by_row[row][j][0] = x
+          items_by_row[row][j][1] = x + w
+        }
+      }
+
+
+    }
+  }
+  catch(e){log(e)}
 }

@@ -69,8 +69,6 @@ function set_items(val_array) {
     rect1.firstChild.style.fill = calc_color(vol)
     rect1.style.left = x
     rect1.style.top = y
-    rect1.my_x = 0
-    rect1.my_y = 0
     add_listeners(rect1)
 
 
@@ -298,8 +296,8 @@ function add_listeners_to_cnv(el) {
 
 function calc_color(vol) {
   if (vol < 64) {
-    var col1 = elem_cols[0]
-    var col2 = elem_cols[1]
+    var col1 = elem_cols[1]
+    var col2 = elem_cols[0]
   }
   else {
     var col1 = elem_cols[2]

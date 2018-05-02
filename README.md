@@ -10,7 +10,13 @@ Console can be opened by F12.
 Open sequencers_example.pd and follow the instructions. More information will be added soon.
 
 Works with Purr Data, tested on win7/win10, will work with pd vanilla soon.
+
+
+space: starts/stops playing
+ctrl + wheel: scale x-axis
+shift + wheel: scroll x-axis
  
+ctrl + click / doubleclick: set item
 
 ![alt tag](gui/sequencer.png)
 

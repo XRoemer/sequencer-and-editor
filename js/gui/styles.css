@@ -99,3 +99,17 @@
 .player_click:active{
   fill: orange;
 }
+/* .svg_button {
+  stroke: black;
+  fill: rgb(200,200,200);
+}
+.svg_button:active{
+  fill: orange;
+}
+.svg_toggle {
+  stroke: black;
+  fill: rgb(200,200,200);
+}
+/* .svg_button:active{
+  fill: orange;
+} */ */
