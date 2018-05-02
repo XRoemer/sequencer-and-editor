@@ -12,8 +12,11 @@ Open sequencers_example.pd and follow the instructions. More information will be
 Works with Purr Data, tested on win7/win10, will work with pd vanilla soon.
 
 
+
 space: starts/stops playing
+
 ctrl + wheel: scale x-axis
+
 shift + wheel: scroll x-axis
  
 ctrl + click / doubleclick: set item
