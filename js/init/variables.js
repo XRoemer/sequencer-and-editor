@@ -14,6 +14,11 @@ var win_w = 1600
 var window_h = 300
 var window_w = 650
 
+var ctrl_h = 50
+var scaleX_h = 20
+var scaleY_w = 40
+var player_h = 30
+
 var pointer_w = 3
 var pointer_col = [0,100,0,1]
 
@@ -44,5 +49,25 @@ alt_pressed = false
 loop_bound_left_clicked = false
 loop_bound_right_clicked = false
 
+seq_dragging = false
+seq_dragstart = [0,0]
+
 var log_receive = false
 var log_send = false
+
+
+function set_var(val) {
+  if (val.length > 1) {
+    name = val[0].trim()
+    if (name === 'elem_cols') {
+      elem_cols[Number(val[1])] = [Number(val[2]), Number(val[3]), Number(val[4])]
+    }
+    else if (name === 'win_size') {
+      win_w = Number(val[1])
+      win_h = Number(val[2])
+    }
+    else {
+      window[val[0]] = Number(val[1])
+      }
+    }
+  }

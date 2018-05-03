@@ -1,5 +1,5 @@
 #N struct text float x float y text t;
-#N canvas 1049 98 835 661 10;
+#N canvas 2874 164 835 707 10;
 #X obj 185 48 inlet memory;
 #X scalar text 424 510 \; \;;
 #N canvas 1174 63 497 726 get_items_in_micro 0;
@@ -228,7 +228,7 @@
 #X obj 614 365 sel 0;
 #X obj 468 108 route dollar_null size_change pointer;
 #X obj 614 341 t a;
-#N canvas 1420 400 324 563 calculate_position 0;
+#N canvas 3084 312 324 632 calculate_position 1;
 #X obj 79 29 inlet memory;
 #X obj 79 365 outlet pos;
 #N canvas 1444 529 356 336 micro2midi 0;
@@ -262,7 +262,7 @@
 #X obj 242 345 outlet stop;
 #X obj 192 117 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#N canvas 990 218 784 695 metro 0;
+#N canvas 2099 200 784 764 metro 1;
 #X obj 111 38 inlet start_stop;
 #X msg 114 262 stop;
 #X obj 113 316 delay;
@@ -340,7 +340,7 @@
 #X obj 326 591 outlet stop;
 #X msg 326 546 0;
 #X obj 111 172 sel 1 0 2 3;
-#N canvas 2751 409 810 449 positions 0;
+#N canvas 2343 438 810 472 positions 0;
 #X obj 41 44 inlet pointer_start;
 #X obj 201 44 inlet amount_bars;
 #X obj 317 44 inlet loop_start;
@@ -447,7 +447,7 @@
 #X restore 41 168 pd pointer_start_pos;
 #X floatatom 308 113 5 0 0 0 - - -, f 5;
 #X floatatom 265 114 5 0 0 0 - - -, f 5;
-#N canvas 1064 448 590 461 calc_cutoff_end 0;
+#N canvas 2898 421 590 507 calc_cutoff_end 0;
 #X obj 145 38 inlet midi;
 #X obj 303 39 inlet ms_bpm;
 #X floatatom 241 245 5 0 0 0 - - -, f 5;
@@ -604,7 +604,7 @@
 #X connect 13 1 8 0;
 #X connect 15 0 14 0;
 #X restore 311 168 pd loop_start_pos;
-#N canvas 632 511 487 439 pointer_end_pos 0;
+#N canvas 2218 487 487 462 pointer_end_pos 0;
 #X obj 88 15 inlet trigger;
 #X obj 286 15 inlet micro;
 #X obj 88 236 outlet text_seq;
@@ -695,7 +695,7 @@
 #X restore 417 210 pd positions;
 #X obj 616 166 hradio 15 0 0 2 empty empty empty 0 -8 0 10 -262144
 -1 -1 1;
-#N canvas 1994 197 795 709 end_pos 0;
+#N canvas 2224 215 795 755 end_pos 1;
 #X obj 336 150 unpack f f f;
 #X floatatom 336 177 5 0 0 0 - - -, f 5;
 #X floatatom 380 177 5 0 0 0 - - -, f 5;
@@ -748,29 +748,16 @@
 #X obj 374 521 list;
 #X obj 374 546 s \$0-start-pos;
 #X obj 509 475 t b b;
-#N canvas 204 655 450 323 check_is_looping 0;
-#X obj 58 37 inlet pos;
-#X obj 244 73 r \$0-loop_pos;
-#X msg 143 86 \$1;
-#X obj 58 87 spigot;
-#X obj 106 85 tgl 15 0 empty \$0-loop_on loop_on -10 -10 0 10 -262144
+#X floatatom 467 453 5 0 0 0 - - -, f 5;
+#X obj 635 80 inlet stop;
+#X obj 635 102 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 602 353 spigot;
+#X obj 650 351 tgl 15 0 empty \$0-loop_on loop_on -10 -10 0 10 -262144
 -1 -1 1 1;
-#X obj 222 167 list;
-#X obj 222 192 s \$0-start-pos;
-#X obj 85 171 ==;
-#X obj 85 193 sel 1;
-#X obj 169 209 print;
-#X connect 0 0 3 0;
-#X connect 1 0 2 0;
-#X connect 1 0 5 1;
-#X connect 2 0 7 1;
-#X connect 3 0 7 0;
-#X connect 4 0 3 1;
-#X connect 5 0 6 0;
-#X connect 5 0 9 0;
-#X connect 7 0 8 0;
-#X connect 8 0 5 0;
-#X restore 177 148 pd check_is_looping;
+#X msg 603 376 1;
+#X obj 603 398 t b f;
+#X msg 605 480 0;
 #X connect 0 0 1 0;
 #X connect 0 1 2 0;
 #X connect 0 2 3 0;
@@ -825,6 +812,7 @@
 #X connect 37 0 8 0;
 #X connect 37 1 38 0;
 #X connect 38 0 6 0;
+#X connect 38 0 50 0;
 #X connect 39 0 4 0;
 #X connect 40 0 39 0;
 #X connect 41 0 9 0;
@@ -834,9 +822,17 @@
 #X connect 45 0 15 0;
 #X connect 46 0 47 1;
 #X connect 47 0 48 0;
-#X connect 49 0 41 0;
 #X connect 49 0 27 0;
-#X connect 49 1 47 0;
+#X connect 49 0 47 0;
+#X connect 49 1 57 0;
+#X connect 51 0 52 0;
+#X connect 52 0 53 0;
+#X connect 53 0 55 0;
+#X connect 54 0 53 1;
+#X connect 55 0 56 0;
+#X connect 56 0 5 0;
+#X connect 56 1 9 0;
+#X connect 57 0 41 0;
 #X restore 125 459 pd end_pos;
 #X floatatom 514 187 5 0 0 2 micro #0-micro -, f 5;
 #X floatatom 432 187 5 0 0 2 bars #0-bars -, f 5;
@@ -851,7 +847,7 @@
 #X obj 417 119 route pointer_start loop_start loop_end loop_bounds
 loop;
 #X obj 145 562 pack f f f f f;
-#N canvas 1435 368 332 509 set_start_pos_bar 0;
+#N canvas 1488 372 332 532 set_start_pos_bar 0;
 #X obj 84 39 inlet trigger;
 #X floatatom 84 246 5 0 0 0 - - -, f 5;
 #X obj 84 139 list;
@@ -933,6 +929,7 @@ loop;
 #X connect 3 0 19 0;
 #X connect 3 0 32 1;
 #X connect 3 1 15 0;
+#X connect 3 1 19 1;
 #X connect 5 0 3 0;
 #X connect 6 0 7 0;
 #X connect 6 1 11 0;
@@ -951,7 +948,7 @@ loop;
 #X connect 19 0 2 0;
 #X connect 19 1 30 0;
 #X connect 19 2 31 0;
-#X connect 19 3 15 0;
+#X connect 19 3 14 0;
 #X connect 20 0 17 5;
 #X connect 21 0 17 1;
 #X connect 22 0 30 4;

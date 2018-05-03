@@ -23,21 +23,19 @@ function Rect() {
   rect.style.height="10px"
   svg.style.width="10px"
   svg.style.height="10px"
-  // svg.setAttributeNS(null, "box-shadow",  '-5px -5px 5px #888')
-  // svg.setAttributeNS(null, "filter", "url(#f1)")
   svg.appendChild(rect);
   return svg
 }
 
 
-function set_items(val_array) {
+function set_items(received_array) {
 
   clear_sequencer()
   var rect0 = new Rect()
 
-  for (var i = 0; i < val_array.length ; i++) {
+  for (var i = 0; i < received_array.length ; i++) {
     var rect1 = rect0.cloneNode(true)
-    var val = val_array[i]
+    var val = received_array[i]
 
     var id = Number(val[0])
     var row = Number(val[1])
@@ -79,13 +77,14 @@ function set_items(val_array) {
   }
 }
 
-function create_new_item(e){
+function create_new_item(e,x,y){
 
   var div = document.getElementById("sequencer");
   var bound = div.getBoundingClientRect()
-
-  var x = Math.trunc((e.clientX - bound.left) / item_w) * item_w
-  var y = Math.trunc((e.clientY - bound.top) / elem_h) * elem_h
+  if (x == null) {
+    var x = Math.trunc((e.clientX - bound.left) / item_w) * item_w
+    var y = Math.trunc((e.clientY - bound.top) / elem_h) * elem_h
+  }
 
   var midi_pos = posX2midi(x)
   var midi_len = posX2midi(item_w)
@@ -115,8 +114,6 @@ function create_new_item(e){
   rect.firstChild.style.fill = calc_color(vol)
   rect.style.left = x
   rect.style.top = y
-  rect.my_x = 0
-  rect.my_y = 0
   add_listeners(rect)
 
   items[id] = rect
@@ -131,16 +128,12 @@ function delete_item(){
   var it = items[selected_item]
   var del = 1
   var id = selected_item
-  log(selected_item)
   adjust_arrays({id,del})
   selected_item = null
   selected_item_se = null
   it.parentNode.removeChild(it)
 }
 
-function sortNumber(a,b) {
-    return Number(a) - (b);
-}
 
 function get_new_id(){
   if (items[0]) {
@@ -150,36 +143,6 @@ function get_new_id(){
   }
   else new_id = 0
   return new_id
-}
-
-function midi2posX(bar, micro, cent) {
-  var x = barlen * bar + miclen * micro + miclen/100 * cent
-  return x
-}
-
-function posX2midi(x) {
-  if (!use_quant){
-    var bar = Math.trunc(x / barlen) + 1
-    var micro = Math.trunc( (x % barlen) / miclen) + 1
-    var cent = Math.trunc( (x % miclen) / miclen * 100 )
-  } else {
-    var q = use_triplets ? quant + quant / 2 : quant
-    var div_mic = q / 4
-    var divisions = Math.round(x / item_w)
-
-    var bar = Math.trunc(divisions / q)
-    var micro = Math.trunc((divisions - bar * q) / div_mic)
-    var rest = divisions - bar * q - micro * div_mic
-    var cent = Math.round(rest * 100 / (q/4))
-
-    bar += 1
-    micro += 1
-    }
-  return {bar, micro, cent}
-}
-
-function posY2row(my){
-  return amount_rows - Math.trunc(my / elem_h) - 1
 }
 
 function insert_items_by_row(it) {
@@ -206,6 +169,9 @@ function add_listeners(el) {
         rect.style.stroke = 'red'
         selected_item = rect.id
         show_item_pos(rect)
+      }
+      if(alt_pressed && shift_pressed){
+	delete_item()
       }
       }, false);
   el.addEventListener("mouseout", function(e) {
@@ -294,29 +260,14 @@ function add_listeners_to_cnv(el) {
   }, false);
 }
 
-function calc_color(vol) {
-  if (vol < 64) {
-    var col1 = elem_cols[1]
-    var col2 = elem_cols[0]
-  }
-  else {
-    var col1 = elem_cols[2]
-    var col2 = elem_cols[1]
-  }
-  var fak = (vol % 64) / 63
-  var fak2 = 1 - fak
-  var r = Math.round(col1[0] * fak + col2[0] * fak2)
-  var g = Math.round(col1[1] * fak + col2[1] * fak2)
-  var b = Math.round(col1[2] * fak + col2[2] * fak2)
-  var col = 'rgba('+r.toString()+','+g.toString()+','+b.toString()+',1)'
-  return col
-}
-
 function get_div(ev) {
   if (ev.path[0].nodeName == 'svg') return ev.path[0]
   else return ev.path[1]
 }
 
+
+function active(){items[selected_item_se].style.stroke = 'red'}
+function inactive(){items[selected_item_se].style.stroke = 'black'}
 
 function search_for_close_items(mx, row) {
   //log({mx,row,items_by_row})
@@ -328,21 +279,26 @@ function search_for_close_items(mx, row) {
 
   for (var i = 0; i < items_by_row[row].length ; i++) {
     var it_pos = items_by_row[row][i]
-    if (it_pos[0] > mx && !post_found) {post = [it_pos[0] - mx, it_pos[2]]; post_found = true}
-    if (it_pos[1] < mx) {pre = [mx - it_pos[1], it_pos[2]]}
+    if (it_pos[0] > mx && !post_found) {
+    	post = [it_pos[0] - mx, it_pos[2]]
+    	post_found = true
+    	}
+    if (it_pos[1] < mx) {
+    	pre = [mx - it_pos[1], it_pos[2]]
+    	}
   }
   if (post && post[0] < 10) {
     document.getElementById('sequencer').style.cursor = "w-resize";
     if (selected_item_se) {
       if (selected_item_se != post[1]) {
-        items[selected_item_se].style.stroke = 'black'
+        inactive()
         selected_item_se = post[1]
-        items[selected_item_se].style.stroke = 'red'
+        active()
       }
     }
     else {
       selected_item_se = post[1]
-      items[selected_item_se].style.stroke = 'red'
+      active()
     }
     drag_end = false
     drag_start = true
@@ -351,14 +307,14 @@ function search_for_close_items(mx, row) {
     document.getElementById('sequencer').style.cursor = "col-resize"
     if (selected_item_se) {
       if (selected_item_se != pre[1]) {
-        items[selected_item_se].style.stroke = 'black'
+    	inactive()
         selected_item = pre[1]
-        items[selected_item_se].style.stroke = 'red'
+    	active()
       }
     }
     else {
       selected_item_se = pre[1]
-      items[selected_item_se].style.stroke = 'red'
+      active()
     }
     drag_end = true
     drag_start = false
@@ -368,43 +324,16 @@ function search_for_close_items(mx, row) {
     drag_end = false
     drag_start = false
     if (selected_item_se) {
-      items[selected_item_se].style.stroke = 'black'
-      selected_item_se = null
+    	inactive()
+    	selected_item_se = null
     }
   }
 }
 
-function show_mouse_pos(bar, micro, cent, row) {
-  var lbl = document.getElementById('mouse')
-  var p = '.'
-  var start = bar + p + micro + p + cent
-  row += 1
-  lbl.innerHTML = "row " + row + " pos " + start
-}
-
-function show_item_pos(el) {
-  var it = el.info
-  lbl = document.getElementById('item')
-  var p = '.'
-  var sp = ' '
-
-  if (it.cent < 10) {var c = '0' + it.cent.toString()}
-  else {var c = it.cent.toString()}
-  if (it.len_cent < 10) {var lc = '0' + it.len_cent.toString()}
-  else {var lc = it.len_cent.toString()}
-
-  var start = 'start ' + it.bar + p + it.micro + p + c + sp
-  var len = 'len ' + it.len_bar + p + it.len_micro + p + lc + sp
-  var vol = 'vol ' + it.vol
-  var row = 'row ' + (it.row + 1) + sp
-
-  lbl.innerHTML = row + start + len + vol
-}
-
 function drag_item(id,my,mx) {
   document.getElementById('sequencer').style.cursor = "move";
-  it = items[id]
-  mx = Math.min(mx, win_w - 1 )
+  var it = items[id]
+  var mx = Math.min(mx, win_w - 1 )
   drag_itemX(it,id,mx,dx)
   drag_itemY(it,id,my)
   show_item_pos(it)
@@ -542,7 +471,6 @@ function get_index_of_arr_el(row,id) {
   if(!items_by_row[row]){
     throw "error"
   }
-
   for (var i = 0; i < items_by_row[row].length ; i++) {
     if (items_by_row[row][i][2] == id) {
       return i
@@ -551,14 +479,13 @@ function get_index_of_arr_el(row,id) {
   throw "error"
 }
 
-sp = ' '
 function set_item_x(id,midipos){
-  send_data('memory change '+id+' pos '+midipos.bar+sp+midipos.micro+sp+midipos.cent, window.win_nr)
+  send_data(['memory change',id,'pos',midipos.bar,midipos.micro,midipos.cent].join(' '), window.win_nr)
 }
 function set_item_w(id,midilen){
   var bar = midilen.bar - 1
   var micro = midilen.micro - 1
-  send_data('memory change '+id+' len '+bar+sp+micro+sp+midilen.cent, window.win_nr)
+  send_data(['memory change',id,'len',bar,micro,midilen.cent].join(' '), window.win_nr)
 }
 function set_item_row(id,row){
   send_data('memory change '+id+' row '+row, window.win_nr)
@@ -573,6 +500,4 @@ function del_item(id){
 function set_item_vol(id){
   send_data('memory change '+id+' vol ' + vol, window.win_nr)
 }
-// out: move item x: change #id pos #bar #micro #cent
-// out: move item y: change #id row #row
-// out: new item: new #id #bar #micro #cent #barlen #microlen #centlen #vol
+

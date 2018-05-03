@@ -55,3 +55,30 @@ function clear_from_gui(){
   clear_sequencer()
   send_data('memory clear', window.win_nr)
 }
+
+function show_mouse_pos(bar, micro, cent, row) {
+	  var lbl = document.getElementById('mouse')
+	  var p = '.'
+	  var start = bar + p + micro + p + cent
+	  row += 1
+	  lbl.innerHTML = "row " + row + " pos " + start
+	}
+
+	function show_item_pos(el) {
+	  var it = el.info
+	  lbl = document.getElementById('item')
+	  var p = '.'
+	  var sp = ' '
+
+	  if (it.cent < 10) {var c = '0' + it.cent.toString()}
+	  else {var c = it.cent.toString()}
+	  if (it.len_cent < 10) {var lc = '0' + it.len_cent.toString()}
+	  else {var lc = it.len_cent.toString()}
+
+	  var start = 'start ' + it.bar + p + it.micro + p + c + sp
+	  var len = 'len ' + it.len_bar + p + it.len_micro + p + lc + sp
+	  var vol = 'vol ' + it.vol
+	  var row = 'row ' + (it.row + 1) + sp
+
+	  lbl.innerHTML = row + start + len + vol
+	}

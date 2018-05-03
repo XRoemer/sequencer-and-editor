@@ -2,12 +2,9 @@ function test() {
 
   try {
 
-
-    log(items_by_row[0][0])
-    log(items_by_row[0].length)
-    // for (var i = 0; i < items_by_row[row].length ; i++) {
-    //   log
-    // }
+    seq_div_extend.onmousemove = window_mousemove;
+    seq_div_extend.onmouseup = window_mouseup;
+    seq_div_extend.onwheel = window_scroll;
 
   }
   catch(e){log(e)}
@@ -17,4 +14,8 @@ function test() {
 
 function my_fkt(id) {
   log('toggle',id)
+}
+
+function myFunction(e){
+  log('hier', e)
 }

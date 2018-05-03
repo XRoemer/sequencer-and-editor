@@ -104,6 +104,8 @@ class Pointer {
     if (!type) {
       x += window.scrollX
     }
+    player.set_col_active('loop_bounds')
+    
     if (loop_bound_right_clicked || type == 'right') {
       var x = Math.min(x, win_w)
       var pos_left = Number(this.loop_border_left.style.left.replace('px',''))
@@ -143,6 +145,7 @@ class Pointer {
       if (!ctrl_pressed && !alt_pressed) {
         var pos = this.get_x_pos(this.scale_x_pos)
         this.set_position(pos.x)
+        player.set_col_inactive('loop_bounds')
         send_data('player pointer_start ' + this.scale_x_pos.bar + ' ' +
                 this.scale_x_pos.micro + ' ' + pos.cent, window.win_nr)
       } else {

@@ -71,8 +71,8 @@ function set_micro(e) {
   var data = 'settings micro ' + micro
   send_data(data, window.win_nr)
 }
-function resp_use_triplets() {
-  use_triplets = this.checked
+function resp_use_triplets(e) {
+  use_triplets = e.srcElement.parentElement.state
   set_widths_and_heights()
   set_quantisation()
   lbl = document.getElementById('quant')
@@ -81,8 +81,8 @@ function resp_use_triplets() {
 
 }
 
-function resp_use_quant() {
-  use_quant = this.checked
+function resp_use_quant(e) {
+  use_quant = e.srcElement.parentElement.state
 }
 function call_settings(e) {
   load_scripts_otf({fkt:'open_settings',scripts:['init/settings'],args:e})

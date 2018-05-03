@@ -13,13 +13,24 @@ Works with Purr Data, tested on win7/win10, will work with pd vanilla soon.
 
 
 
+
 space: starts/stops playing
+
+ctrl + click / doubleclick: set item
+
+mmb on item: delete item
+
+ctrl + wheel on item: set volume
+
+shift + ctrl + mousemove: draw mode
+
+alt + shift + mousemove: erase mode
 
 ctrl + wheel: scale x-axis
 
 shift + wheel: scroll x-axis
  
-ctrl + click / doubleclick: set item
+
 
 ![alt tag](gui/sequencer.jpg)
 

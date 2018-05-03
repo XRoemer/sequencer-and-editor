@@ -8,7 +8,13 @@ class Player {
     this.use_bounds = false
     this.loop_on = false
   }
-
+  
+  init() {
+    if(pointer.scroll_window){this.set_col_active('scroll_window')}
+    if(this.use_bounds){this.set_col_active('use_bounds')}
+    if(this.loop_on){this.set_col_active('loop')}
+    
+  }
 
 
   create_player() {
@@ -52,13 +58,13 @@ class Player {
 
     x += xx
     var btn = create_play_btn(x, h, 300 ,300, w, bounds_btn_str,'loop_bounds','player_svg')
-    btn.setAttribute("transform", "translate(-135 -135) scale(0.1)");
+    btn.setAttribute("transform", attr);
     btn.addEventListener("click", e => {this.btn_triggered('loop_bounds')});
     player_div.appendChild(btn)
 
     x += xx + xx
     var btn = create_play_btn(x, h, 300 ,300, w, scroll_btn_str,'scroll_window','player_svg')
-    btn.setAttribute("transform", "translate(-135 -135) scale(0.1)");
+    btn.setAttribute("transform", attr);
     btn.addEventListener("click", e => {this.btn_triggered('scroll_window')});
     player_div.appendChild(btn)
 
@@ -116,14 +122,12 @@ class Player {
       send_data('player ' + type + ' ' + val, window.win_nr)
       if (this.loop_on){this.set_col_active(type)}
       else {this.set_col_inactive(type)}
-
     }
     else if (type=="loop_bounds") {
       this.use_bounds = !this.use_bounds
       if (this.use_bounds) {this.set_col_active(type)}
       else {this.set_col_inactive(type)}
       var val = this.use_bounds ? 1 : 0
-      log('player ' + type + ' ' + val, window.win_nr)
       send_data('player ' + type + ' ' + val, window.win_nr)
     }
     else if(type == "hide") {
