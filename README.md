@@ -32,7 +32,7 @@ shift + wheel: scroll x-axis
  
 
 
-![alt tag](gui/sequencer.jpg)
+![alt tag](gui/sequencer.png)
 
 
 
