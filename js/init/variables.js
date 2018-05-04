@@ -8,11 +8,12 @@ var amount_bars = 4
 var micro = 4
 
 // sequencer canvas size
-var win_h = 500
 var win_w = 1600
+var win_h = 500
 // browser size
+var window_w = 800
 var window_h = 300
-var window_w = 650
+
 
 var ctrl_h = 50
 var scaleX_h = 20
@@ -38,6 +39,8 @@ var line_layouts = [
   [0,1,2,3,],
   [0,1,2,3,4]
 ]
+col_btn_inactive = 'rgb(221,220,220)'
+col_btn_active = 'orange'
 
 var open_windows = {}
 
@@ -68,6 +71,37 @@ function set_var(val) {
     }
     else {
       window[val[0]] = Number(val[1])
-      }
     }
   }
+}
+
+function set_quant() {
+  lbl = document.getElementById('quant')
+  quant = Math.pow(2,Number(this.id))
+  use_triplets ? tri = ' triplets' : tri = ' norm'
+  lbl.innerHTML = "1/" + quant.toString() + tri
+  set_widths_and_heights()
+  set_quantisation()
+}
+function set_bars(e) {
+  amount_bars = e.srcElement.valueAsNumber
+  var data = 'settings amount_bars ' + amount_bars
+  send_data(data, window.win_nr)
+}
+function set_micro(e) {
+  micro = e.srcElement.valueAsNumber
+  var data = 'settings micro ' + micro
+  send_data(data, window.win_nr)
+}
+function set_use_triplets(e) {
+  use_triplets = e.srcElement.parentElement.state
+  set_widths_and_heights()
+  set_quantisation()
+  lbl = document.getElementById('quant')
+  tri = use_triplets ? ' triplets' : ' norm'
+  lbl.innerHTML = "1/" + quant.toString() + tri
+}
+
+function set_use_quant(e) {
+  use_quant = e.srcElement.parentElement.state
+}

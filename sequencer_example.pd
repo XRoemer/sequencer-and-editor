@@ -1,55 +1,51 @@
-#N canvas 10 299 543 669 10;
-#N canvas 472 65 874 797 manager 0;
-#X msg 168 372 init;
-#X msg 217 372 show_seq;
-#X msg 464 342 save;
-#X msg 280 250 load;
-#X msg 328 300 clear;
-#X obj 253 171 bng 13 250 50 0 empty empty l 3 5 0 10 -135137 -1 -1
+#N canvas 37 254 627 692 10;
+#N canvas 942 114 874 759 manager 0;
+#X msg 214 417 init;
+#X msg 462 417 save;
+#X msg 248 343 load;
+#X msg 346 417 clear;
+#X obj 207 177 bng 13 250 50 0 empty empty l 3 5 0 10 -135137 -1 -1
 ;
-#X obj 253 186 bng 13 250 50 0 empty empty s 3 5 0 10 -260129 -1 -1
+#X obj 229 177 bng 13 250 50 0 empty empty s 3 5 0 10 -260129 -1 -1
 ;
-#X obj 205 171 bng 13 250 50 0 empty empty init 17 7 0 10 -262144 -1
+#X obj 279 198 bng 13 250 50 0 empty empty init 17 7 0 10 -262144 -1
 -1;
-#X obj 205 186 bng 13 250 50 0 empty empty gui 17 7 0 10 -262144 -1
--1;
-#X msg 464 286 pre_name \$1;
-#X symbolatom 206 202 10 0 0 0 - - -, f 10;
-#X obj 464 455 t a;
+#X obj 331 226 bng 15 250 50 0 empty empty open\ gui -14 -9 0 10 -262144
+-1 -1;
+#X msg 386 417 pre_name \$1;
+#X symbolatom 207 196 10 0 0 0 - - -, f 10;
+#X obj 365 479 t a;
 #X obj 250 134 symbol;
 #X obj 205 59 inlet load;
 #X obj 205 106 route init prename load;
-#X msg 253 417 load;
-#X msg 237 398 load_stop;
-#X obj 205 442 t a;
-#X obj 205 471 list prepend gui;
-#X obj 462 477 list prepend memory;
-#X obj 205 638 outlet to_sequencer;
-#X obj 280 272 t b a b b b;
-#X obj 275 196 tgl 13 0 empty empty tcp -1 -8 0 10 -262144 -1 -1 1
-1;
-#X msg 322 400 tcp tcp \$1;
-#X obj 206 222 hradio 12 0 1 8 empty empty empty 0 -8 0 10 -262144
--1 -1 0;
-#X obj 205 597 list trim;
-#N canvas 1303 189 575 720 set_sequencers 1;
+#X msg 312 417 load;
+#X msg 248 417 load_stop;
+#X obj 248 454 t a;
+#X obj 248 502 list prepend gui;
+#X obj 365 502 list prepend memory;
+#X obj 331 198 tgl 13 0 empty empty tcp 15 6 0 10 -262144 -1 -1 0 1
+;
+#X obj 208 228 hradio 14 0 1 8 empty empty sequencer\ nr 0 -8 0 10
+-262144 -1 -1 0;
+#X obj 248 628 list trim;
+#N canvas 1080 368 575 604 set_sequencers 0;
 #X obj 72 69 cnv 15 446 334 empty empty empty 20 12 0 14 -233017 -66577
 0;
 #N canvas 520 289 725 464 set_one_seq 0;
 #X obj 145 131 nbx 3 14 1 1e+037 0 1 empty empty bars 0 -8 0 10 -262144
--1 -1 38 256 0;
+-1 -1 33 256 0;
 #X obj 185 131 nbx 2 14 1 31 0 1 empty empty micro 0 -8 0 10 -262144
 -1 -1 4 256 0;
 #X obj 222 131 nbx 2 14 1 100 0 1 empty empty rows 0 -8 0 10 -262144
--1 -1 44 256 0;
+-1 -1 49 256 0;
 #X obj 260 131 nbx 5 14 100 10000 0 1 empty empty canvas_w 0 -8 0 10
 -262144 -1 -1 5000 256 0;
-#X obj 316 131 nbx 5 14 100 10000 0 1 empty empty canvas_h 0 -8 0 10
--262144 -1 -1 400 256 0;
+#X obj 316 131 nbx 5 14 10 10000 0 1 empty empty canvas_h 0 -8 0 10
+-262144 -1 -1 250 256 0;
 #X obj 381 131 nbx 5 14 100 10000 0 1 empty empty window_w 0 -8 0 10
--262144 -1 -1 650 256 0;
-#X obj 439 131 nbx 5 14 100 2000 0 1 empty empty window_h 0 -8 0 10
--262144 -1 -1 550 256 0;
+-262144 -1 -1 1000 256 0;
+#X obj 439 131 nbx 5 14 20 2000 0 1 empty empty window_h 0 -8 0 10
+-262144 -1 -1 400 256 0;
 #X msg 188 183 amount_bars \$1;
 #X msg 243 233 amount_rows \$1;
 #X msg 222 207 micro \$1;
@@ -109,22 +105,22 @@
 #X obj 93 418 t a;
 #X obj 93 39 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X obj 93 620 outlet;
+#X obj 93 531 outlet;
 #N canvas 520 289 725 464 set_one_seq 0;
 #X obj 145 131 nbx 3 14 1 1e+037 0 1 empty empty bars 0 -8 0 10 -262144
--1 -1 38 256 0;
+-1 -1 8 256 0;
 #X obj 185 131 nbx 2 14 1 31 0 1 empty empty micro 0 -8 0 10 -262144
 -1 -1 4 256 0;
 #X obj 222 131 nbx 2 14 1 100 0 1 empty empty rows 0 -8 0 10 -262144
--1 -1 20 256 0;
+-1 -1 1 256 0;
 #X obj 260 131 nbx 5 14 100 10000 0 1 empty empty canvas_w 0 -8 0 10
--262144 -1 -1 5000 256 0;
-#X obj 316 131 nbx 5 14 100 10000 0 1 empty empty canvas_h 0 -8 0 10
--262144 -1 -1 250 256 0;
+-262144 -1 -1 1000 256 0;
+#X obj 316 131 nbx 5 14 10 10000 0 1 empty empty canvas_h 0 -8 0 10
+-262144 -1 -1 20 256 0;
 #X obj 381 131 nbx 5 14 100 10000 0 1 empty empty window_w 0 -8 0 10
--262144 -1 -1 650 256 0;
-#X obj 439 131 nbx 5 14 100 2000 0 1 empty empty window_h 0 -8 0 10
--262144 -1 -1 300 256 0;
+-262144 -1 -1 800 256 0;
+#X obj 439 131 nbx 5 14 20 2000 0 1 empty empty window_h 0 -8 0 10
+-262144 -1 -1 200 256 0;
 #X msg 188 183 amount_bars \$1;
 #X msg 243 233 amount_rows \$1;
 #X msg 222 207 micro \$1;
@@ -607,10 +603,9 @@
 #X connect 26 0 12 0;
 #X coords 0 -1 1 1 385 27 2 109 118;
 #X restore 93 331 pd set_one_seq;
-#X obj 94 12 inlet;
+#X obj 93 12 inlet;
 #X obj 93 448 list split 1;
 #X obj 93 503 list append;
-#X obj 93 525 list prepend sequencer;
 #X obj 127 474 list prepend settings;
 #X connect 1 0 2 0;
 #X connect 2 0 13 0;
@@ -631,82 +626,87 @@
 #X connect 11 0 2 0;
 #X connect 12 0 3 0;
 #X connect 13 0 14 0;
-#X connect 13 1 16 0;
-#X connect 14 0 15 0;
-#X connect 15 0 4 0;
-#X connect 16 0 14 1;
-#X restore 486 212 pd set_sequencers;
-#X obj 673 169 loadbang;
-#X obj 205 554 list prepend sequencer;
-#X obj 205 531 list prepend;
-#X msg 639 209 player tempo 76;
-#N canvas 502 154 685 523 open_gui 0;
-#X obj 42 26 inlet trigger;
-#X obj 266 27 inlet seq_nr;
-#X obj 247 113 f;
-#X obj 428 276 sys_gui;
-#X obj 420 434 system;
-#X msg 430 216 exec C:/Users/Homer/Desktop/new_sequenzer/lua/nwjs-sdk/nw.exe
+#X connect 13 1 15 0;
+#X connect 14 0 4 0;
+#X connect 15 0 14 1;
+#X restore 66 374 pd set_sequencers;
+#X obj 495 382 loadbang;
+#X obj 248 562 list prepend;
+#X msg 496 417 player tempo 76;
+#N canvas 502 154 546 489 open_gui 0;
+#X obj 88 26 inlet trigger;
+#X obj 189 27 inlet seq_nr;
+#X obj 88 132 f;
+#X obj 347 393 sys_gui;
+#X msg 347 333 exec C:/Users/Homer/Desktop/new_sequenzer/lua/nwjs-sdk/nw.exe
 \$1 &, f 22;
-#X msg 420 346 start "" C:/Users/Homer/Desktop/new_sequenzer/lua/nwjs-sdk/nw.exe
-G:/Dropbox/new_sequenzer/js \$1, f 25;
-#X msg 99 251 start "" C:/Users/xgr/Desktop/Programme/nwjs-sdk/nw.exe
+#X msg 89 318 start "" C:/Users/xgr/Desktop/Programme/nwjs-sdk/nw.exe
 C:/Users/xgr/Dropbox/new_sequenzer/js \$1, f 22;
-#X obj 98 362 system;
+#X obj 88 429 system;
+#X obj 76 156 cnv 15 384 88 empty empty empty 20 12 0 14 -258049 -66577
+0;
+#X obj 88 279 system;
+#X msg 88 172 start "" C:/Users/Homer/Desktop/new_sequenzer/lua/nwjs-sdk/nw.exe
+G:/Dropbox/new_sequenzer/js \$1;
+#X text 183 87 replace my paths with yours;
+#X text 183 109 first path is to nw.exe;
+#X text 183 131 seceond path to js folder inside my patch;
+#X text 347 312 vanilla commands/not used;
 #X connect 0 0 2 0;
 #X connect 1 0 2 1;
-#X connect 2 0 6 0;
-#X connect 5 0 3 0;
-#X connect 6 0 4 0;
-#X connect 7 0 8 0;
-#X restore 85 240 pd open_gui;
-#X obj 275 170 bng 13 250 50 0 empty empty set 1 -9 0 10 -262144 -1
--1;
-#X msg 398 149 \; pd-set_sequencers vis 1;
-#X connect 0 0 29 0;
-#X connect 1 0 17 0;
-#X connect 2 0 11 0;
-#X connect 3 0 21 0;
-#X connect 4 0 11 0;
-#X connect 4 0 17 0;
-#X connect 5 0 3 0;
-#X connect 6 0 2 0;
-#X connect 7 0 0 0;
+#X connect 2 0 9 0;
+#X connect 4 0 3 0;
+#X connect 5 0 6 0;
+#X connect 9 0 8 0;
+#X restore 331 261 pd open_gui;
+#X obj 279 174 bng 13 250 50 0 empty empty gui_settings 19 4 0 10 -262144
+-1 -1;
+#X msg 67 329 \; pd-set_sequencers vis 1;
+#X obj 672 666 outlet tcp;
+#X obj 248 669 outlet sequencer messages;
+#X msg 672 416 tcp \$1;
+#X obj 248 365 t b a b b;
+#X connect 0 0 24 0;
+#X connect 1 0 10 0;
+#X connect 2 0 32 0;
+#X connect 3 0 10 0;
+#X connect 3 0 16 0;
+#X connect 4 0 2 0;
+#X connect 5 0 1 0;
+#X connect 6 0 0 0;
+#X connect 6 0 22 0;
+#X connect 6 0 25 0;
 #X connect 7 0 26 0;
-#X connect 7 0 30 0;
-#X connect 8 0 1 0;
-#X connect 8 0 31 0;
-#X connect 9 0 11 0;
-#X connect 10 0 9 0;
-#X connect 11 0 19 0;
-#X connect 12 0 10 0;
-#X connect 13 0 14 0;
-#X connect 14 0 7 0;
-#X connect 14 1 12 0;
-#X connect 14 2 5 0;
-#X connect 15 0 17 0;
+#X connect 8 0 10 0;
+#X connect 9 0 8 0;
+#X connect 10 0 18 0;
+#X connect 11 0 9 0;
+#X connect 12 0 13 0;
+#X connect 13 0 6 0;
+#X connect 13 1 11 0;
+#X connect 13 2 4 0;
+#X connect 14 0 16 0;
+#X connect 15 0 16 0;
 #X connect 16 0 17 0;
-#X connect 17 0 18 0;
-#X connect 18 0 29 0;
-#X connect 19 0 29 0;
-#X connect 21 0 16 0;
-#X connect 21 1 11 0;
-#X connect 21 2 15 0;
-#X connect 21 3 4 0;
-#X connect 22 0 23 0;
-#X connect 23 0 20 0;
-#X connect 24 0 29 1;
-#X connect 24 0 31 1;
-#X connect 25 0 20 0;
-#X connect 26 0 25 0;
-#X connect 27 0 30 0;
-#X connect 28 0 25 0;
-#X connect 29 0 28 0;
-#X connect 30 0 29 0;
-#X connect 32 0 33 0;
-#X coords 0 -1 1 1 105 82 1 202 155;
-#X restore 52 98 pd manager;
-#X obj 52 616 tools/pd_outlet;
+#X connect 17 0 24 0;
+#X connect 18 0 24 0;
+#X connect 19 0 31 0;
+#X connect 20 0 24 1;
+#X connect 20 0 26 1;
+#X connect 21 0 30 0;
+#X connect 22 0 21 0;
+#X connect 23 0 25 0;
+#X connect 24 0 21 0;
+#X connect 25 0 24 0;
+#X connect 27 0 28 0;
+#X connect 31 0 29 0;
+#X connect 32 0 15 0;
+#X connect 32 1 10 0;
+#X connect 32 2 14 0;
+#X connect 32 3 3 0;
+#X coords 0 -1 1 1 173 90 1 202 155;
+#X restore 23 36 pd manager;
+#X obj 23 595 tools/pd_outlet;
 #N canvas 1308 249 546 451 val2midi 0;
 #X obj 89 83 t a a;
 #X msg 89 151 \$1;
@@ -755,9 +755,9 @@ C:/Users/xgr/Dropbox/new_sequenzer/js \$1, f 22;
 #X connect 19 1 0 0;
 #X connect 20 0 3 0;
 #X coords 0 -1 1 1 83 39 1 259 58;
-#X restore 52 231 pd val2midi;
-#X obj 52 295 instr/tri_ops_v2/tri_ops_v2;
-#X obj 163 259 loadbang;
+#X restore 23 231 pd val2midi;
+#X obj 23 274 instr/tri_ops_v2/tri_ops_v2;
+#X obj 134 238 loadbang;
 #N canvas 790 95 917 552 reverb 0;
 #X obj 518 224 cnv 15 96 103 empty empty empty 20 12 0 14 -199729 -66577
 0;
@@ -896,9 +896,9 @@ C:/Users/xgr/Dropbox/new_sequenzer/js \$1, f 22;
 #X connect 56 0 57 0;
 #X connect 57 0 29 0;
 #X coords 0 -1 1 1 98 105 2 517 223;
-#X restore 52 501 pd reverb;
-#X msg 224 278 preset 24;
-#X obj 53 208 route 0 1 2 3 4 5 6 7;
+#X restore 23 480 pd reverb;
+#X msg 195 257 preset 24;
+#X obj 23 196 route 0 1 2 3 4 5 6 7;
 #N canvas 1005 359 625 560 cpu 0;
 #X floatatom 139 260 0 0 0 0 - - -;
 #X obj 139 156 cputime;
@@ -911,7 +911,7 @@ C:/Users/xgr/Dropbox/new_sequenzer/js \$1, f 22;
 #X obj 139 185 int;
 #X text 184 72 <-- on/off;
 #X obj 369 298 nbx 4 20 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
-18 -262144 -1 -1 9.3 256 0;
+18 -262144 -1 -1 12.4 256 0;
 #X obj 186 337 % 20;
 #X floatatom 186 359 5 0 0 0 - - -, f 5;
 #X obj 186 312 f;
@@ -921,11 +921,11 @@ C:/Users/xgr/Dropbox/new_sequenzer/js \$1, f 22;
 #X obj 139 418 array sum \$0-cpu;
 #X obj 139 440 / 20;
 #X obj 369 321 nbx 4 20 -1e+037 1e+037 0 0 empty empty empty 0 -8 0
-18 -262144 -1 -1 5.87 256 0;
+18 -262144 -1 -1 11.19 256 0;
 #N canvas 0 0 450 300 (subpatch) 0;
 #X array \$0-cpu 20 float 5 black black;
-#A 0 6.2 4.6 6.2 4.6 3.1 4.6 4.6 6.2 3.1 4.6 4.6 4.6 7.8 4.6 4.6 9.3
-9.3 12.4 9.3 3.1;
+#A 0 17.1 6.2 15.6 9.3 14 15.6 12.4 4.6 9.3 12.4 9.3 7.8 10.9 9.3 7.8
+10.9 14 15.6 12.4 9.3;
 #X coords 0 100 19 0 100 40 1;
 #X restore 355 255 graph;
 #X obj 138 236 min 150;
@@ -952,8 +952,8 @@ C:/Users/xgr/Dropbox/new_sequenzer/js \$1, f 22;
 #X connect 21 0 10 0;
 #X connect 21 0 0 0;
 #X coords 0 -1 1 1 105 97 2 353 246;
-#X restore 167 508 pd cpu;
-#X msg 163 278 voices 5;
+#X restore 138 487 pd cpu;
+#X msg 134 257 voices 5;
 #N canvas 929 241 250 418 presets 0;
 #N canvas 1106 469 344 198 one_pre 0;
 #X msg 196 86 example;
@@ -976,7 +976,7 @@ C:/Users/xgr/Dropbox/new_sequenzer/js \$1, f 22;
 #X coords 0 -1 1 1 102 16 2 80 71;
 #X restore 71 75 pd one_pre;
 #N canvas 1106 469 344 198 one_pre 0;
-#X msg 196 86 -;
+#X msg 196 86 master;
 #X symbolatom 96 71 14 0 0 0 - - -, f 14;
 #X msg 196 65 set \$1;
 #X obj 96 123 outlet;
@@ -1168,17 +1168,95 @@ C:/Users/xgr/Dropbox/new_sequenzer/js \$1, f 22;
 #X connect 14 0 1 0;
 #X connect 15 0 14 0;
 #X coords 0 -1 1 1 108 166 2 68 72;
-#X restore 175 15 pd presets;
-#X msg 309 72 \; pd-open_gui vis 1;
-#X text 309 45 1) set paths to nw.js and js folder;
-#X text 309 112 2) press gui to open first editor;
-#X text 309 139 3) set tcp to active;
-#X text 309 166 4) press init;
-#X text 309 193 5) load example;
-#X text 309 247 7) use play buttons from the editor;
-#X text 309 220 6) start dsp / set volume;
-#X obj 53 186 sequencer;
-#X connect 0 0 19 0;
+#X restore 202 36 pd presets;
+#X obj 23 158 sequencer;
+#N canvas 753 227 856 486 master_track 0;
+#X obj 65 46 inlet notes;
+#X obj 132 446 outlet;
+#X obj 132 408 list trim;
+#X msg 395 286 play;
+#X msg 395 313 stop;
+#X msg 395 236 stop \, pointer_start 4 3 0 \, play;
+#X msg 395 262 stop \, pointer_start 8 1 0 \, play;
+#X obj 132 173 * 0.25;
+#X obj 65 125 unpack f f f;
+#X floatatom 132 151 5 0 0 0 - - -, f 5;
+#X obj 132 196 t f f;
+#X obj 159 222 int;
+#X obj 132 246 -;
+#X obj 132 267 / 0.25;
+#X floatatom 132 289 5 0 0 0 - - -, f 5;
+#X obj 132 309 pack f f;
+#X msg 132 334 stop \, pointer_start \$2 \$1 0 \, play;
+#X obj 607 381 list trim;
+#X text 607 202 change tempo (has some issues);
+#X text 164 72 messages from the sequencer have three values: row \,
+length \, volume. Here the volume from seq1 is used for controlling
+the start positions of seq0;
+#X obj 379 355 t a;
+#X msg 607 234 tempo 50 \, init;
+#X msg 613 262 tempo 90 \, init;
+#X msg 622 290 tempo 120 \, init;
+#X obj 607 337 list prepend 0 player;
+#X obj 607 358 list prepend 1 player;
+#X obj 132 386 list prepend 0 player;
+#X connect 0 0 8 0;
+#X connect 2 0 1 0;
+#X connect 3 0 20 0;
+#X connect 4 0 20 0;
+#X connect 5 0 20 0;
+#X connect 6 0 20 0;
+#X connect 7 0 10 0;
+#X connect 8 2 9 0;
+#X connect 9 0 7 0;
+#X connect 10 0 12 0;
+#X connect 10 1 11 0;
+#X connect 11 0 12 1;
+#X connect 11 0 15 1;
+#X connect 12 0 13 0;
+#X connect 13 0 14 0;
+#X connect 14 0 15 0;
+#X connect 15 0 16 0;
+#X connect 16 0 26 0;
+#X connect 17 0 1 0;
+#X connect 20 0 26 0;
+#X connect 21 0 24 0;
+#X connect 21 0 25 0;
+#X connect 22 0 24 0;
+#X connect 22 0 25 0;
+#X connect 23 0 24 0;
+#X connect 23 0 25 0;
+#X connect 24 0 17 0;
+#X connect 25 0 17 0;
+#X connect 26 0 2 0;
+#X coords 0 0 1 1 94 60 0;
+#X restore 91 158 pd master_track;
+#X obj 329 88 cnv 15 270 85 empty empty start\ here 137 58 0 20 -180204
+-66577 0;
+#X msg 340 129 \; pd-open_gui vis 1;
+#X text 333 597 (you might have to activate tcp again \, when all sequencer
+windows had been closed), f 36;
+#X text 340 92 1) set paths to nw.js and js folder (click msg-box below)
+, f 38;
+#X obj 329 204 cnv 15 251 185 empty empty Example\ 1 20 12 0 14 -233017
+-66577 0;
+#X text 347 237 1) press gui to open first editor;
+#X obj 329 404 cnv 15 250 173 empty empty Example\ 2 20 12 0 14 -233017
+-66577 0;
+#X text 347 464 2) press init;
+#X text 347 437 1) select 2nd radio button;
+#X text 347 490 3) load master;
+#X text 347 518 4) set inner loop-regions by dragging (use Q works
+as well), f 38;
+#X text 347 554 5) set loop on (circled array) \, play;
+#X text 222 14 presets;
+#X text 347 262 2) set tcp to active;
+#X text 347 287 3) press init;
+#X text 347 312 4) load example;
+#X text 348 337 5) start dsp / set volume;
+#X text 347 362 6) use play buttons inside sequencer;
+#X connect 0 0 11 0;
+#X connect 0 1 11 1;
 #X connect 2 0 3 0;
 #X connect 3 0 5 0;
 #X connect 4 0 9 0;
@@ -1187,6 +1265,8 @@ C:/Users/xgr/Dropbox/new_sequenzer/js \$1, f 22;
 #X connect 5 0 1 1;
 #X connect 6 0 3 1;
 #X connect 7 0 2 0;
+#X connect 7 1 12 0;
 #X connect 9 0 3 1;
 #X connect 10 0 0 0;
-#X connect 19 0 7 0;
+#X connect 11 0 7 0;
+#X connect 12 0 11 0;

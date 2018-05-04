@@ -7,10 +7,8 @@ function create_btn(x,y,font_size,name,fkt) {
   btn.style.position = 'absolute'
   btn.style.top = y
   btn.style.left = x
-  var size = 12
   btn.style.height = 12
   btn.style.width = 8
-
   return btn
 }
 
@@ -53,82 +51,6 @@ function create_select(x, y, fkt, id_name) {
   return input
 }
 
-function resp_quant() {
-  lbl = document.getElementById('quant')
-  quant = Math.pow(2,Number(this.id))
-  use_triplets ? tri = ' triplets' : tri = ' norm'
-  lbl.innerHTML = "1/" + quant.toString() + tri
-  set_widths_and_heights()
-  set_quantisation()
-}
-function set_bars(e) {
-  amount_bars = e.srcElement.valueAsNumber
-  var data = 'settings amount_bars ' + amount_bars
-  send_data(data, window.win_nr)
-}
-function set_micro(e) {
-  micro = e.srcElement.valueAsNumber
-  var data = 'settings micro ' + micro
-  send_data(data, window.win_nr)
-}
-function resp_use_triplets(e) {
-  use_triplets = e.srcElement.parentElement.state
-  set_widths_and_heights()
-  set_quantisation()
-  lbl = document.getElementById('quant')
-  tri = use_triplets ? ' triplets' : ' norm'
-  lbl.innerHTML = "1/" + quant.toString() + tri
-
-}
-
-function resp_use_quant(e) {
-  use_quant = e.srcElement.parentElement.state
-}
-function call_settings(e) {
-  load_scripts_otf({fkt:'open_settings',scripts:['init/settings'],args:e})
-}
-
-function call_midi(e) {
-  var x = e.screenX - 190
-  var y = e.screenY + 60
-  open_win(x,y,390,220,'midi_win',"midi/midi.html", create_midi_dialog)
-}
-function call_test() {
-  load_scripts_otf({fkt:'test',scripts:['test/test'],args:[]})
-}
-
-function create_radios(x,y,amount,fkt) {
-  var container = document.createElement("div");
-  container.style.position = 'absolute'
-  container.style.left = x.toString() + 'px'
-  container.style.top = y.toString() + 'px'
-
-  for(var i=0; i< amount; i++) {
-    var radio = document.createElement("INPUT");
-    radio.type = "radio"
-    radio.name = fkt.toString()
-    radio.id = i
-    radio.style ="margin: 0px 0px 0px 0px"
-    radio.setAttribute("padding", 0);
-    radio.onclick = fkt
-    container.appendChild(radio)
-  }
-  return container
-}
-
-function create_checkbox(x,y,name,fkt,variable) {
-  var cb = document.createElement('input');
-  cb.type = 'checkbox';
-  cb.onclick = fkt
-  cb.id = name
-  cb.style.position = 'absolute'
-  cb.style.top = y
-  cb.style.left = x
-  variable ? cb.checked = variable : cb.checked = false
-
-  return cb
-}
-
 function create_stroke(x1,y1,x2,y2,w,col,id) {
   var c=document.getElementById("canvas_bg");
   var ctx=c.getContext("2d");
@@ -157,15 +79,6 @@ function create_stroke_svg(x,y,w,h, stroke_w,col,id) {
   svg.appendChild(path);
   return svg
 }
-function create_stroke2(x1,y1,x2,y2,w,col,el) {
-  var c=document.getElementById(el);
-  var ctx=c.getContext("2d");
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
-  ctx.lineWidth = w;
-  ctx.stroke();
-}
 
 function create_triad(x,y,w,h, stroke_w,col,id,fill,str) {
   if (fill == null) {fill = 'rgb(128,0,64)'}
@@ -188,7 +101,7 @@ function create_triad(x,y,w,h, stroke_w,col,id,fill,str) {
   return svg
 }
 
-function create_svg_btn(x,y,id,type,fkt) {
+function create_svg_btn(x,y,id,type,fkt,sel) {
   var w = SVGs.r_bound
   var h = SVGs.r_bound
   var stroke_w = SVGs.stroke_w
@@ -196,8 +109,10 @@ function create_svg_btn(x,y,id,type,fkt) {
   path.setAttributeNS(null, "d", SVGs.btn_str);
   var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
   svg.setAttributeNS(null, "stroke-width", stroke_w);
-  svg.setAttributeNS(null, "z-index", 30);
-  svg.style.fill = 'rgb(221,220,220)'
+  svg.setAttributeNS(null, "z-index", 30)
+  if (sel) {var col = col_btn_active}
+  else {col = col_btn_inactive }
+  svg.style.fill = col 
   svg.style.stroke = 'black'
   svg.style.position="absolute"
   svg.style.width = w
@@ -216,7 +131,7 @@ function create_svg_btn(x,y,id,type,fkt) {
   return svg
 }
 
-function create_svg_radio(x,y,id,type,fkt,amount) {
+function create_svg_radio(x,y,id,type,fkt,amount,sel) {
   var w = SVGs.r_bound
   var h = SVGs.r_bound
   var stroke_w = SVGs.stroke_w
@@ -227,7 +142,9 @@ function create_svg_radio(x,y,id,type,fkt,amount) {
 
   var pos = 0
   for(var i=0; i< amount; i++) {
-    var btn = create_svg_btn(pos,0,i,'toggle',fkt)
+    if (i == sel) {var active = true}
+    else {var active = false}
+    var btn = create_svg_btn(pos,0,i,'toggle',fkt, active)
     btn.type = 'radio'
     btn.fkt = fkt
     btn.container = container

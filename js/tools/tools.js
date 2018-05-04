@@ -36,10 +36,9 @@ function open_win(x,y,w,h,name,path,fkt){
   width = w ? ',width=' + w : ',width=410'
   height = h ? ',height=' + h : ',height=260'
   _path = path ? path : 'index.html'
+  var args = left + top + width + height
 
-  args = left + top + width + height
-
-  var win = window.open(_path,'new', args);
+  var win = window.open(_path,'_blank', args);
   if (name) {window[name] = win; win.document.title = name}
   if (fkt) {win.addEventListener('load', fkt, false)}
 
@@ -47,15 +46,16 @@ function open_win(x,y,w,h,name,path,fkt){
   // it's a hack for win.focus(), which doesn't work
   chrome.windows.getLastFocused(function(wind) {
     win.id = wind.id
-  });
+  });  
   return win
 }
 
-function resize_window(win, w, h){
-  var h_dif = win.outerHeight - win.innerHeight
-  var w_dif = win.outerWidth - win.innerWidth
-  win.resizeTo(w + w_dif, h + h_dif)
-}
+//function resize_window(win, w, h){
+//  var h_dif = win.outerHeight - win.innerHeight
+//  var w_dif = win.outerWidth - win.innerWidth
+//  log({w,w_dif,h,h_dif,win})
+//  win.resizeTo(w + w_dif, h + h_dif)
+//}
 
 
 function dict_to_arr(dict) {

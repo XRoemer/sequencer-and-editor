@@ -13,16 +13,6 @@ win.on('close', function() {
   delete open_windows[window.win_nr]
   win.close()
 });
-gui.App.on('open', function (argString) {
-  argString = argString.split(' ')
-  var nr = argString[argString.length - 1]
-  if (!open_windows[nr]) {
-    open_new_sequencer_window(nr)
-  }
-  else {
-    chrome.windows.update(open_windows[nr].id, {focused : true});
-  }
-});
 
 window.addEventListener('scroll', function(e) {
   // correct elements which need to keep their position
@@ -119,11 +109,15 @@ function dist_data(data, from){
     if (open_windows[win_nr]){
       open_windows[win_nr].distribute_data(name, values)
     }
-    else {log("sequencer doesn't exist")}
+    else {
+      log("sequencer doesn't exist",name,values,win_nr)
+      }
   }
 }
 
+var val_array = []
 function distribute_data(name, values){
+  
   // testing for selections
   if      (name === 'load')       {clear_sequencer(); val_array = []}
   else if (name === 'pos_pointer'){pointer.move_pointer(values)}

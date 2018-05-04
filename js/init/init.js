@@ -3,15 +3,47 @@ var gui = require('nw.gui')
 last_seq_dragging_pos = [0,0,0,0]
 
 
+gui.App.on('open', function (argString) {
+  
+  argString = argString.split(' ')
+  var nr = argString[argString.length - 1]
+  
+  if (!open_windows[nr]) {
+ // search for window with the lowest win_nr
+    // to open a new window just once
+    var wins = gui.global.__nw_windows
+    var keys = Object.keys(wins) 
+    var win_nrs = []
+    keys.forEach(function(e) {
+      win_nrs.push(wins[e][0].window.win_nr)
+      })
+    win_nrs.sort()  
+    var is_win_with_lowest_nr = window.win_nr == win_nrs[0].toString()
+    if (is_win_with_lowest_nr) {
+      log('opened sequencer',nr)
+      open_new_sequencer_window(nr)
+    }
+  }
+  else {
+    // hack for not working window.focus()
+    chrome.windows.update(open_windows[nr].id, {focused : true});
+  }
+});
+
 function init(){
   // check if nw is already started
   // if not, start tcp connection
+  log('init')
   if (!window.parent_Win){
     var nr = gui.App.argv[0]
     load_scripts_otf({fkt:'load_tcp',scripts:['tools/TCP'],args:[nr]})
     window.document.title = 'Sequencer ' + nr
     open_windows[nr] = this
     window.win_nr = nr
+    // used for a hack with window.focus()
+    chrome.windows.getLastFocused(function(wind) {
+      window.id = wind.id
+    }); 
   }
   player = new Player()
   player.create_player()
@@ -28,7 +60,6 @@ function open_new_sequencer_window(nr) {
   var name = 'Sequencer ' + nr
 
   var win = open_win(x,y,w,h,name,path)
-
   win.parent_Win = window
   win.addEventListener('load', function(e) {
     win.document.title = name
@@ -36,7 +67,6 @@ function open_new_sequencer_window(nr) {
     win['open_windows'] = open_windows
     win.tcp = tcp
     open_windows[nr] = win
-    log(name)
   }, false);
 }
 
@@ -112,7 +142,7 @@ function create_seqgui() {
       add_listeners_to_cnv(document.getElementById("sequencer"))
       }
     
-    resize_window(window, window_w , window_h)
+    window.resizeTo(window_w , window_h)
 
     create_h_lines_bg()
     create_h_lines()

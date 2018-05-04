@@ -18,31 +18,31 @@ function on_load_settings(e){
   ctrl_cont = doc.getElementById('settings')
 
   ctrl_cont.appendChild(create_nr(10, 10, 50, 600, 2000, 100,
-    set_win_size_x, window_w, set_number_by_wheel, 'window_w'));
-  ctrl_cont.appendChild(create_label(68, 10, 'win size x', 11));
+    set_win_size_x, window_w, set_number_by_wheel, 'window_w'))
+  ctrl_cont.appendChild(create_label(68, 10, 'win size x', 11))
 
   ctrl_cont.appendChild(create_nr(10, 30, 50, 200, 1000, 100,
-    set_win_size_y, window_h, set_number_by_wheel, 'window_h'));
-  ctrl_cont.appendChild(create_label(68, 30, 'win size y', 11));
+    set_win_size_y, window_h, set_number_by_wheel, 'window_h'))
+  ctrl_cont.appendChild(create_label(68, 30, 'win size y', 11))
 
   ctrl_cont.appendChild(create_nr(10, 60, 50, 100, 10000, 100,
-    set_cnv_size_x, win_w, set_number_by_wheel, 'win_w'));
-  ctrl_cont.appendChild(create_label(68, 60, 'canvas size x', 11));
+    set_cnv_size_x, win_w, set_number_by_wheel, 'win_w'))
+  ctrl_cont.appendChild(create_label(68, 60, 'canvas size x', 11))
 
   ctrl_cont.appendChild(create_nr(10, 80, 50, 100, 2000, 100,
-    set_cnv_size_y, win_h, set_number_by_wheel, 'win_h'));
-  ctrl_cont.appendChild(create_label(68, 80, 'canvas size y', 11));
+    set_cnv_size_y, win_h, set_number_by_wheel, 'win_h'))
+  ctrl_cont.appendChild(create_label(68, 80, 'canvas size y', 11))
 
   //
   ctrl_cont.appendChild(create_nr(160, 10, 50, 1, 100, 1,
-    set_amount_of_rows, amount_rows, set_number_by_wheel, 'amount_rows'));
-  ctrl_cont.appendChild(create_label(218, 10, 'amount rows', 11));
-
-  ctrl_cont.appendChild(create_checkbox(160, 50, 'use_tr', set_log_rec, log_receive));
-  ctrl_cont.appendChild(create_label(180, 52, 'log received data', 10, 'log_rec'));
-
-  ctrl_cont.appendChild(create_checkbox(160, 70, 'use_tr', set_log_send, log_send));
-  ctrl_cont.appendChild(create_label(180, 72, 'log send data', 10, 'log_send'));
+    set_amount_of_rows, amount_rows, set_number_by_wheel, 'amount_rows'))
+  ctrl_cont.appendChild(create_label(218, 10, 'amount rows', 11))
+  
+  ctrl_cont.appendChild(create_svg_btn(160, 50, 'use_tr', 'toggle', set_log_rec, log_receive))
+  ctrl_cont.appendChild(create_label(180, 52, 'log received data', 10, 'log_rec'))
+  
+  ctrl_cont.appendChild(create_svg_btn(160, 70, 'use_send', 'toggle',  set_log_send, log_send))
+  ctrl_cont.appendChild(create_label(180, 72, 'log send data', 10, 'log_send'))
 
 }
 
@@ -85,11 +85,9 @@ function set_amount_of_rows(e){
   send_data('settings amount_rows ' + amount_rows, window.win_nr)
 }
 
-function set_log_rec(){
-  log_receive = this.checked
-  log(log_receive)
-
+function set_log_rec(e){
+  log_receive = e.srcElement.parentElement.state
 }
-function set_log_send(){
-  log_send = this.checked
+function set_log_send(e){
+  log_send = e.srcElement.parentElement.state
 }
