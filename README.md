@@ -13,19 +13,19 @@ More information will be added soon.
 
 ## Shortcuts and Controls
 - ITEMS
--- ctrl + click / doubleclick: set item
--- mmb on item: delete item
--- ctrl + wheel on item: set volume
--- shift + ctrl + mousemove: draw mode
--- alt + shift + mousemove: erase mode
--- ctrl + wheel: scale x-axis
--- shift + wheel: scroll x-axis
+	- ctrl + click / doubleclick: set item
+	- mmb on item: delete item
+	- ctrl + wheel on item: set volume
+	- shift + ctrl + mousemove: draw mode
+	- alt + shift + mousemove: erase mode
+	- ctrl + wheel: scale x-axis
+	- shift + wheel: scroll x-axis
 - PLAYER
--- space: starts/stops playing
--- click into x-scale sets transport start
--- ctrl click into x-scale sets loop-region start
--- alt click into x-scale sets loop-region end
--- loop-regions are draggable
+	- space: starts/stops playing
+	- click into x-scale sets transport start
+	- ctrl click into x-scale sets loop-region start
+	- alt click into x-scale sets loop-region end
+	- loop-regions are draggable
 
 Works with Purr Data, tested on win7/win10, will work with pd vanilla soon.
  
