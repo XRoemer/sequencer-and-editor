@@ -1,6 +1,6 @@
 # Sequencer and (Midi) Editor
 
-Sequencer and midi-style editor for pure data / Purr Data. 
+### Sequencer and midi-style editor for pure data / Purr Data. 
 
 Uses nw.js for the editor. It's preferable to use the sdk version to see the commands exchanged between pd and nw.
 Console can be opened by F12. nw.js can be downloaded from here:
@@ -12,7 +12,7 @@ More information will be added soon.
 
 
 
-## Shortcuts and Controls
+### Shortcuts and Controls
 - ITEMS
 	- ctrl + click / doubleclick: set item
 	- mmb on item: delete item
