@@ -1,10 +1,11 @@
 # Sequencer and (Midi) Editor
 
+Sequencer and midi-style editor for pure data / Purr Data. 
+
 Uses nw.js for the editor. It's preferable to use the sdk version to see the commands exchanged between pd and nw.
 Console can be opened by F12. nw.js can be downloaded from here:
 
 https://nwjs.io/
-
 
 Open sequencers_example.pd and follow the instructions. 
 More information will be added soon.
@@ -28,6 +29,8 @@ More information will be added soon.
 	- loop-regions are draggable
 
 Works with Purr Data, tested on win7/win10, will work with pd vanilla soon.
+
+The handling of the editor is done with pd. The editor might be controlled by any other program using tcp ports 8150 (server) / 8151 (client) for communication.
  
 
 
