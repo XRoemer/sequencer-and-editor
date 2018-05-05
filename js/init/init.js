@@ -2,7 +2,6 @@
 var gui = require('nw.gui')
 last_seq_dragging_pos = [0,0,0,0]
 
-
 gui.App.on('open', function (argString) {
   
   argString = argString.split(' ')
@@ -45,6 +44,7 @@ function init(){
       window.id = wind.id
     }); 
   }
+  items = new Items()
   player = new Player()
   player.create_player()
   create_ctrl()
@@ -104,15 +104,14 @@ function clear_all() {
 }
 
 function clear_vars(){
-  selected_item  = null
-  selected_item_se  = null
-  dragging = false
-  drag_start = false
-  drag_end = false
-  dragging_startend = false
-  drag_y_tmp = 0
-  items = {}
-  items_by_row = {}
+  items.selected_item  = null
+  items.selected_item_se  = null
+  items.dragging = false
+  items.drag_start = false
+  items.drag_end = false
+  items.dragging_startend = false
+  items.dict = {}
+  items.items_by_row = {}
 }
 
 function clear_sequencer() {
@@ -218,7 +217,7 @@ function add_listener_to_seq(){
       if(same == false && ctrl_pressed && shift_pressed){
         var x = (bar -1) * barlen + (micro - 1) * miclen + cent/100 * miclen
         var y = (amount_rows - row - 1) * elem_h
-        create_new_item(null, x, y)
+        items.create_new_item(null, x, y)
 
       last_seq_dragging_pos = [row,bar,micro,cent]
     }
@@ -383,38 +382,11 @@ function scale_scale_x(){
 
 function scale_items() {
   
-  var keys = Object.keys(items)
-  var n = function(a,b){return Number(items[a].info[b])}
-
-  for (var k = 0; k < keys.length ; k++) {
-    var i = keys[k]
-    var rect1 = items[i] 
-
-    var id = n(i,'id')
-    var row = n(i,'row')
-    var bar = n(i,'bar') - 1
-    if (row > amount_rows - 1 || bar > amount_bars - 1) continue
-    var micro = n(i,'micro') - 1
-    var cent = n(i,'cent')
-    var len_bar = n(i,'len_bar')
-    var len_micro = n(i,'len_micro')
-    var len_cent = n(i,'len_cent')
-
-    var x = midi2posX(bar, micro, cent)
-    var w = midi2posX(len_bar, len_micro, len_cent)
-
-    rect1.info.x = x
-    rect1.info.w = w
-    rect1.style.width = w
-    rect1.firstChild.style.width = w
-    rect1.style.left = x
-    items[i] = rect1
-    
-    for (var j = 0; j < items_by_row[row].length ; j++) {
-      if (parseInt(items_by_row[row][j][2]) == id){
-        items_by_row[row][j][0] = x
-        items_by_row[row][j][1] = x + w
-      }
-    }
+  for (var key in items.dict) {
+    var it = items.dict[key] 
+    var x = midi2posX(it.bar - 1, it.micro - 1, it.cent)
+    var w = midi2posX(it.len_bar, it.len_micro, it.len_cent)
+    it.set_x(x)
+    it.set_w(w)
   }
 }

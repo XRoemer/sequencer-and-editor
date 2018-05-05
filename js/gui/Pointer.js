@@ -100,12 +100,12 @@ class Pointer {
     }
   }
   move_bounds(x, type) {
-
+    
     if (!type) {
       x += window.scrollX
     }
     player.set_col_active('loop_bounds')
-    
+
     if (loop_bound_right_clicked || type == 'right') {
       var x = Math.min(x, win_w)
       var pos_left = Number(this.loop_border_left.style.left.replace('px',''))
@@ -137,8 +137,9 @@ class Pointer {
 
     el.addEventListener("mousemove", e => {
       var b = window.document.getElementById("div_scale_x")
-      var mx = e.clientX - b.offsetLeft + window.scrollX
+      var mx = e.clientX - 40 + window.scrollX
       this.scale_x_pos = posX2midi(mx)
+      show_mouse_pos(this.scale_x_pos.bar,this.scale_x_pos.micro,this.scale_x_pos.cent,-2)
     })
 
     el.addEventListener("mousedown", e => {
@@ -147,9 +148,9 @@ class Pointer {
         this.set_position(pos.x)
         player.set_col_inactive('loop_bounds')
         send_data('player pointer_start ' + this.scale_x_pos.bar + ' ' +
-                this.scale_x_pos.micro + ' ' + pos.cent, window.win_nr)
+            this.scale_x_pos.micro + ' ' + pos.cent, window.win_nr)
       } else {
-        var x = this.get_x_pos(this.scale_x_pos).x
+        x = e.clientX - 40 + window.scrollX
         if (ctrl_pressed) {
           this.move_bounds(x,'left')
         } else if (alt_pressed) {

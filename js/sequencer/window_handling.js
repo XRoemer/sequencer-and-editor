@@ -18,19 +18,13 @@ window.addEventListener('scroll', function(e) {
   // correct elements which need to keep their position
   var scrollY = window.scrollY
   var scrollX = window.scrollX
-  var scale_x = window.document.getElementById('div_scale_x')
-  scale_x.style.top = 50 + scrollY
-  var scale_y = window.document.getElementById('div_scale_y')
-  scale_y.style.left = scrollX
-  var c = window.document.getElementById('scale_y_bg')
-  c.style.left = scrollX
-  var c = window.document.getElementById('top_left_div')
-  c.style.left = scrollX
-  c.style.top = 50 + scrollY
+  div_scale_x.style.left = -scrollX + 40
+  div_scale_y.style.top = -scrollY + 100
+  scale_y_bg.style.left = scrollX
 
-  pointer.pointer_triad.style.top = scrollY - 20
-  pointer.loop_border_left.style.top = scrollY - 20
-  pointer.loop_border_right.style.top = scrollY - 20
+//  pointer.pointer_triad.style.top = scrollY - 20
+//  pointer.loop_border_left.style.top = scrollY - 20
+//  pointer.loop_border_right.style.top = scrollY - 20
 
   if (scrollX - parseInt(pointer.loop_border_left.style.left) > 15) {
     pointer.loop_border_left.style.visibility  = 'hidden'
@@ -74,19 +68,19 @@ function window_mouseup(e) {
 }
 
 function window_scroll(e) {
+
   if(ctrl_pressed) {
-    if (selected_item) {return}
+    if (items.selected_item != null) {return}
     var scrollX_old = window.scrollX
     var rel = win_w / scrollX_old
     win_w += e.deltaY
     win_w = Math.max(600,win_w)
     var scrollX_new = win_w / rel
     scale_seqgui()
-    window.scrollTo(scrollX_new, window.scrollY)
+    window.scrollTo({left:scrollX_new})
     send_data('settings win_size_w ' + win_w, window.win_nr)
   }
 }
-
 
 function load_tcp(args){
   tcp = new Tcp()
@@ -124,7 +118,7 @@ function distribute_data(name, values){
   else if (name === 'init')       {create_seqgui()}
   else if (name === 'set_var')    {set_var(values)}
   else if (name === 'set_item')   {val_array.push(values)}
-  else if (name === 'load_stop')  {set_items(val_array)}
+  else if (name === 'load_stop')  {items.set_items(val_array)}
 }
 
 function send_data(data, nr){
@@ -140,3 +134,25 @@ function send_data(data, nr){
 // out: amount_bars: amount_bars #amount_bars
 // out: clear: clear
 // in: pos_pointer: pos_pointer pos #pos
+
+function send_item_x(id,midipos){
+  send_data(['memory change',id,'pos',midipos.bar,midipos.micro,midipos.cent].join(' '), window.win_nr)
+}
+function send_item_w(id,midilen){
+  var bar = midilen.bar - 1
+  var micro = midilen.micro - 1
+  send_data(['memory change',id,'len',bar,micro,midilen.cent].join(' '), window.win_nr)
+}
+function send_item_row(id,row){
+  send_data('memory change '+id+' row '+row, window.win_nr)
+}
+function send_new_item(id,row,bar,micro,cent,len_bar,len_micro,len_cent,vol){
+  var str = ['memory new',id,row,bar-1,micro-1,cent,len_bar,len_micro,len_cent,vol].join(' ')
+  send_data(str, window.win_nr)
+}
+function send_del_item(id){
+  send_data('memory del '+id, window.win_nr)
+}
+function send_item_vol(id){
+  send_data('memory change '+id+' vol ' + vol, window.win_nr)
+}

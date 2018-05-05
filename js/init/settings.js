@@ -67,21 +67,18 @@ function set_win_size_y(e){
 function set_cnv_size_x(e){
   win_w = e.srcElement.valueAsNumber
   create_seqgui()
-  //set_items(val_array)
   send_data('settings win_size_w ' + win_w, window.win_nr)
 
 }
 function set_cnv_size_y(e){
   win_h = e.srcElement.valueAsNumber
   create_seqgui()
-  //set_items(val_array)
   send_data('settings win_size_h ' + win_h, window.win_nr)
 
 }
 function set_amount_of_rows(e){
   amount_rows = e.srcElement.valueAsNumber
   create_seqgui()
-  //set_items(val_array)
   send_data('settings amount_rows ' + amount_rows, window.win_nr)
 }
 

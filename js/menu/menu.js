@@ -10,7 +10,7 @@ function create_menu() {
   sub1.append(new gui.MenuItem({
   label: 'Test1',
   click: function() {
-    log(items)
+    log(items.dict)
   }
   }));
   sub1.append(

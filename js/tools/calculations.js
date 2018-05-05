@@ -1,6 +1,4 @@
-function sortNumber(a,b) {
-    return Number(a) - (b);
-}
+
 
 function midi2posX(bar, micro, cent) {
   var x = barlen * bar + miclen * micro + miclen/100 * cent

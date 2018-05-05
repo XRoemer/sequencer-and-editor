@@ -76,7 +76,7 @@ function select_track(e){
 function set_selection_to_editor(){
   try {
     var arr = notes.result[notes.selected_track]
-    set_items(arr.val_array, window.win_nr)
+    items.set_items(arr.val_array, window.win_nr)
   }
   catch(e) {log(e)}
 }

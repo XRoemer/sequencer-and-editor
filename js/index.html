@@ -17,6 +17,7 @@
     <script type="text/javascript" src='sequencer/window_handling.js'></script>
     <script type="text/javascript" src='sequencer/sequencer_listener.js'></script>
     <script type="text/javascript" src='sequencer/items.js'></script>
+    <script type="text/javascript" src='sequencer/Item.js'></script>
     <!-- <script type="text/javascript" src='menu/menu.js'></script> -->
 
     <script type="text/javascript" src='gui/gui_elements.js'></script>
@@ -43,11 +44,11 @@
     <div id="player_div" class="player">
       <canvas id="player_bg" class="player_bg"></canvas>
     </div>
-
+	<div    id="div_scale_x"  class="scale scaleX"> <canvas id="scale_x_bg"></canvas> </div>
+    <div    id="div_scale_y"  class="scale scaleY"> <canvas id="scale_y_bg"></canvas> </div>
+    <div    id="top_left_div" class="top_left"><canvas id="top_left" class="top_left_cnv"></canvas></div>
+    
     <div id="seq_container" class="seq_cont">
-      <div    id="top_left_div" class="top_left"><canvas id="top_left" class="top_left_cnv"></canvas></div>
-      <div    id="div_scale_x"  class="scale scaleX"> <canvas id="scale_x_bg"></canvas> </div>
-      <div    id="div_scale_y"  class="scale scaleY"> <canvas id="scale_y_bg"></canvas> </div>
       <canvas id="canvas_bg"    class="seq"></canvas>
       <div    id="sequencer_bg" class="seq"></div>
       <div    id="pointer_div"      class="seq pointer"></div>

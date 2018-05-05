@@ -72,8 +72,7 @@ function show_mouse_pos(bar, micro, cent, row) {
   lbl.innerHTML = "row " + row + " pos " + start
 }
 
-function show_item_pos(el) {
-  var it = el.info
+function show_item_pos(it) {
   lbl = document.getElementById('item')
   var p = '.'
   var sp = ' '

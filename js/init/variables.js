@@ -27,7 +27,7 @@ var elem_h = 10 // set on init
 var elem_w = 10 // set on init
 var item_w = 10 // set on init
 
-var vol = 80 // global var to set vol for new items to last item
+var vol = 80 // global var to set vol for new items.dict to last item
 
 var amount_rows = 20
 var line_design = 0 // 0,1,2,3: piano, iter, group of 4, group of 5
