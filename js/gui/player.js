@@ -146,10 +146,10 @@ class Player {
 function toggle_player(){
   if (player_div.style.visibility == 'hidden') {
     player_div.style.visibility = 'visible'
-    seq_container.style.top = 30
+    set_sequencer_pos(30)
   } else {
     player_div.style.visibility = 'hidden'
-    seq_container.style.top = 0
+    set_sequencer_pos(0)
   }
 }
 
@@ -157,14 +157,21 @@ function toggle_ctrl() {
   if (ctrl.style.visibility == 'hidden') {
     ctrl.style.visibility = 'visible'
     player_div.style.visibility = 'visible'
-    seq_container.style.top = 30
+    set_sequencer_pos(30)
     var attr =  "translate(-135 -135) scale(0.1) rotate(0)"
     hide.setAttribute("transform", attr);
   } else {
     ctrl.style.visibility = 'hidden'
     player_div.style.visibility = 'hidden'
-    seq_container.style.top = -50
+    set_sequencer_pos(-50)
     var attr =  "translate(-135 -135) scale(0.1) rotate(180)"
     hide.setAttribute("transform", attr);
   }
+}
+
+function set_sequencer_pos(x){
+  seq_container.style.top = x
+  scales.style.top = x + 50
+  transport.style.top = x + 50
+  top_left_div.style.top = x + 50
 }

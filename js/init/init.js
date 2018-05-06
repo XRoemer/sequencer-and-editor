@@ -368,15 +368,23 @@ function scale_scale_x(){
   for (i = 0; i < amount_bars * micro ; i++) {
     var x = i * elem_w
     x = Math.trunc(x)
-    if (i % micro === 0) {
-      var stroke_w=2, stroke_h=10, fs=12, hight=20 - fs
-    }
-    else {
-      var stroke_w=0.5, stroke_h=15, fs=10, hight=20 - fs
-    }
     div_scale_x.children['cnv_scale_x' + i].style.left = x
     div_scale_x.children['scale_lbl' + i ].style.left = x + 4
   }
+  
+  var m = pointer.loop_start_midi
+  var x = midi2posX(m.bar - 1,m.micro - 1,m.cent)
+  pointer.set_loop_start_x(x)
+  
+  m = pointer.loop_end_midi
+  x = midi2posX(m.bar - 1,m.micro - 1,m.cent)
+  pointer.set_loop_end_x(x)
+  
+  m = pointer.scale_x_pos
+  x = midi2posX(m.bar - 1,m.micro - 1,m.cent)
+  pointer.pointer_x = x
+  pointer.pointer.style.left = x
+  pointer.pointer_triad.style.left = x - 6.5
 }
 
 

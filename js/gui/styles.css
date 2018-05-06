@@ -39,8 +39,10 @@
 }
 
 .pointer {
+  left:40px;
   z-index: 15;
   opacity:1;
+  position:relative;
 }
 .loop_bounds {
   z-index: 35;
@@ -48,17 +50,19 @@
 }
 
 .scale {
+  top:80px;
   user-select: none;
   z-index: 10;
   position:fixed;
 }
 .scaleY {
-  top:100px;
+  top:0px;
   z-index: 20;
+  position:relative;
 }
 .scaleX {
-  top:80px;
   left:40px;
+  position:relative;
 }
 .top_left {
   width:40px;
@@ -74,8 +78,6 @@
   position:absolute;
   top:0px;
 }
-
-
 .player_svg {
   transition: 100ms;
   transition-timing-function: ease-in-out;

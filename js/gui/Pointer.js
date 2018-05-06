@@ -7,9 +7,11 @@ class Pointer {
     this.bar_nr = 0
     this.mic_nr = 0
     this.mic_len_ms = 10
-    this.scale_x_pos = 0
-    this.loop_start = null
-    this.loop_end = null
+    this.scale_x_pos = {bar:0,micro:1,cent:0}
+    this.loop_start_x = null
+    this.loop_start_midi = {bar:1,micro:1,cent:0}
+    this.loop_end_x = null
+    this.loop_end_midi = {bar:1,micro:2,cent:0}
     this.scroll_window = true
   }
 
@@ -20,16 +22,18 @@ class Pointer {
     var col = 'rgba('+p[0]+','+p[1]+','+p[2]+','+p[3]+')'
     this.pointer = create_stroke_svg(0, 0, pointer_w, win_h, pointer_w, col, 'pointer')
     c.appendChild(this.pointer)
-    this.pointer_triad = create_triad(-7.5, -20, 20, 20, 1, col, 'pointer_triad')
+    this.pointer_triad = create_triad(-7.5, 0, 20, 20, 1, col, 'pointer_triad')
     c.appendChild(this.pointer_triad)
 
-    var x_right = 2 * item_w  + 1
-    var x_left = item_w - 15 + 1
+    var x_right = 2 * item_w  
+    var x_left = item_w 
 
-    this.loop_border_left = create_triad(x_left, -20, 15, 20, 1, 'black',
+    this.loop_border_left = create_triad(x_left, 0, 15, 20, 1, 'black',
                                     'loop_bound_left', "orange", loop_bound_left)
-    this.loop_border_right = create_triad(x_right, -20, 15, 20, 1, 'black',
+    this.loop_border_right = create_triad(x_right, 0, 15, 20, 1, 'black',
                                     'loop_bound_right', "orange", loop_bound_right)
+    this.set_loop_start(x_left)
+    this.set_loop_end(x_right)
 
     loop_bounds_div.appendChild(this.loop_border_left)
     loop_bounds_div.appendChild(this.loop_border_right)
@@ -41,8 +45,9 @@ class Pointer {
 
 
   set_position(x) {
-    this.pointer.style.left = x
-    this.pointer_triad.style.left = x - 6.5
+    this.pointer_x = x
+    this.pointer.style.left = x - window.scrollX
+    this.pointer_triad.style.left = x - 6.5 - window.scrollX
   }
 
   move_pointer(val){
@@ -108,35 +113,53 @@ class Pointer {
 
     if (loop_bound_right_clicked || type == 'right') {
       var x = Math.min(x, win_w)
-      var pos_left = Number(this.loop_border_left.style.left.replace('px',''))
-      x = Math.max(x, pos_left + 15 )
+      x = Math.max(x, this.loop_start_x )
       if (use_quant) {
         x = Math.floor((x) / item_w) * item_w
         var pos = posX2midi(x)
       }
-      var pos = posX2midi(x)
+      this.set_loop_end(x)
+      var pos = this.loop_end_midi
       send_data('player loop_end ' + pos.bar + ' ' +
               pos.micro + ' ' + pos.cent, window.win_nr)
-      this.loop_border_right.style.left = x + 1
     } else {
       var x = Math.max(x, 0)
-      var pos_right = Number(this.loop_border_right.style.left.replace('px',''))
-      x = Math.min(x, pos_right - 2)
+      x = Math.min(x, this.loop_end_x)
       if (use_quant) {
         x = Math.floor(x / item_w) * item_w
       }
-      this.loop_border_left.style.left = x - 14
-      var pos = posX2midi(x)
+      this.set_loop_start(x)
+      var pos = this.loop_start_midi
       send_data('player loop_start ' + pos.bar + ' ' +
               pos.micro + ' ' + pos.cent, window.win_nr)
     }
   }
-
+  
+  set_loop_start(x){
+    this.set_loop_start_x(x)
+    this.loop_start_midi = posX2midi(x)
+    this.loop_border_left.style.visibility  = 'visible'
+  }
+  
+  set_loop_start_x(x){
+    this.loop_start_x = x
+    this.loop_border_left.style.left = x - 14 - window.scrollX
+  }
+  
+  set_loop_end(x){
+    this.set_loop_end_x(x)
+    this.loop_end_midi = posX2midi(x)
+    this.loop_border_right.style.visibility  = 'visible'
+  }
+  
+  set_loop_end_x(x){
+    this.loop_end_x = x
+    this.loop_border_right.style.left = x + 1 - window.scrollX
+  }
 
   add_listeners_to_x_scale(el) {
 
     el.addEventListener("mousemove", e => {
-      var b = window.document.getElementById("div_scale_x")
       var mx = e.clientX - 40 + window.scrollX
       this.scale_x_pos = posX2midi(mx)
       show_mouse_pos(this.scale_x_pos.bar,this.scale_x_pos.micro,this.scale_x_pos.cent,-2)
@@ -146,6 +169,9 @@ class Pointer {
       if (!ctrl_pressed && !alt_pressed) {
         var pos = this.get_x_pos(this.scale_x_pos)
         this.set_position(pos.x)
+        this.pointer_x = pos.x
+        this.pointer.style.visibility  = 'visible'
+        this.pointer_triad.style.visibility  = 'visible'
         player.set_col_inactive('loop_bounds')
         send_data('player pointer_start ' + this.scale_x_pos.bar + ' ' +
             this.scale_x_pos.micro + ' ' + pos.cent, window.win_nr)
@@ -169,10 +195,10 @@ class Pointer {
         cent = res[res.length - 1]
       }
       var x = (midi_pos.bar - 1) * barlen + (midi_pos.micro - 1) * miclen
-              + miclen * cent / 100
+              + miclen * cent / 100 
     } else {
       var x = (midi_pos.bar - 1) * barlen + (midi_pos.micro - 1) * miclen
-      + miclen * midi_pos.cent / 100
+      + miclen * midi_pos.cent / 100 
       cent = midi_pos.cent
 
     }

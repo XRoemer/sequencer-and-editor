@@ -5,6 +5,7 @@ function test() {
    
     log(items.dict)
     log(items.items_by_row)
+    log(pointer)
     
   }
   catch(e){log(e)}

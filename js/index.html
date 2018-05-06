@@ -44,15 +44,20 @@
     <div id="player_div" class="player">
       <canvas id="player_bg" class="player_bg"></canvas>
     </div>
-	<div    id="div_scale_x"  class="scale scaleX"> <canvas id="scale_x_bg"></canvas> </div>
-    <div    id="div_scale_y"  class="scale scaleY"> <canvas id="scale_y_bg"></canvas> </div>
+    <div id="scales" class="scale">
     <div    id="top_left_div" class="top_left"><canvas id="top_left" class="top_left_cnv"></canvas></div>
+		<div    id="div_scale_x"  class="scaleX"> <canvas id="scale_x_bg"></canvas> </div>
+	    <div    id="div_scale_y"  class="scaleY"> <canvas id="scale_y_bg"></canvas> </div>
+	    
+    </div>
+    <div id="transport" class="scale">
+    	<div    id="pointer_div"      class="pointer"></div>
+      	<div    id="loop_bounds_div"  class="pointer loop_bounds"></div>
+    </div>
     
     <div id="seq_container" class="seq_cont">
       <canvas id="canvas_bg"    class="seq"></canvas>
       <div    id="sequencer_bg" class="seq"></div>
-      <div    id="pointer_div"      class="seq pointer"></div>
-      <div    id="loop_bounds_div"  class="seq pointer loop_bounds"></div>
       <div    id="sequencer"    class="seq"> <canvas id="seq_div_extend"></canvas> </div>
     </div>
 

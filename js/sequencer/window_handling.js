@@ -19,19 +19,30 @@ window.addEventListener('scroll', function(e) {
   var scrollY = window.scrollY
   var scrollX = window.scrollX
   div_scale_x.style.left = -scrollX + 40
-  div_scale_y.style.top = -scrollY + 100
+  div_scale_y.style.top = -scrollY 
   scale_y_bg.style.left = scrollX
 
-//  pointer.pointer_triad.style.top = scrollY - 20
-//  pointer.loop_border_left.style.top = scrollY - 20
-//  pointer.loop_border_right.style.top = scrollY - 20
-
-  if (scrollX - parseInt(pointer.loop_border_left.style.left) > 15) {
+  pointer.pointer_triad.style.left = pointer.pointer_x - scrollX - 7.5
+  pointer.pointer.style.left = pointer.pointer_x - scrollX 
+  pointer.loop_border_left.style.left = pointer.loop_start_x - scrollX - 14
+  pointer.loop_border_right.style.left = pointer.loop_end_x - scrollX
+  
+  // hide/show transport and loop_bounds
+  if (pointer.loop_start_x - scrollX < 0) {
     pointer.loop_border_left.style.visibility  = 'hidden'
   } else {pointer.loop_border_left.style.visibility  = 'visible'}
-  if (scrollX - parseInt(pointer.loop_border_right.style.left) > 0) {
+  
+  if (pointer.loop_end_x - scrollX < 0) {
     pointer.loop_border_right.style.visibility  = 'hidden'
   } else {pointer.loop_border_right.style.visibility  = 'visible'}
+  
+  if (pointer.pointer_x - scrollX < 0) {
+    pointer.pointer.style.visibility  = 'hidden'
+      pointer.pointer_triad.style.visibility  = 'hidden'
+    } else {
+      pointer.pointer.style.visibility  = 'visible'
+      pointer.pointer_triad.style.visibility  = 'visible'
+    }
 });
 
 function get_key(e){
