@@ -5,7 +5,8 @@ function test() {
    
 //    log(items.dict)
 //    log(items.items_by_row)
-    log(pointer.a,pointer.b,sc)
+    //pointer = new Pointer()
+   // pointer.create_pointer()
 
   }
   catch(e){log(e)}

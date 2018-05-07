@@ -144,6 +144,10 @@ function create_seqgui() {
     create_scale_y()
     create_scale_x()
     
+    if(window.pointer) {
+      pointer.stop_pointer()
+      pointer = null
+    }
     pointer = new Pointer()
     pointer.create_pointer()
     player = new Player()
