@@ -172,7 +172,7 @@ class Items {
     }
   }
 
-  drag_item(id,my,mx) {
+  drag_item(id,my,mx,dx) {
     document.getElementById('sequencer').style.cursor = "move";
     var it = this.dict[id]
     var mx = Math.min(mx, win_w - 1 )
@@ -323,75 +323,5 @@ var miclen = 0
 
 
 
-
-function add_listeners_to_cnv(el) {
-
-  el.addEventListener("wheel", function(e) {
-    if(items.selected_item != null && ctrl_pressed){
-      var it = items.dict[items.selected_item]
-      dx = e.deltaY / 100
-      vol = Math.min(Math.max(it.vol - dx,0),127)
-      it.set_vol(vol)
-      show_item_pos(it)
-      send_item_vol(items.selected_item)
-    }
-  }, false);
-
-  el.addEventListener("mousemove", function(e) {
-
-    var recta = this.getBoundingClientRect()
-    var mx = e.clientX - recta.left
-    var my = e.clientY - recta.top
-    dy = my - items.my_old
-    items.my_old = my
-    dx = mx - items.mx_old
-    items.mx_old = mx
-    var midi_pos = posX2midi(mx)
-    var row = posY2row(my)
-
-    show_mouse_pos(midi_pos.bar, midi_pos.micro, midi_pos.cent,row)
-    if (!items.dragging && !items.dragging_startend 
-		&& !ctrl_pressed && !shift_pressed && !alt_pressed) {
-      items.search_for_close_items(mx, row)
-      }
-    else {
-      if (items.dragging && items.selected_item != null) {
-        items.drag_item(items.selected_item, my, mx, dx)
-      }
-      else {if (items.drag_start) {items.dragging_start(dx)}
-        else if (items.drag_end) {items.dragging_end(dx)}
-      }
-    }
-  }, false);
-
-  el.addEventListener("mouseup", function(e) {
-    if (e.button == 0){
-      items.dragging = false
-      document.getElementById('sequencer').style.cursor = "default";
-
-      if (items.selected_item != null){
-	items.dict[items.selected_item].set_inactive()
-        items.selected_item = null
-      }
-      items.drag_end = false
-      items.drag_start = false
-      items.dragging_startend = false
-    }
-  }, false);
-  el.addEventListener("mousedown", function(e) {
-    if (e.button == 0){
-      if (items.drag_end || items.drag_start) {
-        items.dragging_startend = true
-      } else if (ctrl_pressed) {
-	items.create_new_item(e)
-      }
-    } else if (e.button == 1 && items.selected_item != null) {
-      items.delete_item()
-    }
-  }, false);
-  el.addEventListener("dblclick", function(e) {
-    items.create_new_item(e)
-  }, false);
-}
 
 

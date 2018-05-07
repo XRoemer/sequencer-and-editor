@@ -54,6 +54,7 @@
   user-select: none;
   z-index: 10;
   position:fixed;
+  pointer-events:none;   
 }
 .scaleY {
   top:0px;
@@ -63,6 +64,10 @@
 .scaleX {
   left:40px;
   position:relative;
+  pointer-events:all;   
+}
+#loop_bounds_div {
+	pointer-events:all;  
 }
 .top_left {
   width:40px;

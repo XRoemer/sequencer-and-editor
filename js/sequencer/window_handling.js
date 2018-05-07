@@ -3,7 +3,8 @@ window.onkeydown = get_key;
 window.onkeyup = end_key;
 window.onmousemove = window_mousemove;
 window.onmouseup = window_mouseup;
-window.onwheel = window_scroll;
+window.onwheel = scroll_window_by_wheel;
+window.onscroll = correct_positions
 
 var win = gui.Window.get()
 
@@ -14,7 +15,7 @@ win.on('close', function() {
   win.close()
 });
 
-window.addEventListener('scroll', function(e) {
+function correct_positions(e) {
   // correct elements which need to keep their position
   var scrollY = window.scrollY
   var scrollX = window.scrollX
@@ -43,7 +44,23 @@ window.addEventListener('scroll', function(e) {
       pointer.pointer.style.visibility  = 'visible'
       pointer.pointer_triad.style.visibility  = 'visible'
     }
-});
+}
+
+function scroll_window_by_wheel(e) {
+
+  if(ctrl_pressed) {
+    if (items.selected_item != null) {return}
+    var scrollX_old = window.scrollX
+    var rel = win_w / scrollX_old
+    win_w += e.deltaY
+    win_w = Math.max(600,win_w)
+    var scrollX_new = win_w / rel
+    scale_seqgui()
+    sc += 1
+    window.scrollTo({left:scrollX_new})
+    send_data('settings win_size_w ' + win_w, window.win_nr)
+  }
+}
 
 function get_key(e){
   if (e.key == 'Control') { ctrl_pressed = true }
@@ -77,21 +94,8 @@ function window_mouseup(e) {
   }
   window.dragging = false
 }
+sc = 0
 
-function window_scroll(e) {
-
-  if(ctrl_pressed) {
-    if (items.selected_item != null) {return}
-    var scrollX_old = window.scrollX
-    var rel = win_w / scrollX_old
-    win_w += e.deltaY
-    win_w = Math.max(600,win_w)
-    var scrollX_new = win_w / rel
-    scale_seqgui()
-    window.scrollTo({left:scrollX_new})
-    send_data('settings win_size_w ' + win_w, window.win_nr)
-  }
-}
 
 function load_tcp(args){
   tcp = new Tcp()

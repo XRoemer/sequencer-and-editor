@@ -34,8 +34,6 @@ function create_ctrl() {
   ctrl_cont.appendChild(create_label(518, 2, 'settings', 10))
   ctrl_cont.appendChild(create_svg_btn(500, 17, 'clear', 'button', clear_from_gui));
   ctrl_cont.appendChild(create_label(518, 17, 'clear', 10))
-  ctrl_cont.appendChild(create_svg_btn(500, 32, 'init', 'button', create_seqgui));
-  ctrl_cont.appendChild(create_label(518, 32, 'init', 10))
 
   ctrl_cont.appendChild(create_svg_btn(560, 2, 'midi', 'button', call_midi));
   ctrl_cont.appendChild(create_label(578, 2, 'midi', 10))

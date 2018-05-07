@@ -13,6 +13,9 @@ class Pointer {
     this.loop_end_x = null
     this.loop_end_midi = {bar:1,micro:2,cent:0}
     this.scroll_window = true
+    
+    this.a = 0
+    this.b = 0
   }
 
   create_pointer(){
@@ -20,7 +23,7 @@ class Pointer {
     c.innerHTML = ''
     var p = pointer_col
     var col = 'rgba('+p[0]+','+p[1]+','+p[2]+','+p[3]+')'
-    this.pointer = create_stroke_svg(0, 0, pointer_w, win_h, pointer_w, col, 'pointer')
+    this.pointer = create_stroke_svg(0, 20, pointer_w, win_h, pointer_w, col, 'pointer')
     c.appendChild(this.pointer)
     this.pointer_triad = create_triad(-7.5, 0, 20, 20, 1, col, 'pointer_triad')
     c.appendChild(this.pointer_triad)
@@ -51,7 +54,7 @@ class Pointer {
   }
 
   move_pointer(val){
-
+    this.a += 1
     if (val[0] == 'stop'){
       this.stop_pointer()
       var c = window.document.getElementById('play')
@@ -74,6 +77,7 @@ class Pointer {
 
   scroll_pointer(p){
     p.pointer_count += 1
+    this.b += 1
     var cutoff = 0
     if (this.cutoff > 0){
       cutoff = this.cutoff / 100 * elem_w
@@ -85,9 +89,9 @@ class Pointer {
 
     if (this.scroll_window) {
       if (x_scroll > window.scrollX ) {
-        window.scrollTo(x_scroll, window.scrollY)
+        window.scrollTo({left:x_scroll})
       } else if(p.pointer_x < window.scrollX){
-        window.scrollTo(p.pointer_x, window.scrollY)
+        window.scrollTo({left:p.pointer_x})
       }
     }
   }

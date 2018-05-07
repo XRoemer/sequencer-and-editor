@@ -114,7 +114,7 @@ class Player {
       this.set_col_inactive("pause")
       pointer.set_position(0)
       send_data('player pointer_start 1 1 0' , window.win_nr)
-      window.scrollTo(0, window.scrollY)
+      window.scrollTo({left:0})
     }
     else if (type=="loop") {
       this.loop_on = !this.loop_on
