@@ -75,6 +75,7 @@
   z-index: 25;
   position:fixed;
   top:80px;
+  pointer-events:all;
 }
 .top_left_cnv {
   width:40px;

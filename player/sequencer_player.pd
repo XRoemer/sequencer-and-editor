@@ -1,8 +1,8 @@
 #N struct text float x float y text t;
-#N canvas 2874 164 835 707 10;
+#N canvas 2405 197 835 707 10;
 #X obj 185 48 inlet memory;
 #X scalar text 424 510 \; \;;
-#N canvas 1174 63 497 726 get_items_in_micro 0;
+#N canvas 2273 144 497 726 get_items_in_micro 0;
 #X obj 94 236 until;
 #X msg 94 212 100;
 #X obj 94 259 f;
@@ -18,7 +18,6 @@
 #X obj 150 467 == 2;
 #X obj 150 488 sel 0;
 #X obj 93 535 spigot;
-#X obj 76 184 t f b 0 f 1;
 #X msg 150 509 0;
 #X obj 77 5 inlet;
 #X obj 93 639 outlet;
@@ -82,16 +81,19 @@
 #X obj 77 28 unpack f f f f;
 #X floatatom 204 49 5 0 0 3 co-end - -, f 5;
 #X obj 365 335 pack f f;
+#X msg 122 507 1;
+#X obj 76 184 t f b 0 f b;
+#X msg 133 237 0;
 #X connect 0 0 2 0;
 #X connect 1 0 0 0;
 #X connect 2 0 3 0;
 #X connect 2 0 4 0;
 #X connect 3 0 2 1;
-#X connect 4 0 24 0;
-#X connect 5 0 25 0;
+#X connect 4 0 23 0;
+#X connect 5 0 24 0;
 #X connect 5 1 9 0;
 #X connect 6 0 14 0;
-#X connect 6 1 28 0;
+#X connect 6 1 27 0;
 #X connect 7 0 8 0;
 #X connect 7 1 10 0;
 #X connect 8 0 11 0;
@@ -101,39 +103,41 @@
 #X connect 11 0 12 0;
 #X connect 12 0 13 0;
 #X connect 13 0 0 1;
-#X connect 13 0 16 0;
-#X connect 14 0 38 0;
-#X connect 15 1 1 0;
-#X connect 15 2 2 1;
-#X connect 15 3 4 1;
-#X connect 15 4 14 1;
-#X connect 16 0 14 1;
-#X connect 17 0 39 0;
-#X connect 19 0 37 0;
-#X connect 20 0 37 1;
-#X connect 21 1 15 0;
-#X connect 23 0 33 0;
-#X connect 24 0 26 0;
-#X connect 25 0 21 0;
-#X connect 26 0 6 0;
-#X connect 27 0 18 0;
-#X connect 28 0 7 0;
-#X connect 29 0 26 3;
-#X connect 30 0 25 1;
-#X connect 30 0 31 0;
-#X connect 32 0 24 1;
-#X connect 33 0 32 0;
-#X connect 34 0 33 1;
-#X connect 34 0 35 0;
-#X connect 36 0 41 0;
-#X connect 37 0 5 0;
-#X connect 38 0 27 0;
-#X connect 39 0 19 0;
-#X connect 39 1 20 0;
-#X connect 39 2 36 0;
-#X connect 39 3 40 0;
-#X connect 40 0 41 1;
-#X connect 41 0 38 1;
+#X connect 13 0 15 0;
+#X connect 14 0 37 0;
+#X connect 15 0 14 1;
+#X connect 16 0 38 0;
+#X connect 18 0 36 0;
+#X connect 19 0 36 1;
+#X connect 20 1 42 0;
+#X connect 22 0 32 0;
+#X connect 23 0 25 0;
+#X connect 24 0 20 0;
+#X connect 25 0 6 0;
+#X connect 26 0 17 0;
+#X connect 27 0 7 0;
+#X connect 28 0 25 3;
+#X connect 29 0 24 1;
+#X connect 29 0 30 0;
+#X connect 31 0 23 1;
+#X connect 32 0 31 0;
+#X connect 33 0 32 1;
+#X connect 33 0 34 0;
+#X connect 35 0 40 0;
+#X connect 36 0 5 0;
+#X connect 37 0 26 0;
+#X connect 38 0 18 0;
+#X connect 38 1 19 0;
+#X connect 38 2 35 0;
+#X connect 38 3 39 0;
+#X connect 39 0 40 1;
+#X connect 40 0 37 1;
+#X connect 41 0 14 1;
+#X connect 42 1 1 0;
+#X connect 42 2 43 0;
+#X connect 42 3 4 1;
+#X connect 42 4 41 0;
+#X connect 43 0 2 1;
 #X restore 185 295 pd get_items_in_micro;
 #X text 123 459 cent midibar midimicro midicent vol row;
 #N canvas 2235 433 500 577 calc_pos_and_len 0;
@@ -228,10 +232,10 @@
 #X obj 614 365 sel 0;
 #X obj 468 108 route dollar_null size_change pointer;
 #X obj 614 341 t a;
-#N canvas 3084 312 324 632 calculate_position 1;
+#N canvas 3084 312 324 613 calculate_position 0;
 #X obj 79 29 inlet memory;
 #X obj 79 365 outlet pos;
-#N canvas 1444 529 356 336 micro2midi 0;
+#N canvas 1444 529 356 317 micro2midi 0;
 #X obj 109 18 inlet;
 #X obj 207 18 inlet micro;
 #X obj 109 257 outlet;
@@ -262,7 +266,7 @@
 #X obj 242 345 outlet stop;
 #X obj 192 117 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#N canvas 2099 200 784 764 metro 1;
+#N canvas 2099 200 784 764 metro 0;
 #X obj 111 38 inlet start_stop;
 #X msg 114 262 stop;
 #X obj 113 316 delay;
@@ -695,7 +699,7 @@
 #X restore 417 210 pd positions;
 #X obj 616 166 hradio 15 0 0 2 empty empty empty 0 -8 0 10 -262144
 -1 -1 1;
-#N canvas 2224 215 795 755 end_pos 1;
+#N canvas 2224 215 795 755 end_pos 0;
 #X obj 336 150 unpack f f f;
 #X floatatom 336 177 5 0 0 0 - - -, f 5;
 #X floatatom 380 177 5 0 0 0 - - -, f 5;
@@ -725,7 +729,7 @@
 #X obj 316 363 demux . .;
 #X obj 509 522 spigot;
 #X obj 557 520 tgl 15 0 empty \$0-loop_on loop_on -10 -10 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 161 174 t f f f;
 #X obj 367 397 pack f 0 f;
 #X obj 161 452 pack f f f;
@@ -740,7 +744,7 @@
 #X obj 137 468 t b;
 #X obj 649 509 spigot;
 #X obj 683 464 tgl 15 0 empty \$0-loop_on loop_on -10 -10 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 683 484 == 0;
 #X msg 317 397 \$1 0 100;
 #X obj 336 71 r \$0-start-pos;
@@ -754,7 +758,7 @@
 -1 -1;
 #X obj 602 353 spigot;
 #X obj 650 351 tgl 15 0 empty \$0-loop_on loop_on -10 -10 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X msg 603 376 1;
 #X obj 603 398 t b f;
 #X msg 605 480 0;
@@ -843,7 +847,7 @@
 #X floatatom 205 534 5 0 0 2 ms #0-ms -, f 5;
 #X floatatom 453 354 5 0 0 2 ms #0-ms -, f 5;
 #X obj 683 143 tgl 15 0 \$0-loop_on empty loop_on -9 20 0 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 417 119 route pointer_start loop_start loop_end loop_bounds
 loop;
 #X obj 145 562 pack f f f f f;
@@ -1011,7 +1015,7 @@ loop;
 #X msg 425 389 pos_pointer pos \$1 \$2 \$3 \$4;
 #X msg 614 389 pos_pointer stop 0 0 0 0;
 #X obj 185 125 t a a;
-#X obj 218 379 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+#X obj 218 379 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
 #X msg 185 268 \$2 \$1 \$3 \$4;
 #X msg 425 296 \$2 \$1 \$3 \$5;

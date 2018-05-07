@@ -441,10 +441,10 @@
 #X connect 15 0 13 0;
 #X connect 16 0 15 1;
 #X restore 331 108 pd Gui_control;
-#X obj 75 112 hsl 66 20 0 1 0 0 \$0-slider \$0-set-slider volume 19
-7 1 13 -228856 -1 -1 0 1;
-#X obj 144 100 tgl 16 0 \$0-dsp-toggle \$0-dsp-toggle-set on 3 6 1
-9 -74965 -74965 -262144 1 1;
+#X obj 76 112 hsl 66 20 0 1 0 0 \$0-slider \$0-set-slider volume 19
+7 1 13 -228856 -1 -1 5100 1;
+#X obj 144 100 tgl 16 0 \$0-dsp-toggle \$0-dsp-toggle-set off 3 6 1
+9 -228856 -128992 -66577 0 1;
 #X obj 144 116 bng 16 500 50 0 \$0-mute-bng \$0-mute empty 0 9 2 8
 -228856 -91674 -195568;
 #N canvas 1440 128 347 352 load_args 0;
@@ -480,8 +480,8 @@
 #X obj 516 294 int;
 #X obj 516 316 / 100;
 #X floatatom 516 338 5 0 0 0 - - -, f 5;
-#X obj 86 100 cnv 10 42 6 empty \$0-cnv 0 9 3 0 10 -262144 -66577 0
-;
+#X obj 86 100 cnv 10 42 6 empty \$0-cnv 0.78 9 3 0 10 -262144 -66577
+0;
 #X obj 576 320 l2s;
 #X obj 576 365 s \$0-cnv;
 #X msg 576 342 label \$1;
