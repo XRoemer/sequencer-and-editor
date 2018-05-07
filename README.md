@@ -28,7 +28,9 @@ More information will be added soon.
 	- alt click into x-scale sets loop-region end
 	- loop-regions are draggable
 
-Works with Purr Data, tested on win7/win10, will work with pd vanilla soon.
+Works with pd vanilla and Purr Data, tested on win7/win10.
+
+pd vanilla needs following libraries: zexy, moocow, mrpeach and hcs. moonlib is needed for the synth in the example.
 
 The handling of the editor is done with pd. The editor might be controlled by any other program using tcp ports 8150 (server) / 8151 (client) for communication.
  
