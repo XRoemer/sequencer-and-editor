@@ -40,6 +40,7 @@ The handling of the editor is done with pd. The editor might be controlled by an
 
 
 ![alt tag](js/gui/sequencer.png)
+![alt tag](js/gui/parameters.png)
 
 
 
