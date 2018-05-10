@@ -1,4 +1,4 @@
-.ctrl {
+.main_div {
   z-index: 40;
   user-select: none;
   position:fixed;
@@ -6,13 +6,10 @@
   margin:0px;
   width: 100%;
 }
-.cnv_ctrl {
-  /* width:1000px; */
+.cnv_main {
   height:50px;
 }
-
 .player {
-  top:50px;
   height:30px;
   position: fixed;
   z-index: 40;
@@ -21,14 +18,10 @@
   height:30px;
   width: 100%;
 }
-
 .seq_cont {
   position:absolute;
-  top:30px;
 }
-
 .seq {
-  top:70px;
   position:absolute;
   z-index: 1;
   left:40px;
@@ -37,7 +30,6 @@
 #sequencer {
   opacity: 1;
 }
-
 .pointer {
   left:40px;
   z-index: 15;
@@ -48,16 +40,13 @@
   z-index: 35;
   opacity:0.65;
 }
-
 .scale {
-  top:80px;
   user-select: none;
   z-index: 10;
   position:fixed;
   pointer-events:none;   
 }
 .scaleY {
-  top:0px;
   z-index: 20;
   position:relative;
 }
@@ -74,7 +63,13 @@
   height:20px;
   z-index: 25;
   position:fixed;
-  top:80px;
+  pointer-events:all;
+}
+.bottom_left {
+  width:40px;
+  left:-40px;
+  z-index: 25;
+  position:absolute;
   pointer-events:all;
 }
 .top_left_cnv {
@@ -106,17 +101,7 @@
 .player_click:active{
   fill: orange;
 }
-/* .svg_button {
-  stroke: black;
-  fill: rgb(200,200,200);
+.parameters{
+	position:absolute;
+	left:40px;
 }
-.svg_button:active{
-  fill: orange;
-}
-.svg_toggle {
-  stroke: black;
-  fill: rgb(200,200,200);
-}
-/* .svg_button:active{
-  fill: orange;
-} */ */

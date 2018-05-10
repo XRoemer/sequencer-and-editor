@@ -21,6 +21,7 @@ function correct_positions(e) {
   var scrollX = window.scrollX
   div_scale_x.style.left = -scrollX + 40
   div_scale_y.style.top = -scrollY 
+  bottom_left_div.style.left = scrollX - 40
   scale_y_bg.style.left = scrollX
 
   pointer.pointer_triad.style.left = pointer.pointer_x - scrollX - 7.5

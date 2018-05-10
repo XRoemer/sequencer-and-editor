@@ -33,7 +33,6 @@ function on_load_settings(e){
     set_cnv_size_y, win_h, set_number_by_wheel, 'win_h'))
   ctrl_cont.appendChild(create_label(68, 80, 'canvas size y', 11))
 
-  //
   ctrl_cont.appendChild(create_nr(160, 10, 50, 1, 100, 1,
     set_amount_of_rows, amount_rows, set_number_by_wheel, 'amount_rows'))
   ctrl_cont.appendChild(create_label(218, 10, 'amount rows', 11))
@@ -43,7 +42,42 @@ function on_load_settings(e){
   
   ctrl_cont.appendChild(create_svg_btn(160, 70, 'use_send', 'toggle',  set_log_send, log_send))
   ctrl_cont.appendChild(create_label(180, 72, 'log send data', 10, 'log_send'))
+  
+  ctrl_cont.appendChild(create_label(10, 110, 'item colors', 11, 'i_col'))
+  
+  var str_path = SVGs.rectangle(0,0, 40, 3, 20)
+  
+  var btn = create_color_picker(10, 130, 40 ,20, 'items_col0', elem_cols[0], set_elem_cols)
+  ctrl_cont.appendChild(btn)
+  
+  btn = create_color_picker(50, 130, 40 ,20, 'items_col1', elem_cols[1], set_elem_cols)
+  ctrl_cont.appendChild(btn)
+    
+  btn = create_color_picker(90, 130, 40 ,20, 'items_col2', elem_cols[2], set_elem_cols)
+  ctrl_cont.appendChild(btn)
 
+  draw_item_palette(ctrl_cont,155)
+
+}
+
+function draw_item_palette(ctrl_cont, y){
+  var ctx = ctrl_cont.children['cnv_settings'].getContext("2d")
+  var path = new Path2D()
+  
+  for (var i = 0; i < 128; i++){
+    path.rect(i * 1 + 5,y,2,20)
+    ctx.fillStyle = calc_color(i)
+    ctx.fillRect(i * 2.5 + 10 ,y,2.5,20)
+  }  
+}
+
+function set_elem_cols(e){
+  var c = hexToRgb(e.target.value)
+  var new_col = [c.r, c.g, c.b]
+  if (e.target.id == 'items_col0') {elem_cols[0] = new_col}
+  else if (e.target.id == 'items_col1') {elem_cols[1] =new_col}
+  else if (e.target.id == 'items_col2'){ elem_cols[2] = new_col}
+  draw_item_palette(ctrl_cont, 155)
 }
 
 function set_number_by_wheel(e){

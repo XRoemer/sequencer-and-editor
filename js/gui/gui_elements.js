@@ -1,3 +1,5 @@
+
+
 function create_btn(x,y,font_size,name,fkt) {
   var btn = document.createElement("BUTTON");
   var t = document.createTextNode('');
@@ -48,6 +50,20 @@ function create_select(x, y, fkt, id_name) {
   input.onchange = fkt
   input.id = id_name
   input.style = "position: absolute; width: 100; top:" + y.toString() + "px; left:" + x.toString() + "px;"
+  return input
+}
+
+function create_color_picker(x, y, w, h, id, col, fkt) {
+  var input = document.createElement("INPUT");
+  input.type = "color";
+  input.onchange = fkt
+  input.id = id
+  input.style.position = "absolute" 
+  input.style.width = w 
+  input.style.height = h 
+  input.style.top = y 
+  input.style.left = x
+  input.value = rgbToHex(col[0], col[1],col[2])
   return input
 }
 
@@ -190,9 +206,8 @@ function toggle_radios(e) {
 }
 
 
-function create_play_btn(x,y,w,h, stroke_w,str,id,classes) {
+function create_player_btn(x,y,w,h, stroke_w,str,id,classes) {
   var path = document.createElementNS("http://www.w3.org/2000/svg", 'path')
-  var str = str
   path.setAttributeNS(null, "d", str);
 
   var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")

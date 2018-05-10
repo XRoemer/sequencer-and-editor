@@ -16,6 +16,7 @@ class Item {
     this.y = null
     this.w = null
     this.h = null 
+    this.col = null
     
     this.params = {}
     
@@ -85,7 +86,8 @@ class Item {
   
   set_vol(vol){
     this.vol = vol
-    this.rect.firstChild.style.fill = calc_color(vol)
+    this.col = calc_color(vol)
+    this.rect.firstChild.style.fill = this.col
   }
   set_active(){this.rect.style.stroke = 'red'}
   set_inactive(){this.rect.style.stroke = 'black'}
@@ -96,7 +98,7 @@ class Item {
         if (!items.dragging && !items.dragging_startend) {
           this.rect.style.stroke = 'red'
           items.selected_item = this.id
-          show_item_pos(this)
+          main.show_item_pos(this)
         }
         if(alt_pressed && shift_pressed){
           items.delete_item()

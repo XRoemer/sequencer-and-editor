@@ -47,6 +47,7 @@ class Items {
 
       document.getElementById('sequencer').appendChild(item.rect);
     }
+    params.set_items()
   }
   
   create_new_item(e,x,y){
@@ -91,7 +92,9 @@ class Items {
     bar += 1
     micro += 1
     send_new_item(id,row,bar,micro,cent,len_bar,len_micro,len_cent,vol)
-    document.getElementById('sequencer').appendChild(item.rect);
+    document.getElementById('sequencer').appendChild(item.rect)
+    
+    params.set_items()
   }
   
   delete_item(){
@@ -178,25 +181,26 @@ class Items {
     var mx = Math.min(mx, win_w - 1 )
     this.drag_itemX(it,id,mx,dx)
     this.drag_itemY(it,id,my)
-    show_item_pos(it)
+    main.show_item_pos(it)
   }
 
   drag_itemX(it,id,mx,dx){
     var item_x = it.x
-    var x = item_x + dx
+    var x = Math.max(item_x + dx, 0)
     if (!use_quant) {
+      
       this.adjust_arrays({id,x})
       it.set_x(x)
     } else {
       var it_pos = Math.round(item_x / item_w)
       var cur_pos = Math.round(mx / item_w)
-
       if (cur_pos != it_pos) {
         var x = cur_pos * item_w
         this.adjust_arrays({id,x})
         it.set_x(x)
       }
     }
+    params.set_items()
   }
 
   drag_itemY(it,id,my){
@@ -224,7 +228,7 @@ class Items {
   dragging_end(dx) {
     var it = this.dict[this.selected_item_se]
     var w = Math.max( it.w + dx, 1)
-    var x = parseFloat(it.left)
+    var x = parseFloat(it.x)
     it.w = w
     var id = this.selected_item_se
     this.adjust_arrays({id,x,w})
@@ -244,9 +248,10 @@ class Items {
       this.adjust_arr_items_by_row({id,x,w,old_row,new_row})
       send_item_row(id,new_row)
     }
-    if (args.x) {
+    if (args.x != null) {
       var x = args.x
       var w = it.w
+      
       this.adjust_arr_items_by_row({id,x,w})
       // wird in adjust gesetzt it.x = x
       var midipos = posX2midi(x)
@@ -265,13 +270,14 @@ class Items {
       it.len_bar = midilen.bar - 1
       it.len_micro = midilen.micro - 1
       it.len_cent = midilen.cent
-      show_item_pos(it)
+      main.show_item_pos(it)
     }
-    if (args.vol) {
+    if (args.vol != null) {
       it.set_vol(args.vol)
       send_item_vol(id,midipos)
+      params.set_items()
     }
-    show_item_pos(it)
+    main.show_item_pos(it)
     if (args.del){
       var x = args.x
       var row = it.row
@@ -295,7 +301,7 @@ class Items {
       var it = this.dict[args.id]
       this.insert_items_by_row(it)
     }
-    if (args.x || args.w){
+    if (args.x != null || args.w){
       var it = this.dict[args.id]
       var ind = this.get_index_of_arr_el(it.row, args.id)
       this.items_by_row[it.row].splice(ind,1)

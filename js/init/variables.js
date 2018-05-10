@@ -6,19 +6,24 @@ var use_triplets = false
 
 var amount_bars = 4
 var micro = 4
+var amount_rows = 8
+var line_design = 0 // 0,1,2,3: piano, iter, group of 4, group of 5
+var vol = 80 // global var to set vol for new items to last item
+
 
 // sequencer canvas size
-var win_w = 1600
-var win_h = 500
+var win_w = 1000
+var win_h = 100
 // browser size
 var window_w = 800
-var window_h = 300
-
-
+var window_h = 350
+// element sizes
 var ctrl_h = 50
+var player_h = 30
 var scaleX_h = 20
 var scaleY_w = 40
-var player_h = 30
+var params_h = 64
+var params_el_w = 8
 
 var pointer_w = 3
 var pointer_col = [0,100,0,1]
@@ -27,12 +32,11 @@ var elem_h = 10 // set on init
 var elem_w = 10 // set on init
 var item_w = 10 // set on init
 
-var vol = 80 // global var to set vol for new items.dict to last item
-
-var amount_rows = 20
-var line_design = 0 // 0,1,2,3: piano, iter, group of 4, group of 5
 
 var elem_cols = [ [205,213,229], [255,255,197], [107,31,69] ]
+var elem_cols = [[214, 214, 214],[252, 236, 120],[103, 14, 16]]
+var elem_cols = [[226, 226, 226],[206, 253, 204],[21, 2, 108]]
+
 var line_layouts = [
   [0,-1,2,-1,4,5,-1,7,-1,9,-1,11],
   [0,-1],
@@ -41,7 +45,13 @@ var line_layouts = [
 ]
 col_btn_inactive = 'rgb(221,220,220)'
 col_btn_active = 'orange'
+params_bg_col = 'rgba(220, 215, 215, 1)'
 
+show_parameters = true
+show_player = true
+show_main = true
+
+// holding all opened nw windows
 var open_windows = {}
 
 initialized = false

@@ -27,6 +27,9 @@ More information will be added soon.
 	- ctrl click into x-scale sets loop-region start
 	- alt click into x-scale sets loop-region end
 	- loop-regions are draggable
+- PARAMETERS
+	- click: set item(s) at current position
+	- ctrl + lmb: draw values
 
 Works with pd vanilla and Purr Data, tested on win7/win10.
 

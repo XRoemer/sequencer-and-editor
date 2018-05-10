@@ -46,20 +46,20 @@ function init(){
   }
   items = new Items()
   player = new Player()
+  params = new Parameters()
   player.create_player()
-  create_ctrl()
+  main.create_main()
   create_seqgui()
+  
 }
 
 function open_new_sequencer_window(nr) {
   var x = 700
   var y = 300
-  var w = 390
-  var h = 220
   var path = 'index.html'
   var name = 'Sequencer ' + nr
 
-  var win = open_win(x,y,w,h,name,path)
+  var win = open_win(x,y,window_w,window_h,name,path)
   win.parent_Win = window
   win.addEventListener('load', function(e) {
     win.document.title = name
@@ -73,6 +73,7 @@ function open_new_sequencer_window(nr) {
 function clear_all() {
 
   clear_vars()
+  params.clear()
 
   sequencer.innerHTML = ''
   sequencer_bg.innerHTML = ''
@@ -121,6 +122,8 @@ function clear_sequencer() {
   cnv.width = win_w + 2
   cnv.style.position = 'absolute'
   sequencer.appendChild(cnv);
+  
+  params.clear()
 }
 
 
@@ -143,6 +146,7 @@ function create_seqgui() {
     create_v_lines()
     create_scale_y()
     create_scale_x()
+    create_params()
     
     if(window.pointer) {
       pointer.stop_pointer()
@@ -155,6 +159,8 @@ function create_seqgui() {
 
     set_quantisation()
     initialized = true
+    
+    main.adjust_view()
 
   } catch(err) {
     log(err)
@@ -165,7 +171,7 @@ function setup_divs(){
   
   var elements = [
     ["canvas_bg",	[win_w + 2, 	win_h + 1], null],
-    ["canvas_ctrl",	[win_w+2+scaleY_w,ctrl_h], 'rgba(245, 245, 215, 1)'],
+    ["canvas_main",	[win_w+2+scaleY_w,ctrl_h], 'rgba(245, 245, 215, 1)'],
     ["sequencer_bg",	[win_w + 2,	win_h + 1], null],
     ["seq_div_extend",	[win_w + 2,	win_h + 1], null],
     ["sequencer",	[win_w + 2,	win_h + 1], null],     
@@ -175,6 +181,8 @@ function setup_divs(){
     ["scale_x_bg",	[win_w + 2,	scaleX_h], 'rgba(220, 215, 215, 1)'], 
     ["player_bg",	[win_w+2+scaleY_w,player_h], 'rgba(160,140, 140, 1)'],
     ["top_left",	[scaleY_w,	scaleX_h], 'rgba(220, 215, 215, 1)'], 
+    ["bottom_left",	[scaleY_w,	params_h], 'rgba(220, 215, 215, 1)'], 
+    ["params_cnv",	[win_w + 2,	params_h], params_bg_col],
   ]
   
   var c
@@ -188,6 +196,20 @@ function setup_divs(){
       ctx.fillRect(0,0, c.width, c.height)
     }
   }
+  
+  var ctx = bottom_left.getContext('2d')
+  ctx.fillStyle = 'black'
+  ctx.fillRect(scaleY_w - 1,0, 1, params_h)
+  ctx.fillRect(0,0, scaleY_w, 1)
+  
+  var ctx = scale_y_bg.getContext('2d')
+  ctx.fillStyle = 'black'
+  ctx.fillRect(scaleY_w - 1,0, 1, win_h)
+  
+  var ctx = top_left.getContext('2d')
+  ctx.fillStyle = 'black'
+  ctx.fillRect(scaleY_w - 1,0, 1, scaleX_h)
+  
 }
 
 
@@ -307,13 +329,17 @@ function create_scale_x(){
       var hight = 20 - fs
     }
     var str = create_stroke_svg(x, hight, stroke_w, fs, stroke_w, 'black', 'cnv_scale_x' + i)
-    div_scale_x.appendChild(str)
+    if (i > 0) div_scale_x.appendChild(str)
     var mic = i % micro + 1
     var bar = Math.trunc(i / micro) + 1
     var txt = bar.toString() + '.' + mic.toString()
     var lbl = create_label (x + 4, hight - 1 ,txt, fs , 'scale_lbl' + i)
     div_scale_x.appendChild(lbl)
   }
+}
+
+function create_params(){
+  params_div.style.top = ctrl_h + player_h + scaleX_h + win_h
 }
 
 function scale_seqgui() {
@@ -328,7 +354,7 @@ function scale_seqgui() {
 }
 
 function scale_scale_x(){
-  for (i = 0; i < amount_bars * micro ; i++) {
+  for (i = 1; i < amount_bars * micro ; i++) {
     var x = i * elem_w
     x = Math.trunc(x)
     div_scale_x.children['cnv_scale_x' + i].style.left = x
@@ -359,5 +385,7 @@ function scale_items() {
     var w = midi2posX(it.len_bar, it.len_micro, it.len_cent)
     it.set_x(x)
     it.set_w(w)
+
   }
+  params.set_items()
 }

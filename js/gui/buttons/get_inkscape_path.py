@@ -1,4 +1,4 @@
-fo = open("scroll.svg", "r")
+fo = open("pencil.svg", "r")
 txt = fo.readlines()
 #print(txt[0:10])
 

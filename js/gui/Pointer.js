@@ -32,9 +32,9 @@ class Pointer {
     var x_left = item_w 
 
     this.loop_border_left = create_triad(x_left, 0, 15, 20, 1, 'black',
-                                    'loop_bound_left', "orange", loop_bound_left)
+                                    'svg_str.loop_bound_left', "orange", svg_str.loop_bound_left)
     this.loop_border_right = create_triad(x_right, 0, 15, 20, 1, 'black',
-                                    'loop_bound_right', "orange", loop_bound_right)
+                                    'svg_str.loop_bound_right', "orange", svg_str.loop_bound_right)
     this.set_loop_start(x_left)
     this.set_loop_end(x_right)
 
@@ -102,9 +102,9 @@ class Pointer {
   }
 
   loop_bounds_fkt(e) {
-    if (e.srcElement.parentElement.id == 'loop_bound_right') {
+    if (e.srcElement.parentElement.id == 'svg_str.loop_bound_right') {
       loop_bound_right_clicked = true
-    } else if (e.srcElement.parentElement.id == 'loop_bound_left') {
+    } else if (e.srcElement.parentElement.id == 'svg_str.loop_bound_left') {
       loop_bound_left_clicked = true
     }
   }
@@ -166,7 +166,7 @@ class Pointer {
     el.addEventListener("mousemove", e => {
       var mx = e.clientX - 40 + window.scrollX
       this.scale_x_pos = posX2midi(mx)
-      show_mouse_pos(this.scale_x_pos.bar,this.scale_x_pos.micro,this.scale_x_pos.cent,-2)
+      main.show_mouse_pos(this.scale_x_pos.bar,this.scale_x_pos.micro,this.scale_x_pos.cent,-2)
     })
 
     el.addEventListener("mousedown", e => {

@@ -35,7 +35,7 @@ function posX2midi_quant(x) {
 }
 
 function posY2row(my){
-  return amount_rows - Math.trunc(my / elem_h) - 1
+  return Math.max(amount_rows - Math.trunc(my / elem_h) - 1, 0)
 }
 
 function calc_color(vol) {

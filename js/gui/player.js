@@ -13,7 +13,6 @@ class Player {
     if(pointer.scroll_window){this.set_col_active('scroll_window')}
     if(this.use_bounds){this.set_col_active('use_bounds')}
     if(this.loop_on){this.set_col_active('loop')}
-    
   }
 
 
@@ -31,45 +30,45 @@ class Player {
 
 
 
-    var btn = create_play_btn(x, h, 300 ,300, w, back_btn_str,'back','player_svg player_click')
+    var btn = create_player_btn(x, h, 300 ,300, w, svg_str.back_btn_str,'back','player_svg player_click')
     btn.setAttribute("transform", attr);
     btn.addEventListener("click", e => {this.btn_triggered('back')});
     player_div.appendChild(btn)
     x += xx
-    var btn = create_play_btn(x, h, 300 ,300, w, stop_btn_str,'stop','player_svg player_click')
+    var btn = create_player_btn(x, h, 300 ,300, w, svg_str.stop_btn_str,'stop','player_svg player_click')
     btn.setAttribute("transform", attr);
     btn.addEventListener("click", e => {this.btn_triggered('stop')});
     player_div.appendChild(btn)
     x += xx
-    var btn = create_play_btn(x, h, 300 ,300, w, play_btn_str,'play','player_svg')
+    var btn = create_player_btn(x, h, 300 ,300, w, svg_str.play_btn_str,'play','player_svg')
     btn.setAttribute("transform", attr);
     btn.addEventListener("click", e => {this.btn_triggered('play')});
     player_div.appendChild(btn)
     x += xx
-    var btn = create_play_btn(x, h, 300 ,300, w, pause_btn_str,'pause','player_svg')
+    var btn = create_player_btn(x, h, 300 ,300, w, svg_str.pause_btn_str,'pause','player_svg')
     btn.setAttribute("transform", attr);
     btn.addEventListener("click", e => {this.btn_triggered('pause')});
     player_div.appendChild(btn)
     x += xx
-    var btn = create_play_btn(x, h, 300 ,300, w, loop_btn_str,'loop','player_svg')
+    var btn = create_player_btn(x, h, 300 ,300, w, svg_str.loop_btn_str,'loop','player_svg')
     btn.setAttribute("transform", attr);
     btn.addEventListener("click", e => {this.btn_triggered('loop')});
     player_div.appendChild(btn)
 
     x += xx
-    var btn = create_play_btn(x, h, 300 ,300, w, bounds_btn_str,'loop_bounds','player_svg')
+    var btn = create_player_btn(x, h, 300 ,300, w, svg_str.bounds_btn_str,'loop_bounds','player_svg')
     btn.setAttribute("transform", attr);
     btn.addEventListener("click", e => {this.btn_triggered('loop_bounds')});
     player_div.appendChild(btn)
 
     x += xx + xx
-    var btn = create_play_btn(x, h, 300 ,300, w, scroll_btn_str,'scroll_window','player_svg')
+    var btn = create_player_btn(x, h, 300 ,300, w, svg_str.scroll_btn_str,'scroll_window','player_svg')
     btn.setAttribute("transform", attr);
     btn.addEventListener("click", e => {this.btn_triggered('scroll_window')});
     player_div.appendChild(btn)
 
     // HIDE Button
-    var btn = create_play_btn(2,-4, 300 ,300, 1, eject_btn_str,'hide','player_svg player_click')
+    var btn = create_player_btn(2,-4, 300 ,300, 1, svg_str.eject_btn_str,'hide','player_svg player_click')
     btn.setAttribute("transform", attr);
     btn.addEventListener("click", e => {this.btn_triggered('hide')});
     btn.style.zIndex = 50
@@ -131,8 +130,7 @@ class Player {
       send_data('player ' + type + ' ' + val, window.win_nr)
     }
     else if(type == "hide") {
-      //toggle_player()
-      toggle_ctrl()
+      main.toggle_main()
     }
 
     else if(type == "scroll_window") {
@@ -141,37 +139,4 @@ class Player {
       else {this.set_col_inactive(type)}
     }
   }
-}
-
-function toggle_player(){
-  if (player_div.style.visibility == 'hidden') {
-    player_div.style.visibility = 'visible'
-    set_sequencer_pos(30)
-  } else {
-    player_div.style.visibility = 'hidden'
-    set_sequencer_pos(0)
-  }
-}
-
-function toggle_ctrl() {
-  if (ctrl.style.visibility == 'hidden') {
-    ctrl.style.visibility = 'visible'
-    player_div.style.visibility = 'visible'
-    set_sequencer_pos(30)
-    var attr =  "translate(-135 -135) scale(0.1) rotate(0)"
-    hide.setAttribute("transform", attr);
-  } else {
-    ctrl.style.visibility = 'hidden'
-    player_div.style.visibility = 'hidden'
-    set_sequencer_pos(-50)
-    var attr =  "translate(-135 -135) scale(0.1) rotate(180)"
-    hide.setAttribute("transform", attr);
-  }
-}
-
-function set_sequencer_pos(x){
-  seq_container.style.top = x
-  scales.style.top = x + 50
-  transport.style.top = x + 50
-  top_left_div.style.top = x + 50
 }

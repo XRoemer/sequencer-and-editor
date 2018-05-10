@@ -6,8 +6,9 @@ function add_listeners_to_sequencer() {
       dx = e.deltaY / 100
       vol = Math.min(Math.max(it.vol - dx,0),127)
       it.set_vol(vol)
-      show_item_pos(it)
+      main.show_item_pos(it)
       send_item_vol(items.selected_item)
+      params.set_items()
     }
   }, false);
 
@@ -23,7 +24,7 @@ function add_listeners_to_sequencer() {
     var midi_pos = posX2midi(mx)
     var row = posY2row(my)
 
-    show_mouse_pos(midi_pos.bar, midi_pos.micro, midi_pos.cent,row)
+    main.show_mouse_pos(midi_pos.bar, midi_pos.micro, midi_pos.cent,row)
     
     if (!items.dragging && !items.dragging_startend 
 		&& !ctrl_pressed && !shift_pressed && !alt_pressed) {
@@ -36,19 +37,15 @@ function add_listeners_to_sequencer() {
       else {if (items.drag_start) {items.dragging_start(dx)}
         else if (items.drag_end) {items.dragging_end(dx)}
       }
-    }
-    
-    
+    }    
     if (ctrl_pressed && shift_pressed && e.srcElement.id == 'seq_div_extend') {
       var pos = posX2midi_quant(e.offsetX - item_w / 2)
       var bar = pos.bar
       var micro = pos.micro
       var cent = pos.cent
-  
       var same = [row,bar,micro,cent].every(function(element, index) {
           return element === last_seq_dragging_pos[index];
       })
-      
       if(same == false){
         var x = (bar -1) * barlen + (micro - 1) * miclen + cent/100 * miclen
         var y = (amount_rows - row - 1) * elem_h
