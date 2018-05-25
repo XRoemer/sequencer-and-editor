@@ -24,14 +24,12 @@
 .seq {
   position:absolute;
   z-index: 1;
-  left:40px;
   opacity:0.5;
 }
 #sequencer {
   opacity: 1;
 }
 .pointer {
-  left:40px;
   z-index: 15;
   opacity:1;
   position:relative;
@@ -49,9 +47,14 @@
 .scaleY {
   z-index: 20;
   position:relative;
+  user-select: all;
+  pointer-events:all;  
+}
+#scale_y_bg {
+	left: 0px;
+	position:absolute;
 }
 .scaleX {
-  left:40px;
   position:relative;
   pointer-events:all;   
 }
@@ -59,25 +62,14 @@
 	pointer-events:all;  
 }
 .top_left {
-  width:40px;
-  height:20px;
   z-index: 25;
   position:fixed;
   pointer-events:all;
 }
 .bottom_left {
-  width:40px;
-  left:-40px;
   z-index: 25;
   position:absolute;
   pointer-events:all;
-}
-.top_left_cnv {
-  width:40px;
-  height:20px;
-  z-index: 25;
-  position:absolute;
-  top:0px;
 }
 .player_svg {
   transition: 100ms;
@@ -103,5 +95,15 @@
 }
 .parameters{
 	position:absolute;
-	left:40px;
 }
+.par_drag{
+	height:10px;
+	top: -25px;
+}
+.par_drag:hover{
+	cursor:row-resize;
+}
+
+
+
+

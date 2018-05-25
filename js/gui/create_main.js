@@ -1,18 +1,26 @@
 
 class Main_Gui {
   constructor(){
+    this.mouse_pos = {}
   }
-  
-  btn_triggered(e,type){    
+
+  btn_triggered(e,type){
+
     if (type=="show_parameters") {
-      show_parameters = !show_parameters
-      this.set_col(type,show_parameters)
-      main.adjust_view()
-    } 
+      V.show_parameters = !V.show_parameters
+      this.set_col(type,V.show_parameters)
+      gui.adjust_view()
+    }
     else if(type=="show_player"){
-      show_player = !show_player
-      this.set_col(type,show_player)
-      main.adjust_view()
+      V.show_player = !V.show_player
+      this.set_col(type,V.show_player)
+      gui.adjust_view()
+    }
+    else if(type=="show_solo"){
+      V.show_solo = !V.show_solo
+      V.scaleY_w = V.numbers_w + V.show_solo * V.solo_w
+      this.set_col(type,V.show_solo)
+      gui.adjust_view()
     }
     else if(type=="call_settings"){
       this.call_settings(e)
@@ -21,19 +29,25 @@ class Main_Gui {
       this.call_midi(e)
     }
     else if(type=="clear"){
-      clear_sequencer()
-      send_data('memory clear', window.win_nr)
+      gui.clear_sequencer()
+      gui.clear_vars()
+      params.clear()
+      data.send_data('memory clear', window.win_nr)
     }
     else if(type=="test"){
       this.call_test()
     }
+    else if(type=="face"){
+      alert('X. Roemer 2018, License MIT \n\rhttps://github.com/XRoemer/sequencer-and-editor \n\r' +
+	  "http://www.sprechduette.de/droste-projekt.html")
+    }
   }
-  
-  set_col(type,val){
-    var c = window.document.getElementById(type)
+
+  set_col(name,val){
+    var c = window.document.getElementById(name)
     c.style.fill = val ? 'orange' : 'rgb(128,0,64)'
-  }  
-  
+  }
+
   create_btn(x,y,w,h,stroke_w,svg_str,classes,type, _var) {
     var path = document.createElementNS("http://www.w3.org/2000/svg", 'path')
     path.setAttributeNS(null, "d", svg_str);
@@ -52,93 +66,87 @@ class Main_Gui {
       svg.style.fill = _var ? 'orange' : 'rgb(128,0,64)'
     }
     svg.appendChild(path)
-    
+
     var attr =  "translate(-120 -115) scale(0.1)"
     svg.setAttribute("transform", attr);
     svg.addEventListener("click", e => {main.btn_triggered(e,type)});
 
     return svg
   }
-  
-  adjust_view(){
-    if(show_main){
-      main_div.style.visibility = 'visible'
-    } else main_div.style.visibility = 'hidden'
-      
-    if(show_player){
-      player_div.style.visibility = 'visible'
-      player_div.style.top = ctrl_h * show_main
-    } else player_div.style.visibility = 'hidden'
-      
-    if(show_parameters){
-      params_div.style.visibility = 'visible'
-      params_div.style.top = ctrl_h * show_main + player_h * show_player + scaleX_h + win_h
-      params_div.style.height = params_h
-      params_cnv.style.height = params_h
-      bottom_left.style.visibility = 'visible'
-      bottom_left.style.height = params_h
-    } else {
-      	params_div.style.visibility = 'hidden'
-	params_div.style.height = 0
-	params_cnv.style.height = 0
-	bottom_left.style.visibility = 'hidden'
-	bottom_left.style.height = 0
-    }
-      
-    seq_container.style.top = player_h * show_player + ctrl_h * show_main 
-    sequencer.style.top = scaleX_h 
-    sequencer_bg.style.top = scaleX_h
-    canvas_bg.style.top = scaleX_h
-    scales.style.top = ctrl_h * show_main + player_h * show_player
-    transport.style.top = ctrl_h * show_main + player_h * show_player
-  }
-  
+
+
+
   create_main() {
     var cnv = document.getElementById('canvas_main')
     var ctx = cnv.getContext('2d')
-    ctx.fillStyle = 'rgba(245, 245, 215, 1)'
+    ctx.fillStyle = V.main_bg_col
     ctx.fillRect(0,0, cnv.width, cnv.height)
 
+    btn = this.create_btn(0, 0, 1200,1000, 12, svg_str.faces_str1,
+       'player_svg player_click','face', true)
+    var attr =  "translate(-582 -482) scale(0.028)"
+    btn.setAttribute("transform", attr);
+    main_div.appendChild(btn)
+
+    btn = this.create_btn(0, 0, 1200,1000, 12, svg_str.faces_str2,
+       'player_svg player_click','face')
+    btn.setAttribute("transform", attr);
+    main_div.appendChild(btn)
+
     var main_cont = document.getElementById('main_div')
+    var nr = sf.create_nr(45, 2, 30, 0, 99, 1, V.set_bars, V.amount_bars)
+    nr.style.background = V.main_bg_col
+    nr.style.margin = 0
+    nr.style.outlineColor = 'transparent'
+    nr.style.border = 'none'
 
-    main_cont.appendChild(create_nr(10, 2, 36, 0, 100, 1, set_bars, amount_bars))
-    main_cont.appendChild(create_label(48, 2, 'bars', 12))
-    
-    main_cont.appendChild(create_nr(10, 21, 36, 1, 15, 1, set_micro, micro))
-    main_cont.appendChild(create_label(48, 21, '/4', 12))
+    main_cont.appendChild(nr)
+    main_cont.appendChild(sf.create_label(58, 2, 'bars', 11))
 
-    main_cont.appendChild(create_svg_radio(80, 20, 'quant_radios', 'radio', set_quant, 8, 3))
-    main_cont.appendChild(create_label(80, 0, 'Q', 16));
-    main_cont.appendChild(create_label(100, 4, '1/8 norm', 10, 'quant'))
+    var nr = sf.create_nr(45, 21, 36, 1, 15, 1, V.set_micro, V.micro)
+    nr.style.background = V.main_bg_col
+    nr.style.margin = 0
+    nr.style.outlineColor = 'transparent'
+    nr.style.border = 'none'
+    main_cont.appendChild(nr)
+    main_cont.appendChild(sf.create_label(58, 21, '/4', 11))
 
-    main_cont.appendChild(create_svg_btn(190, 20, 'use_tr', 'toggle', set_use_triplets))
-    main_cont.appendChild(create_label(182, 4, 'triplets', 10, 'tripl'))
+    main_cont.appendChild(sf.create_svg_radio(90, 20, 'quant_radios', 'radio', V.set_quant, 8, 3))
+    main_cont.appendChild(sf.create_label(90, 0, 'Q', 16));
+    main_cont.appendChild(sf.create_label(110, 4, '1/8 norm', 10, 'quant'))
 
-    main_cont.appendChild(create_svg_btn(220, 20, 'use_q', 'toggle', set_use_quant))
-    main_cont.appendChild(create_label(222, 4, 'use', 10, 'use_q'))
+    main_cont.appendChild(sf.create_svg_btn(200, 20, 'use_tr', 'toggle', V.set_use_triplets))
+    main_cont.appendChild(sf.create_label(192, 4, 'triplets', 10, 'tripl'))
 
-    main_cont.appendChild(create_label(265, 4, 'ITEM', 12))
-    main_cont.appendChild(create_label(300, 4, 'row 18 start 4.4.87 len 0.0.12 vol 96', 10, 'item'))
+    main_cont.appendChild(sf.create_svg_btn(230, 20, 'use_q', 'toggle', V.set_use_quant))
+    main_cont.appendChild(sf.create_label(232, 4, 'use', 10, 'use_q'))
 
-    main_cont.appendChild(create_label(265, 24, 'MOUSE', 12));
-    main_cont.appendChild(create_label(315, 24, 'row 18 pos 4.4.87', 10, 'mouse'))
-    
-    var btn = main.create_btn(500, 0, 250 ,250, 1, svg_str.play_btn_str,'player_svg','show_player', show_player)
+    main_cont.appendChild(sf.create_label(275, 4, 'ITEM', 12))
+    main_cont.appendChild(sf.create_label(310, 4, 'row 18 start 4.4.87 len 0.0.12 vol 96', 10, 'item'))
+
+    main_cont.appendChild(sf.create_label(275, 24, 'MOUSE', 12));
+    main_cont.appendChild(sf.create_label(325, 24, 'row 18 pos 4.4.87', 10, 'mouse'))
+
+    var btn = this.create_btn(510, 0, 250 ,250, 1, svg_str.play_btn_str,'player_svg','show_player', V.show_player)
     main_cont.appendChild(btn)
-    btn = main.create_btn(500, 20, 250 ,250, 1, svg_str.attachment_str,'player_svg','show_parameters', show_parameters)
+    btn = this.create_btn(535, 0, 250 ,250, 1, svg_str.attachment_str,'player_svg','show_parameters', V.show_parameters)
     main_cont.appendChild(btn)
-    
-    btn = main.create_btn(525, 0, 250 ,250, 1, svg_str.settings_str,'player_svg player_click','call_settings')
+    btn = this.create_btn(560, 0, 250 ,250, 1, svg_str.solo_str,'player_svg','show_solo', V.show_solo)
     main_cont.appendChild(btn)
-    btn = main.create_btn(525, 20, 250 ,250, 1, svg_str.midi_str,'player_svg player_click','call_midi')
+
+
+    btn = this.create_btn(510, 20, 250 ,250, 1, svg_str.clear_str,'player_svg player_click','clear')
     main_cont.appendChild(btn)
-    
-    btn = main.create_btn(550, 0, 250 ,250, 1, svg_str.clear_str,'player_svg player_click','clear')
+    btn = this.create_btn(535, 20, 250 ,250, 1, svg_str.midi_str,'player_svg player_click','call_midi')
     main_cont.appendChild(btn)
-//    btn = main.create_btn(550, 20, 250 ,250, 1, svg_str.test_str,'player_svg player_click','test')
-//    main_cont.appendChild(btn)   
+    btn = this.create_btn(560, 20, 250 ,250, 1, svg_str.settings_str,'player_svg player_click','call_settings')
+    main_cont.appendChild(btn)
+
+
+//    btn = this.create_btn(585, 20, 250 ,250, 1, svg_str.test_str,'player_svg player_click','test')
+//    main_cont.appendChild(btn)
   }
-  
+
   call_settings(e) {
     load_scripts_otf({fkt:'open_settings',scripts:['init/settings'],args:e})
   }
@@ -156,13 +164,14 @@ class Main_Gui {
     var start = bar + p + micro + p + cent
     row += 1
     lbl.innerHTML = "row " + row + " pos " + start
+    this.mouse_pos = {bar,micro,cent,row}
   }
 
   show_item_pos(it) {
-    lbl = document.getElementById('item')
+    var lbl = document.getElementById('item')
     var p = '.'
     var sp = ' '
-    
+
     if (it.cent < 10) {var c = '0' + it.cent.toString()}
     else {var c = it.cent.toString()}
     if (it.len_cent < 10) {var lc = '0' + it.len_cent.toString()}
@@ -171,30 +180,14 @@ class Main_Gui {
     var len = 'len ' + it.len_bar + p + it.len_micro + p + lc + sp
     var vol = 'vol ' + it.vol
     var row = 'row ' + (it.row + 1) + sp
-    
+
     lbl.innerHTML = row + start + len + vol
   }
 
   toggle_main() {
-    show_main = !show_main
-    if (show_main) {
-      var attr =  "translate(-135 -135) scale(0.1) rotate(0)"
-      hide.setAttribute("transform", attr);
-    } else {
-      var attr =  "translate(-135 -135) scale(0.1) rotate(180)"
-      hide.setAttribute("transform", attr);
-    }
-    main.adjust_view()
+    V.show_main = !V.show_main
+    gui.adjust_view()
   }
 }
 
 main = new Main_Gui()
-
-
-
-
-
-
-
-
-	

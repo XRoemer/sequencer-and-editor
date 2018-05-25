@@ -11,6 +11,10 @@ SVGs = new class SVGs {
   p(x,y){
     return x+" "+y+" ";
   }
+  
+  get_bound(w){
+    return w + 2 * this.stroke_w
+  }
 
   rectangle(x, y, w, r1, h){
     var r2 = r1
@@ -29,6 +33,33 @@ SVGs = new class SVGs {
 
   create_btn_str(){
     return this.rectangle(this.stroke_w,this.stroke_w,this.rect_w,2)
+  }
+  
+  create_btn(x,y,w,h,id,type,fkt,sel) {
+    var stroke_w = SVGs.stroke_w
+    var path = document.createElementNS("http://www.w3.org/2000/svg", 'path')
+    path.setAttributeNS(null, "d", this.rectangle(0,0, w, 0, h));
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    svg.setAttributeNS(null, "stroke-width", stroke_w);
+    svg.setAttributeNS(null, "z-index", 30)
+    if (sel) {var col = V.col_btn_active}
+    else {col = V.col_btn_inactive }
+    svg.style.fill = col
+    svg.style.stroke = 'black'
+    svg.style.position="absolute"
+    svg.style.width = w
+    svg.style.height = h
+    svg.style.left = x
+    svg.style.top = y
+    svg.id = id
+    if (type == 'button'){svg.onclick = fkt}
+    else if (type == 'toggle') {
+      svg.onclick = sf.svg_toggle
+      svg.fkt = fkt
+    }
+    svg.appendChild(path);
+    svg.state = sel
+    return svg
   }
 }
 
@@ -209,6 +240,30 @@ class SVG_STRINGS {
     "3.322 -1.512,-5.203 l 6.027,-27.035 c 0.34,-1.517 1.286,-2.798 2.578,-3.582 L 77" +
     ".83,193.416 192.3,78.941 c 1.678,-1.675 4.404,-1.675 6.082,0.005 l 22.922,22.917" +
     " c 1.678,1.678 1.678,4.404 -0.002,6.082 z"
+    
+    this.faces_str1 = "M 295.80078 0 L 325.19922 810 L 384 810 L 413.40039 0 L 295.80078 " +
+    "0 z M 60 60 L 60 270 L 270 270 L 270 60 L 60 60 z M 1050 60 L 1050 " +
+    "270 L 1200 270 L 1200 60 L 1050 60 z M 503.40039 145.19922 L 503.40039 " +
+    "300 L 645.59961 300 L 645.59961 145.19922 L 503.40039 145.19922 z " +
+    "M 806.40039 945 L 806.40039 990 L 1120.8008 990 L 1120.8008 945 L " +
+    "806.40039 945 z" 
+    
+    this.faces_str2 = "M 885 0 L 914.40039 810 L 973.19922 810 L 1002.5996 0 L 885 0 z " +
+    "M 628.80078 37.199219 L 628.80078 114 L 786.59961 114 L " +
+    "786.59961 37.199219 L 628.80078 37.199219 z M 217.19922 945 " +
+    "L 217.19922 990 L 531.59961 990 L 531.59961 945 L 217.19922 945 z" 
+    
+    this.solo_str = "m 149.74609 77.251953 C 106.41443 77.251953 71.013672 112.65272 71.013672 155.98" +
+    "438 C 71.013672 199.31602 106.41443 234.7168 149.74609 234.7168 C 193.07775 234." +
+    "7168 228.47852 199.31602 228.47852 155.98438 C 228.47852 112.65272 193.07775 77." +
+    "251953 149.74609 77.251953 z M 149.74609 102.76758 C 179.28843 102.76758 202.962" +
+    "89 126.44204 202.96289 155.98438 C 202.96289 185.5267 179.28843 209.20117 149.74" +
+    "609 209.20117 C 120.20376 209.20117 96.529297 185.52671 96.529297 155.98438 C 96" +
+    ".529297 126.44204 120.20376 102.76758 149.74609 102.76758 z M 149.74609 124.0976" +
+    "6 C 132.19677 124.09766 117.85938 138.43505 117.85938 155.98438 C 117.85938 173." +
+    "53369 132.19677 187.87109 149.74609 187.87109 C 167.29542 187.87109 181.63281 17" +
+    "3.53369 181.63281 155.98438 C 181.63281 138.43505 167.29542 124.09766 149.74609 " +
+    "124.09766 z "
   }
 }
 

@@ -1,4 +1,4 @@
-fo = open("pencil.svg", "r")
+fo = open("solo2.svg", "r")
 txt = fo.readlines()
 #print(txt[0:10])
 

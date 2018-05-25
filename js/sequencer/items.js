@@ -1,5 +1,11 @@
 class Items {
   constructor() {
+    this.selected_items = []
+    this.move_items_direction = null
+    this.sel_items_old_row = null
+    this.sel_items_start_posX = 0
+    this.sel_items_old_pos = {}
+    
     this.selected_item  = null
     this.selected_item_se  = null
     this.dragging = false
@@ -8,28 +14,35 @@ class Items {
     this.dragging_startend = false
     this.my_old = 0
     this.mx_old = 0
+    
     this.dict = {}
     this.items_by_row  = {}
   }
-  
+
   set_items(received_array) {
 
-    clear_sequencer()
-    
+    var par, val
+
     for (var i = 0; i < received_array.length ; i++) {
       var item = new Item()
       var val = received_array[i]
 
       var [id, row, bar, micro] = val.slice(0,4).map( z => z * 1 )
       // do not use values outside of rows or bars
-      if (row > amount_rows - 1 || bar > amount_bars - 1) continue
+      if (row > V.amount_rows - 1 || bar > V.amount_bars ) continue
       var [cent, len_bar, len_micro, len_cent, vol] = val.slice(4).map( z => z * 1 )
 
+      var pars = val.slice(9)
+      for (var j = 0; j < pars.length / 2; j++){
+	[par, val] = [pars[j*2], pars[j*2 + 1]]
+	item.set_param(par, val)
+      }
+
       var x = midi2posX(bar - 1, micro - 1, cent)
-      var y = win_h - elem_h * row - elem_h
+      var y = V.win_h - V.elem_h * row - V.elem_h
       var w = midi2posX(len_bar, len_micro, len_cent)
-      var h = elem_h
-        
+      var h = V.elem_h
+
       item.set({bar, micro, cent})
       item.set({len_bar, len_micro, len_cent})
       item.id = i
@@ -41,32 +54,52 @@ class Items {
       item.set_y(y)
       item.add_listeners(item)
 
-
       this.dict[i] = item
       this.insert_items_by_row(item)
 
       document.getElementById('sequencer').appendChild(item.rect);
     }
+
     params.set_items()
   }
-  
+
+  adjust_items(){
+    for (var key in this.dict){
+      var it = this.dict[key]
+      var [bar,micro,cent,row] = [it.bar, it.micro, it.cent,it.row]
+      var [len_bar,len_micro,len_cent] = [it.len_bar, it.len_micro, it.len_cent]
+
+      var x = midi2posX(bar - 1, micro - 1, cent)
+      var y = V.win_h - V.elem_h * row - V.elem_h
+      var w = midi2posX(len_bar, len_micro, len_cent)
+      var h = V.elem_h
+
+      it.set_w(w)
+      it.set_h(h)
+      it.set_x(x)
+      it.set_y(y)
+      document.getElementById('sequencer').appendChild(it.rect);
+    }
+  }
+
   create_new_item(e,x,y){
 
     var div = document.getElementById("sequencer");
     var bound = div.getBoundingClientRect()
     if (x == null) {
-      var x = Math.trunc((e.clientX - bound.left) / item_w) * item_w
-      var y = Math.trunc((e.clientY - bound.top) / elem_h) * elem_h
+      var x = Math.trunc((e.clientX - bound.left) / V.item_w) * V.item_w
+      var y = Math.trunc((e.clientY - bound.top) / V.elem_h) * V.elem_h
     }
 
     var midi_pos = posX2midi(x)
-    var midi_len = posX2midi(item_w)
+    var midi_len = posX2midi(V.item_w)
 
     var item = new Item()
 
     var id = item.get_new_id()
     var row = posY2row(y)
     var bar = midi_pos.bar
+    if (bar > V.amount_bars) return
     var micro = midi_pos.micro
     var cent = midi_pos.cent
     var len_bar = midi_len.bar - 1
@@ -74,7 +107,7 @@ class Items {
     var len_cent = midi_len.cent
 
     var w = midi2posX(len_bar, len_micro, len_cent)
-    var h = elem_h
+    var h = V.elem_h
 
     item.set({bar, micro, cent})
     item.set({len_bar, len_micro, len_cent})
@@ -82,25 +115,112 @@ class Items {
     item.row = row
     item.set_w(w)
     item.set_h(h)
-    item.set_vol(vol)
+    item.set_vol(V.vol)
     item.set_x(x)
     item.set_y(y)
     item.add_listeners(item)
-    
+
     this.dict[id] = item
     this.insert_items_by_row(item)
     bar += 1
     micro += 1
-    send_new_item(id,row,bar,micro,cent,len_bar,len_micro,len_cent,vol)
+    data.send_new_item(id,row,bar,micro,cent,len_bar,len_micro,len_cent,V.vol)
     document.getElementById('sequencer').appendChild(item.rect)
-    
+
     params.set_items()
   }
-  
+
   delete_item(){
+    params.remove_listener_path(this.selected_item)
     this.dict[this.selected_item].delete()
+    params.set_items()
+  }
+
+  select_items_on_row(row){
+    var it, pos
+    var lowest_x = 100000
+    var highest_x = 0
+    this.sel_items_old_row = row
+    pos = main.mouse_pos
+    this.sel_items_start_posX = midi2posX(pos.bar - 1, pos.micro - 1, pos.cent)
+    this.sel_items_old_pos = {}
+    this.selected_items = []
+    var keys = Object.keys(items.dict)
+    for (var i = 0; i < keys.length; i++){
+      it = items.dict[keys[i]]
+      if (it.row == row) {
+	this.selected_items.push(it)
+	this.sel_items_old_pos[it.id] = it.x
+	lowest_x = (lowest_x > it.x) ? it.x : lowest_x
+	highest_x = (highest_x < it.x) ? it.x : highest_x
+      }
+    }
+    this.sel_items_old_pos['lowest_x'] = lowest_x
+    this.sel_items_old_pos['highest_x'] = highest_x
+  }
+
+  deselect_items(){
+    this.move_items_V = false
+    this.move_items_h = false
+    this.selected_items = []
+    params.set_items()
+  }
+
+  abort_move_items(){
+    this.move_items_on_yAxis(this.sel_items_old_row)
+    this.set_items_on_xAxis(0)
+    this.deselect_items()
+  }
+
+  set_move_selected_items(key){
+    this.move_items_direction = key
+    var row = main.mouse_pos.row - 1
+    this.select_items_on_row(row)
   }
   
+  set_selected_items(){
+    if(this.selected_items.length == 0) return
+    if(this.move_items_direction == 'y'){
+      this.move_items_on_yAxis(main.mouse_pos.row - 1)
+    } else if(this.move_items_direction == 'x'){
+      this.move_items_on_xAxis(main.mouse_pos)
+    }
+  }
+  
+  move_items_on_yAxis(row){
+    var it, id, old_row
+    for (var i = 0; i < this.selected_items.length; i++){
+      it = this.selected_items[i]
+      old_row = it.row
+      it.set_row(it,row)
+      id = it.id
+      items.adjust_arrays({id,row,old_row})
+    }
+  }
+
+  move_items_on_xAxis(pos){
+    var x = midi2posX(pos.bar - 1, pos.micro - 1, pos.cent)
+    var dx = x - this.sel_items_start_posX
+    var low = this.sel_items_old_pos.lowest_x
+    var high = this.sel_items_old_pos.highest_x
+    var maxw = V.win_w
+    dx = (low + dx) < 0 ? -low : dx
+    dx = (high + dx) > maxw ? maxw - high - 1 : dx
+    this.set_items_on_xAxis(dx)
+  }
+  
+  set_items_on_xAxis(dx){
+    var x, it, id, old_pos
+    for (var i = 0; i < this.selected_items.length; i++){
+      it = this.selected_items[i]
+      id = it.id
+      old_pos = this.sel_items_old_pos[id]
+      x = old_pos + dx
+      this.adjust_arrays({id,x})
+      it.set_x(x)
+    }
+  }
+
   insert_items_by_row(it) {
     var row = it.row
     if (!this.items_by_row[row]) {
@@ -176,9 +296,9 @@ class Items {
   }
 
   drag_item(id,my,mx,dx) {
-    document.getElementById('sequencer').style.cursor = "move";
+    sequencer.style.cursor = "move";
     var it = this.dict[id]
-    var mx = Math.min(mx, win_w - 1 )
+    var mx = Math.min(mx, V.win_w - 1 )
     this.drag_itemX(it,id,mx,dx)
     this.drag_itemY(it,id,my)
     main.show_item_pos(it)
@@ -186,16 +306,16 @@ class Items {
 
   drag_itemX(it,id,mx,dx){
     var item_x = it.x
+
     var x = Math.max(item_x + dx, 0)
-    if (!use_quant) {
-      
+    if (!V.use_quant) {
       this.adjust_arrays({id,x})
       it.set_x(x)
     } else {
-      var it_pos = Math.round(item_x / item_w)
-      var cur_pos = Math.round(mx / item_w)
+      var it_pos = Math.round(item_x / V.item_w)
+      var cur_pos = Math.round(mx / V.item_w)
       if (cur_pos != it_pos) {
-        var x = cur_pos * item_w
+        var x = cur_pos * V.item_w
         this.adjust_arrays({id,x})
         it.set_x(x)
       }
@@ -204,13 +324,11 @@ class Items {
   }
 
   drag_itemY(it,id,my){
-    var it_row = it.row
-    var cur_row = Math.max(cur_row = amount_rows - Math.trunc(my / elem_h) - 1, 0)
-    if (it_row != cur_row) {
-      var row = cur_row
-      this.adjust_arrays({id,row})
-      var y = win_h - it.row * elem_h - elem_h
-      it.set_y(y)
+    var old_row = it.row
+    var row = Math.max(V.amount_rows - Math.trunc(my / V.elem_h) - 1, 0)
+    if (old_row != row) {
+      it.set_row(it,row)
+      this.adjust_arrays({id,row,old_row})
     }
   }
 
@@ -242,20 +360,19 @@ class Items {
     if (args.row != null) {
       var x = args.x
       var w = it.w + x
-      var old_row = it.row
+      var old_row = args.old_row
       var new_row = args.row
-      it.row = new_row
       this.adjust_arr_items_by_row({id,x,w,old_row,new_row})
-      send_item_row(id,new_row)
+      data.send_item_row(id,new_row)
     }
     if (args.x != null) {
       var x = args.x
       var w = it.w
-      
+
       this.adjust_arr_items_by_row({id,x,w})
       // wird in adjust gesetzt it.x = x
       var midipos = posX2midi(x)
-      send_item_x(id,midipos)
+      data.send_item_x(id,midipos)
       it.bar = midipos.bar
       it.micro = midipos.micro
       it.cent = midipos.cent
@@ -266,7 +383,7 @@ class Items {
       this.adjust_arr_items_by_row({id,w})
       // wird in adjust gesetzt it.x = x
       var midilen = posX2midi(w)
-      send_item_w(id,midilen)
+      data.send_item_w(id,midilen)
       it.len_bar = midilen.bar - 1
       it.len_micro = midilen.micro - 1
       it.len_cent = midilen.cent
@@ -274,7 +391,7 @@ class Items {
     }
     if (args.vol != null) {
       it.set_vol(args.vol)
-      send_item_vol(id,midipos)
+      data.send_item_vol(id,midipos)
       params.set_items()
     }
     main.show_item_pos(it)
@@ -285,7 +402,7 @@ class Items {
       var del = 1
       this.adjust_arr_items_by_row({id,row,del})
       delete this.dict[id]
-      send_del_item(id)
+      data.send_del_item(id)
     }
   }
 
@@ -313,21 +430,13 @@ class Items {
 
   get_index_of_arr_el(row,id) {
     if(!this.items_by_row[row]){
-      throw "error"
+      throw "error: row has no items"
     }
     for (var i = 0; i < this.items_by_row[row].length ; i++) {
       if (this.items_by_row[row][i].id == id) {
         return i
       }
     }
-    throw "error"
+    throw "error: item not found"
   }
 }
-
-var barlen = 0
-var miclen = 0
-
-
-
-
-

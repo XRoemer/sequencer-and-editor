@@ -215,7 +215,7 @@ function mfp(args) {
 function set_tracknames(tr){
 
   var doc = window.midi_win.document
-  var sel = doc.getElementById('midi_dialog.select_track')
+  var sel = doc.getElementById('select_track')
   sel.options.length = 0
   var len = Object.keys(tr)
 

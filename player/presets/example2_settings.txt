@@ -1,0 +1,23 @@
+amount_bars 38;
+micro 4;
+tempo 76;
+loop_start 1.1.0;
+loop_end 5.1.0;
+use_bounds 0;
+loop_on 0;
+win_w 3700;
+win_h 500;
+window_w 1000;
+pre_name example2;
+col0 226 226 226;
+col1 206 253 204;
+col2 21 2 108;
+amount_rows 50;
+show_main 0;
+show_player 0;
+show_parameters 0;
+window_h 580;
+show_solo 0;
+update_freq 20;
+muted 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;

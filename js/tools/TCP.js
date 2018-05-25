@@ -11,8 +11,8 @@ var Tcp = class TCP {
       c.on('end', () => {
         console.log('server disconnected');
       });
-      c.on('data', function(data) {
-        dist_data(data, 'server')
+      c.on('data', function(dat) {
+        data.dist_data(dat, 'server')
       });
 
     });
@@ -28,8 +28,8 @@ var Tcp = class TCP {
     	console.log('client connected');
     });
 
-    this.client.on('data', function(data) {
-      dist_data(data, 'client')
+    this.client.on('data', function(dat) {
+      data.dist_data(dat, 'client')
     });
 
     this.client.on('close', function() {

@@ -46,17 +46,9 @@ function open_win(x,y,w,h,name,path,fkt){
   // it's a hack for win.focus(), which doesn't work
   chrome.windows.getLastFocused(function(wind) {
     win.id = wind.id
-  });  
+  });
   return win
 }
-
-//function resize_window(win, w, h){
-//  var h_dif = win.outerHeight - win.innerHeight
-//  var w_dif = win.outerWidth - win.innerWidth
-//  log({w,w_dif,h,h_dif,win})
-//  win.resizeTo(w + w_dif, h + h_dif)
-//}
-
 
 function dict_to_arr(dict) {
   var tmp = []
@@ -68,6 +60,7 @@ function dict_to_arr(dict) {
 }
 
 function measure_fkt(fkt,args) {
+  // doesn't work properly
   var t0 = performance.now();
   fkt(args)
   var t1 = performance.now();
@@ -93,4 +86,11 @@ function hexToRgb(hex) {
   } : null;
 }
 
-
+function round_to_multiple(val,multi){
+  var parts = multi.toString().split('.')
+  var shift =  (parts.length < 2) ? 1 : Math.pow(10, parts[1].length)
+      val = val * shift
+      multi = multi * shift
+  var div = Math.round(val / multi) 
+  return res = div * multi / shift
+}

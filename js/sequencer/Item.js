@@ -1,7 +1,7 @@
 
 
 class Item {
-  
+
   constructor() {
     this.id = null
     this.row = null
@@ -15,14 +15,14 @@ class Item {
     this.x = null
     this.y = null
     this.w = null
-    this.h = null 
+    this.h = null
     this.col = null
-    
+
     this.params = {}
-    
+
     this.rect = this.create_rect()
   }
-  
+
   create_rect() {
     var rect = document.createElementNS("http://www.w3.org/2000/svg", 'rect')
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
@@ -34,7 +34,7 @@ class Item {
   }
   sortNumber(a,b) {
     return Number(a) - (b);
-  } 
+  }
   get_new_id(){
     if (items.dict[0]) {
       var ids = Object.keys(items.dict)
@@ -67,9 +67,12 @@ class Item {
     this.rect.style.height = h
     this.rect.firstChild.style.height = h
   }
-  set_midipos(){}
-  set_midilen(){}
-  
+  set_row(it,row){
+    it.row = row
+    var y = V.win_h - it.row * V.elem_h - V.elem_h
+    it.set_y(y)
+  }
+
   delete() {
     var del = 1
     var id = this.id
@@ -78,21 +81,24 @@ class Item {
     items.selected_item_se = null
     this.rect.parentNode.removeChild(this.rect)
   }
-  
-  drag_x(){}
-  drag_y(){}
-  drag_start(){}
-  drag_end(){}
-  
+
   set_vol(vol){
     this.vol = vol
     this.col = calc_color(vol)
     this.rect.firstChild.style.fill = this.col
   }
+  set_param(par,val){
+    if (val == 'del') delete this.params[par]
+    else {
+      var col = calc_color(val, params.param)
+      this.params[par] = [val,col]
+    }
+  }
+  
   set_active(){this.rect.style.stroke = 'red'}
   set_inactive(){this.rect.style.stroke = 'black'}
-  set_param(){}
-  
+
+
   add_listeners() {
     this.rect.addEventListener("mouseover", e => {
         if (!items.dragging && !items.dragging_startend) {
@@ -100,7 +106,7 @@ class Item {
           items.selected_item = this.id
           main.show_item_pos(this)
         }
-        if(alt_pressed && shift_pressed){
+        if(e.altKey && e.shiftKey){
           items.delete_item()
         }
         }, false);
@@ -116,6 +122,6 @@ class Item {
             }
         }, false);
   }
-  
-  
+
+
 }

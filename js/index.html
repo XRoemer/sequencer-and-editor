@@ -9,10 +9,12 @@
       var dir = console.dir
     </script>
 
-    <script type="text/javascript" src='init/variables.js'></script>
+    
     <script type="text/javascript" src='init/init.js'></script>
     <script type="text/javascript" src='tools/tools.js'></script>
     <script type="text/javascript" src='tools/calculations.js'></script>
+    
+    <script type="text/javascript" src='init/variables.js'></script>
 
     <script type="text/javascript" src='sequencer/window_handling.js'></script>
     <script type="text/javascript" src='sequencer/sequencer_listener.js'></script>
@@ -21,12 +23,15 @@
     <script type="text/javascript" src='sequencer/parameters.js'></script>
     <!-- <script type="text/javascript" src='menu/menu.js'></script> -->
 
-    <script type="text/javascript" src='gui/gui_elements.js'></script>
+    <script type="text/javascript" src='gui/surface_elements.js'></script>
     <script type="text/javascript" src='gui/Pointer.js'></script>
     <script type="text/javascript" src='gui/create_main.js'></script>
     <script type="text/javascript" src='gui/player.js'></script>
+    <script type="text/javascript" src='gui/solo_mute.js'></script>
     <script type="text/javascript" src='midi/create_midi_dialog.js'></script>
     <script type="text/javascript" src='gui/svgs.js'></script>
+    
+    
 
 
 
@@ -39,35 +44,52 @@
     </script> -->
 
     <div id="main_div" class="main_div">
-      <canvas id="canvas_main" class="cnv_main"></canvas>
+    	<canvas id="canvas_main" class="cnv_main"></canvas>
     </div>
 
     <div id="player_div" class="player">
-      <canvas id="player_bg" class="player_bg"></canvas>
+    	<canvas id="player_bg" class="player_bg"></canvas>
     </div>
-    
+
     <div id="scales" class="scale">
-    	<div    id="top_left_div" class="top_left"><canvas id="top_left" class="top_left_cnv"></canvas></div>
-		<div    id="div_scale_x"  class="scaleX"> <canvas id="scale_x_bg"></canvas> </div>
-	    <div    id="div_scale_y"  class="scaleY"> <canvas id="scale_y_bg"></canvas> </div>
-    </div>
     
+    	<div id="top_left_div" class="top_left">
+    		<canvas id="top_left" class=""></canvas>
+   		</div>
+   		
+		<div id="div_scale_x"  class="scaleX">  
+			<canvas id="scale_x_bg"></canvas> 
+		</div>
+		
+	    <div id="div_scale_y"  class="scaleY">  
+	    	<div id="div_solo_mute"  class="scaleY"></div>
+	    	<canvas id="div_scale_y_numbers"  class="scaleY"></canvas>
+	    	<canvas id="scale_y_bg"></canvas> 
+    	</div>
+    	
+    </div>
+
     <div id="transport" class="scale">
-    	<div    id="pointer_div"      class="pointer"></div>
-      	<div    id="loop_bounds_div"  class="pointer loop_bounds"></div>
+    	<div id="pointer_div"      class="pointer"></div>
+      	<div id="loop_bounds_div"  class="pointer loop_bounds"></div>
     </div>
-    
+
     <div id="seq_container" class="seq_cont">
       <canvas id="canvas_bg"    class="seq"></canvas>
       <div    id="sequencer_bg" class="seq"></div>
-      <div    id="sequencer"    class="seq"> <canvas id="seq_div_extend"></canvas> </div>
-    </div>
-    
-    <div id="params_div" class="parameters">
-    	<div    id="bottom_left_div" class="bottom_left"><canvas id="bottom_left" class="bottom_left_cnv"></canvas></div>
-    	<canvas id="params_cnv"    class=""></canvas>
+      <div    id="sequencer"    class="seq"></div>
     </div>
 
+    <div id="params_div" class="parameters">
+    	<div    id="bottom_left_div"class="bottom_left">
+    		<canvas id="bottom_left_cnv" class="bottom_left_cnv"></canvas>
+    		<canvas id="params_drag"    class="par_drag"></canvas>
+   		</div>
+    	<canvas id="params_cnv"    	class=""></canvas>
+   		
+    </div>
+	
+	
 
   </body>
 </html>
