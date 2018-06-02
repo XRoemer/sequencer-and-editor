@@ -10,38 +10,23 @@ https://nwjs.io/
 Open sequencers_example.pd and follow the instructions. 
 
 
-
 ### Shortcuts and Controls
-- ITEMS
-	- ctrl + click / doubleclick: 	set item
-	- mmb on item: 					delete item
-	- ctrl + wheel on item: 		set volume
-	- shift + ctrl + mousemove: 	draw mode
-	- alt + shift + mousemove: 		erase mode
-	- ctrl + wheel: 				scale x-axis
-	- shift + wheel: 				scroll x-axis
-	- ctrl + x: 					select all items on row, move along x axis, return for confirm, esc for abort
-	- ctrl + y: 					select all items on row, move along y axis, return for confirm, esc for abort
-- PLAYER
-	- space: 						starts/stops playing
-	- click into x-scale sets transport start
-	- ctrl click into x-scale sets loop-region start
-	- alt click into x-scale sets loop-region end
-	- loop-regions are draggable
-- PARAMETERS
-	- click: 						set item(s) at current position
-	- mmb: 							delete parameter on item
-	- click name on the left: set parameter/create new
-	- ctrl + lmb: 					draw values
-	- ctrl + mousemove on bottom left edge: resize parameters hight
-- SOLO/MUTE
-	- ctrl + click solo: 			exclusive solo
-	- ctrl + s: 					unmute/unsolo all
-- VARIOUS
-	- ctrl + m: 					show/hide main control
-	- ctrl + l: 					log received data
-	- ctrl + r: 					log sent data
 
+For a description and a list of available shortcuts click on the faces in the upper left corner of the editor.
+
+- ITEMS
+	- created and deleted by clicking and drawing
+	- can be moved and resized dragging
+- SELECTIONS
+	- selections of a row or by dragging
+	- selections can be extended or deleted
+	- selections can be moved on x an y-axis
+- TRANSPORT
+	- possibility of defining an inner loop region
+- PARAMETERS
+	- custom parameters with custom settings (start, scope, step)
+- SOLO/MUTE
+	- usefull for replay and editing
 - MIDI
 	- imports midi files of type 1
 
