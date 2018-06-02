@@ -134,29 +134,35 @@ class Items {
     return item
   }
   
-  duplicate_item(it){
+  duplicate_item(it, x){
     
     var div = document.getElementById("sequencer");
     var bound = div.getBoundingClientRect()
     var item = new Item()
-
+    var midi_pos = posX2midi(x)
+    
     item.id = item.get_new_id()
     item.row = it.row
-    item.bar = it.bar
-    item.micro = it.micro
-    item.cent = it.cent
+    item.bar = midi_pos.bar 
+    item.micro = midi_pos.micro 
+    item.cent = midi_pos.cent
     item.len_bar = it.len_bar
     item.len_micro = it.len_micro
     item.len_cent = it.len_cent
     item.set_vol(it.vol)
     item.params = it.params
     item.add_listeners(item)
+    
+    item.set_w(it.w)
+    item.set_h(it.h)
+    item.set_x(x)
+    item.set_y(it.y)
 
-    this.dict[id] = item
+    this.dict[item.id] = item
 
     data.send_new_item(id,it.row,it.bar+1,it.micro+1,it.cent,it.len_bar,it.len_micro,it.len_cent,it.vol)
     document.getElementById('sequencer').appendChild(item.rect)
-    log(item,item.id)
+    return item
   }
 
   delete_item(id){
@@ -317,6 +323,7 @@ class Items {
       x = highest_x + it.x - lowest_x
       y = it.y
       item = this.duplicate_item(it,x)
+      log(it,item,x)
       it.set_inactive()
       if (item != null){
         item.set_active()
