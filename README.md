@@ -16,11 +16,13 @@ For a description and a list of available shortcuts click on the faces in the up
 
 - ITEMS
 	- created and deleted by clicking and drawing
-	- can be moved and resized dragging
+	- can be moved and resized by dragging
 - SELECTIONS
 	- selections of a row or by dragging
 	- selections can be extended or deleted
 	- selections can be moved on x an y-axis
+- SNAPSHOTS
+	- up to 10 snapshots can be taken and recalled
 - TRANSPORT
 	- possibility of defining an inner loop region
 - PARAMETERS
