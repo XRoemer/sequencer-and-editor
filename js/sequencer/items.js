@@ -150,7 +150,7 @@ class Items {
     item.len_micro = it.len_micro
     item.len_cent = it.len_cent
     item.set_vol(it.vol)
-    item.params = it.params
+    item.params = Object.assign({}, it.params)
     item.add_listeners(item)
     
     item.set_w(it.w)
