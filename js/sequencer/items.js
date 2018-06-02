@@ -2,25 +2,30 @@ class Items {
   constructor() {
     this.selected_items = []
     this.move_items_direction = null
-    this.sel_items_old_row = null
     this.sel_items_start_posX = 0
-    this.sel_items_old_pos = {}
+    this.sel_items_memory = {}
     
     this.selected_item  = null
-    this.selected_item_se  = null
     this.dragging = false
-    this.drag_start = false
-    this.drag_end = false
-    this.dragging_startend = false
+    this.mouse_down = false
+    this.mouse_row = 0
     this.my_old = 0
     this.mx_old = 0
     
     this.dict = {}
-    this.items_by_row  = {}
+    this.snapshots = []
+    this.current_snapshot = 0
+  }
+  
+  clear_vars(){
+    this.selected_item  = null
+    this.dragging = false
+    this.dict = {}
   }
 
   set_items(received_array) {
-
+    // used to set a bunch of items at once
+    // at loading a preset
     var par, val
 
     for (var i = 0; i < received_array.length ; i++) {
@@ -55,7 +60,6 @@ class Items {
       item.add_listeners(item)
 
       this.dict[i] = item
-      this.insert_items_by_row(item)
 
       document.getElementById('sequencer').appendChild(item.rect);
     }
@@ -83,7 +87,7 @@ class Items {
   }
 
   create_new_item(e,x,y){
-
+    
     var div = document.getElementById("sequencer");
     var bound = div.getBoundingClientRect()
     if (x == null) {
@@ -121,88 +125,238 @@ class Items {
     item.add_listeners(item)
 
     this.dict[id] = item
-    this.insert_items_by_row(item)
     bar += 1
     micro += 1
     data.send_new_item(id,row,bar,micro,cent,len_bar,len_micro,len_cent,V.vol)
     document.getElementById('sequencer').appendChild(item.rect)
 
     params.set_items()
+    return item
+  }
+  
+  duplicate_item(it){
+    
+    var div = document.getElementById("sequencer");
+    var bound = div.getBoundingClientRect()
+    var item = new Item()
+
+    item.id = item.get_new_id()
+    item.row = it.row
+    item.bar = it.bar
+    item.micro = it.micro
+    item.cent = it.cent
+    item.len_bar = it.len_bar
+    item.len_micro = it.len_micro
+    item.len_cent = it.len_cent
+    item.set_vol(it.vol)
+    item.params = it.params
+    item.add_listeners(item)
+
+    this.dict[id] = item
+
+    data.send_new_item(id,it.row,it.bar+1,it.micro+1,it.cent,it.len_bar,it.len_micro,it.len_cent,it.vol)
+    document.getElementById('sequencer').appendChild(item.rect)
+    log(item,item.id)
   }
 
-  delete_item(){
-    params.remove_listener_path(this.selected_item)
-    this.dict[this.selected_item].delete()
+  delete_item(id){
+    if (id == null) id = this.selected_item
+    params.remove_listener_path(id)
+    this.dict[id].delete_rect()
+    this.selected_item = null
+    params.set_items()
+    delete this.dict[id]
+    data.send_del_item(id)
+  }
+  
+  snapshot(nr){
+    var nr = prompt("Enter snapshot nr (0-9)", 0);
+    if (nr == null) return
+    var copy = JSON.parse(JSON.stringify(items.dict))
+    this.snapshots[nr] = copy
+    if (this.snapshots.length > 10) this.snapshots.shift()
+  }
+  
+  call_snapshot(nr){
+    this.current_snapshot = nr
+    var snsh = this.snapshots[nr]
+    if (snsh == null) return
+
+    var keys = Object.keys(items.dict)
+    for (var i = 0; i < keys.length; i++){
+      this.delete_item(keys[i])
+    }
+    
+    keys = Object.keys(snsh)
+    var it, it_old, id, x, y, new_item, skeys
+    for (var i = 0; i < keys.length; i++){
+      id = keys[i]
+      it = snsh[id]
+      it_old = items.dict[id]
+      if (it_old == null) {
+	x = midi2posX(it.bar-1, it.micro-1, it.cent)
+	y = row2posY(it.row)
+	
+	new_item = this.create_new_item(null,x,y)
+	new_item.set_row(new_item,it.row)
+	new_item.set_vol(it.vol)
+	new_item.params = it.params
+	skeys = Object.keys(it.params)
+	if (skeys.length != 0) {
+	  for (var k in skeys){
+	    log(skeys[k])
+	  }
+	}
+      }
+    }
+    this.adjust_items()
     params.set_items()
   }
-
-  select_items_on_row(row){
-    var it, pos
-    var lowest_x = 100000
-    var highest_x = 0
-    this.sel_items_old_row = row
-    pos = main.mouse_pos
-    this.sel_items_start_posX = midi2posX(pos.bar - 1, pos.micro - 1, pos.cent)
-    this.sel_items_old_pos = {}
+  
+  delete_selected(){
+    for (var i = 0; i < this.selected_items.length; i++){
+      this.delete_item(this.selected_items[i].id)
+    }
     this.selected_items = []
+  }
+  
+  
+  select_item(id, e){
+    if (id == null && items.selected_item != null) this.dict[items.selected_item].set_inactive()
+    if (id != null && id != this.selected_item) this.dict[id].set_active()
+    this.selected_item = id  
+  }
+  
+  add_item_to_selected(it){
+    this.selected_items.push(it)
+    it.set_active()
+    this.set_selected_items_memory()
+  }
+
+  select_items_on_row(){
+    var row = main.mouse_pos.row - 1
+    var it
+    this.selected_items = []
+    items.selected_item = null
+    
     var keys = Object.keys(items.dict)
     for (var i = 0; i < keys.length; i++){
       it = items.dict[keys[i]]
       if (it.row == row) {
 	this.selected_items.push(it)
-	this.sel_items_old_pos[it.id] = it.x
-	lowest_x = (lowest_x > it.x) ? it.x : lowest_x
-	highest_x = (highest_x < it.x) ? it.x : highest_x
-      }
+	it.set_active()
+      } else it.set_inactive()
     }
-    this.sel_items_old_pos['lowest_x'] = lowest_x
-    this.sel_items_old_pos['highest_x'] = highest_x
+    this.set_selected_items_memory()
+  }
+  
+  set_selected_items_memory(){
+    this.sel_items_memory = {}
+    var id, it
+    var lowest_x = 100000
+    var highest_x = 0
+    var pos = main.mouse_pos
+    this.sel_items_start_posX = midi2posX(pos.bar - 1, pos.micro - 1, pos.cent)
+
+    for (var i = 0; i < this.selected_items.length; i++){
+      it = this.selected_items[i]
+      this.sel_items_memory[it.id] = [it.x, it.row]
+      lowest_x = (lowest_x > it.x) ? it.x : lowest_x
+      highest_x = (highest_x < it.x) ? it.x : highest_x
+    }
+    this.sel_items_memory['lowest_x'] = lowest_x
+    this.sel_items_memory['highest_x'] = highest_x
   }
 
   deselect_items(){
+    var it
     this.move_items_V = false
     this.move_items_h = false
+    for (var i = 0; i < this.selected_items.length; i++){
+      it = this.selected_items[i]
+      it.set_inactive()
+    }
     this.selected_items = []
+    items.move_items_direction = null
     params.set_items()
   }
-
   abort_move_items(){
-    this.move_items_on_yAxis(this.sel_items_old_row)
+    this.reset_items_on_yAxis()
     this.set_items_on_xAxis(0)
     this.deselect_items()
   }
-
-  set_move_selected_items(key){
-    this.move_items_direction = key
-    var row = main.mouse_pos.row - 1
-    this.select_items_on_row(row)
-  }
   
   set_selected_items(){
-    if(this.selected_items.length == 0) return
+    if(this.move_items_direction == null) return
     if(this.move_items_direction == 'y'){
-      this.move_items_on_yAxis(main.mouse_pos.row - 1)
+      this.move_items_on_yAxis()
     } else if(this.move_items_direction == 'x'){
       this.move_items_on_xAxis(main.mouse_pos)
     }
   }
   
-  move_items_on_yAxis(row){
-    var it, id, old_row
+  repeat_selected(){
+    var keys = Object.keys(this.sel_items_memory)
+    var lowest_x = this.sel_items_memory['lowest_x']
+    var index = keys.indexOf('lowest_x')
+    keys.splice(index, 1)
+    index = keys.indexOf('highest_x')
+    keys.splice(index, 1)
+    
+    var highest_x = 0
+    var it, x, y, item, new_items = []
+    
+    for (var i = 0; i < keys.length; i++){
+      it = items.dict[keys[i]]
+      highest_x = Math.max(highest_x, it.x + it.w)
+    }
+    
+    this.selected_items = []
+    for (var i = 0; i < keys.length; i++){
+      it = items.dict[keys[i]]
+      x = highest_x + it.x - lowest_x
+      y = it.y
+      item = this.duplicate_item(it,x)
+      it.set_inactive()
+      if (item != null){
+        item.set_active()
+        this.selected_items.push(item)
+      }
+    }
+    this.set_selected_items_memory()
+    
+  }
+  
+  move_items_on_yAxis(){
+    var it, id, row, dx_row, orig_row,new_row
+    row = main.mouse_pos.row - 1
+    dx_row = row - this.mouse_row
     for (var i = 0; i < this.selected_items.length; i++){
       it = this.selected_items[i]
-      old_row = it.row
-      it.set_row(it,row)
       id = it.id
-      items.adjust_arrays({id,row,old_row})
+      orig_row = this.sel_items_memory[id][1]
+      new_row = Math.max(orig_row + dx_row,0)
+      it.set_row(it,new_row)
+      data.send_item_row(id,new_row)
+    }
+  }
+  
+  reset_items_on_yAxis(){
+    var it, id, row
+    for (var i = 0; i < this.selected_items.length; i++){
+      it = this.selected_items[i]
+      id = it.id
+      row = this.sel_items_memory[id][1]
+      it.set_row(it,row)
+      data.send_item_row(id,row)
     }
   }
 
   move_items_on_xAxis(pos){
     var x = midi2posX(pos.bar - 1, pos.micro - 1, pos.cent)
     var dx = x - this.sel_items_start_posX
-    var low = this.sel_items_old_pos.lowest_x
-    var high = this.sel_items_old_pos.highest_x
+    var low = this.sel_items_memory.lowest_x
+    var high = this.sel_items_memory.highest_x
     var maxw = V.win_w
     dx = (low + dx) < 0 ? -low : dx
     dx = (high + dx) > maxw ? maxw - high - 1 : dx
@@ -214,84 +368,9 @@ class Items {
     for (var i = 0; i < this.selected_items.length; i++){
       it = this.selected_items[i]
       id = it.id
-      old_pos = this.sel_items_old_pos[id]
+      old_pos = this.sel_items_memory[id][0]
       x = old_pos + dx
-      this.adjust_arrays({id,x})
-      it.set_x(x)
-    }
-  }
-
-  insert_items_by_row(it) {
-    var row = it.row
-    if (!this.items_by_row[row]) {
-      this.items_by_row[row] = [it]
-    }
-    else {
-      var arr_row = this.items_by_row[row]
-      for (var i = 0; i < arr_row.length ; i++) {
-	if (it.x < arr_row[i].x) break
-	}
-      arr_row.splice(i , 0, it);
-    }
-  }
-
-  search_for_close_items(mx, row) {
-    if (!this.items_by_row[row]) return
-
-    var left = null
-    var right = null
-    var right_found = false
-
-    for (var i = 0; i < this.items_by_row[row].length ; i++) {
-      var it = this.items_by_row[row][i]
-      if (it.x > mx && !right_found) {
-      	right = [it.x - mx, it.id]
-      	right_found = true
-      	}
-      if (it.x + it.w < mx) {
-      	left = [mx - it.x - it.w, it.id]
-      	}
-    }
-    if (right && right[0] < 10) {
-      document.getElementById('sequencer').style.cursor = "w-resize";
-      if (this.selected_item_se != null) {
-        if (this.selected_item_se != right[1]) {
-  	this.dict[this.selected_item_se].set_inactive()
-          this.selected_item_se = right[1]
-          this.dict[items.selected_item_se].set_active()
-        }
-      }
-      else {
-        this.selected_item_se = right[1]
-        this.dict[this.selected_item_se].set_active()
-      }
-      this.drag_end = false
-      this.drag_start = true
-    }
-    else if (left && left[0] < 10) {
-      document.getElementById('sequencer').style.cursor = "col-resize"
-      if (this.selected_item_se != null) {
-        if (this.selected_item_se != left[1]) {
-  	this.dict[this.selected_item_se].set_inactive()
-          this.selected_item = left[1]
-      	this.dict[this.selected_item_se].set_active()
-        }
-      }
-      else {
-        this.selected_item_se = left[1]
-        this.dict[this.selected_item_se].set_active()
-      }
-      this.drag_end = true
-      this.drag_start = false
-    }
-    else {
-      document.getElementById('sequencer').style.cursor = "default"
-      this.drag_end = false
-      this.drag_start = false
-      if (this.selected_item_se != null) {
-        this.dict[this.selected_item_se].set_inactive()
-        this.selected_item_se = null
-      }
+      this.adjust_item_x(id,x)
     }
   }
 
@@ -309,15 +388,13 @@ class Items {
 
     var x = Math.max(item_x + dx, 0)
     if (!V.use_quant) {
-      this.adjust_arrays({id,x})
-      it.set_x(x)
+      this.adjust_item_x(id,x)
     } else {
       var it_pos = Math.round(item_x / V.item_w)
       var cur_pos = Math.round(mx / V.item_w)
       if (cur_pos != it_pos) {
         var x = cur_pos * V.item_w
-        this.adjust_arrays({id,x})
-        it.set_x(x)
+        this.adjust_item_x(id,x)
       }
     }
     params.set_items()
@@ -328,115 +405,53 @@ class Items {
     var row = Math.max(V.amount_rows - Math.trunc(my / V.elem_h) - 1, 0)
     if (old_row != row) {
       it.set_row(it,row)
-      this.adjust_arrays({id,row,old_row})
+      data.send_item_row(id,row)
     }
   }
 
+  // dragging start or end doesn't use quantisation
+  // should it be changed?
+  
   dragging_start(dx) {
-    var it = this.dict[this.selected_item_se]
+    var use_quant = V.use_quant
+    V.use_quant = false
+    var id = this.selected_item
+    var it = this.dict[id]
     var w = Math.max( it.w - dx, 1)
     var dx = (w == 1) ? 0 : dx
     var x = Math.max(it.x + dx, 1)
-    it.w = w
-    var id = this.selected_item_se
-    this.adjust_arrays({id,x,w})
-    it.set_x(x)
-    it.set_w(w)
+    this.adjust_item_x(id,x)
+    this.adjust_item_w(id,w)
+    V.use_quant = use_quant
   }
+  
   dragging_end(dx) {
-    var it = this.dict[this.selected_item_se]
-    var w = Math.max( it.w + dx, 1)
-    var x = parseFloat(it.x)
-    it.w = w
-    var id = this.selected_item_se
-    this.adjust_arrays({id,x,w})
-    it.set_w(w)
-  }
-
-  adjust_arrays(args) {
-    var id = args.id
+    var use_quant = V.use_quant
+    V.use_quant = false
+    var id = this.selected_item
     var it = this.dict[id]
-
-    if (args.row != null) {
-      var x = args.x
-      var w = it.w + x
-      var old_row = args.old_row
-      var new_row = args.row
-      this.adjust_arr_items_by_row({id,x,w,old_row,new_row})
-      data.send_item_row(id,new_row)
-    }
-    if (args.x != null) {
-      var x = args.x
-      var w = it.w
-
-      this.adjust_arr_items_by_row({id,x,w})
-      // wird in adjust gesetzt it.x = x
-      var midipos = posX2midi(x)
-      data.send_item_x(id,midipos)
-      it.bar = midipos.bar
-      it.micro = midipos.micro
-      it.cent = midipos.cent
-    }
-    if (args.w) {
-      var x = args.x
-      var w = it.w
-      this.adjust_arr_items_by_row({id,w})
-      // wird in adjust gesetzt it.x = x
-      var midilen = posX2midi(w)
-      data.send_item_w(id,midilen)
-      it.len_bar = midilen.bar - 1
-      it.len_micro = midilen.micro - 1
-      it.len_cent = midilen.cent
-      main.show_item_pos(it)
-    }
-    if (args.vol != null) {
-      it.set_vol(args.vol)
-      data.send_item_vol(id,midipos)
-      params.set_items()
-    }
-    main.show_item_pos(it)
-    if (args.del){
-      var x = args.x
-      var row = it.row
-      var w = it.w
-      var del = 1
-      this.adjust_arr_items_by_row({id,row,del})
-      delete this.dict[id]
-      data.send_del_item(id)
-    }
+    var w = Math.max( it.w + dx, 1)
+    this.adjust_item_w(id,w)
+    V.use_quant = use_quant
   }
-
-  adjust_arr_items_by_row(args){
-
-    if (args.del){
-      var ind = this.get_index_of_arr_el(args.row, args.id)
-      this.items_by_row[args.row].splice(ind,1)
-    }
-    if (args.new_row != null){
-      var ind = this.get_index_of_arr_el(args.old_row, args.id)
-      this.items_by_row[args.old_row].splice(ind,1)
-      var it = this.dict[args.id]
-      this.insert_items_by_row(it)
-    }
-    if (args.x != null || args.w){
-      var it = this.dict[args.id]
-      var ind = this.get_index_of_arr_el(it.row, args.id)
-      this.items_by_row[it.row].splice(ind,1)
-      it.x = args.x ? args.x : it.x
-      it.w = args.w ? args.w : it.w
-      this.insert_items_by_row(it)
-    }
+  
+  adjust_item_x(id,x){
+    var it = items.dict[id]
+    it.set_x(x)
+    var midipos = posX2midi(x)
+    data.send_item_x(id,midipos)
+    it.bar = midipos.bar
+    it.micro = midipos.micro
+    it.cent = midipos.cent
   }
-
-  get_index_of_arr_el(row,id) {
-    if(!this.items_by_row[row]){
-      throw "error: row has no items"
-    }
-    for (var i = 0; i < this.items_by_row[row].length ; i++) {
-      if (this.items_by_row[row][i].id == id) {
-        return i
-      }
-    }
-    throw "error: item not found"
+  
+  adjust_item_w(id,w){
+    var it = items.dict[id]
+    var midilen = posX2midi(w)
+    it.set_w(w)
+    it.len_bar = midilen.bar - 1
+    it.len_micro = midilen.micro - 1
+    it.len_cent = midilen.cent
+    data.send_item_w(id,midilen)
   }
 }

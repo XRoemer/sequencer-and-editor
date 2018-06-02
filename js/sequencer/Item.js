@@ -17,6 +17,8 @@ class Item {
     this.w = null
     this.h = null
     this.col = null
+    
+    this.curpos = null
 
     this.params = {}
 
@@ -69,16 +71,10 @@ class Item {
   }
   set_row(it,row){
     it.row = row
-    var y = V.win_h - it.row * V.elem_h - V.elem_h
-    it.set_y(y)
+    it.set_y(row2posY(row))
   }
 
-  delete() {
-    var del = 1
-    var id = this.id
-    items.adjust_arrays({id, del})
-    items.selected_item = null
-    items.selected_item_se = null
+  delete_rect() {
     this.rect.parentNode.removeChild(this.rect)
   }
 
@@ -100,28 +96,50 @@ class Item {
 
 
   add_listeners() {
-    this.rect.addEventListener("mouseover", e => {
-        if (!items.dragging && !items.dragging_startend) {
-          this.rect.style.stroke = 'red'
-          items.selected_item = this.id
-          main.show_item_pos(this)
-        }
-        if(e.altKey && e.shiftKey){
-          items.delete_item()
-        }
-        }, false);
+    this.rect.addEventListener("mousemove", e => {
+      if (items.selected_items.length != 0) return
+      
+      if (!items.dragging) {
+        items.select_item(this.id,e)
+        main.show_item_pos(this)
+        this.get_curpos_on_item(e)
+      } 
+      if(e.altKey && e.shiftKey){
+        items.delete_item()
+      }
+     }, false)
+        
     this.rect.addEventListener("mouseout", e => {
-          if (!items.dragging && !items.dragging_startend) {
-            items.selected_item = null
-            this.rect.style.stroke = 'black'
+          if (!items.dragging) {
+            items.select_item(null)
+            sequencer.style.cursor = "default"
           }
-        }, false);
+        }, false)
+        
     this.rect.addEventListener("mousedown", e => {
-          if (e.button == 0){
-              items.dragging = true
-            }
-        }, false);
+      if (items.selected_items.length != 0 && e.shiftKey) {
+	items.add_item_to_selected(this)
+      }
+      else if (e.button == 0){
+          items.dragging = true
+        }
+        }, false)
   }
-
-
+  
+  get_curpos_on_item(e){
+    var select_w = items.dict[this.id].w / 5
+    
+    if (e.offsetX >=  items.dict[this.id].w - select_w){
+	sequencer.style.cursor = "w-resize"
+	this.curpos = 2
+    } else if (e.offsetX <= select_w){
+	sequencer.style.cursor = "col-resize"
+	  this.curpos = 0
+    }
+    else {
+	sequencer.style.cursor = "default"
+	  this.curpos = 1
+    }
+  }
+ 
 }

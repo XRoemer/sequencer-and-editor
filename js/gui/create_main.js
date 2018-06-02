@@ -30,7 +30,7 @@ class Main_Gui {
     }
     else if(type=="clear"){
       gui.clear_sequencer()
-      gui.clear_vars()
+      items.clear_vars()
       params.clear()
       data.send_data('memory clear', window.win_nr)
     }
@@ -38,8 +38,7 @@ class Main_Gui {
       this.call_test()
     }
     else if(type=="face"){
-      alert('X. Roemer 2018, License MIT \n\rhttps://github.com/XRoemer/sequencer-and-editor \n\r' +
-	  "http://www.sprechduette.de/droste-projekt.html")
+      open_description(e)
     }
   }
 
@@ -143,8 +142,8 @@ class Main_Gui {
     main_cont.appendChild(btn)
 
 
-//    btn = this.create_btn(585, 20, 250 ,250, 1, svg_str.test_str,'player_svg player_click','test')
-//    main_cont.appendChild(btn)
+    btn = this.create_btn(585, 20, 250 ,250, 1, svg_str.test_str,'player_svg player_click','test')
+    main_cont.appendChild(btn)
   }
 
   call_settings(e) {
@@ -191,3 +190,9 @@ class Main_Gui {
 }
 
 main = new Main_Gui()
+
+function open_description(e) {
+  var x = e.screenX - 190
+  var y = e.screenY + 60
+  open_win(x,y,600,600,'description_win',"init/description.html")//, on_load_description)
+}

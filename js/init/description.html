@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <title>description</title>
+    <script> var log = console.log </script>
+    <link rel="stylesheet" href="desc_styles.css">
+  </head>
+
+  <body style="margin:0; padding:0; font-family:verdana;" bgcolor="#f5f5d7" onload='' >
+    <script>
+    </script>
+    <div id="description" style="position:absolute; margin-left:20px; margin-top:10px;">
+    	
+    	<h5>
+    		X. Roemer 2018, License MIT 
+    		<br/>
+			<a href="https://github.com/XRoemer/sequencer-and-editor">github</a>    		
+    		<br/>
+    		<a href="http://www.sprechduette.de/droste-projekt.html">homepage</a>
+  		</h5>
+    	<h2>Description</h2>
+    	<p>
+    		<h3>Shortcuts and Controls</h3>
+
+		    <h5>ITEMS</h5>
+		    	<ul>
+		        	<li>create item  		<b> ctrl + click / doubleclick </b> </li>
+		        	<li>draw items 			<b> shift + ctrl + mousemove</b> </li>
+		        	<li>delete item 		<b>mmb on item</b></li>
+		        	<li>erase items 		<b>alt + shift + mousemove</b> </li>
+		        	<b>SELECTIONS</b>
+		        	<li>select items 		<b>mousedrag</b> </li>
+		        	<li>add item 			<b>shift + click</b> </li>
+		        	<li>add items 			<b>shift + mousedrag</b> </li>
+		        	<li>select items on row <b>alt + x (mouse row)</b> </li>
+		        	<li>move selected x		<b>ctrl + x, return to confirm, esc to abort</b> </li>
+		        	<li>move selected y		<b>ctrl + y, return to confirm, esc to abort</b> </li>
+		        	<li>duplicate selected 	<b>ctrl + d</b> </li>
+		        	<li>delete selected		<b>delete / backspace</b> </li>
+		        	<li>clear all 			<b>press x button in main control</b> </li>
+		        </ul>
+	        
+	        <h5>SNAPSHOTS</h5>
+	        	<ul>
+	        		<li>create snapshot		<b>alt + s</b> </li>
+	        		<li>recall snapshot		<b>ctrl + 0-9</b> </li>
+	        	</ul>
+		        
+	        <h5>NAVIGATION</h5>
+	        	<ul>
+	        		<li>scale x-axis		<b>wheel</b> </li>
+	        		<li>scale y-axis		<b>ctrl + wheel</b> </li>
+	        		<li>scroll y-axis		<b>shift + wheel</b> </li>
+	        	</ul>
+		
+		    <h5>PLAYER</h5>
+		    	<ul>
+	        		<li>start/stop playing	<b>space</b> </li>
+	        		<li>set transport start	<b>click into x-scale</b> </li>
+	        		<li>set loop-region start	<b>ctrl click into x-scale</b> </li>
+	        		<li>sets loop-region end	<b>alt click into x-scale</b> </li>
+	        		<li>loop-regions are draggable	</li>
+	        	</ul>
+		
+		    <h5>PARAMETERS</h5>
+		    	<ul>
+	        		<li>set item(s) at current position	<b>click</b> </li>
+	        		<li>delete parameter on item		<b>mmb</b> </li>
+	        		<li>select parameter/create new		<b>click name on the left</b> </li>
+	        		<li>draw values						<b>ctrl + lmb</b> </li>
+	        		<li>resize parameters hight			<b>ctrl + mousemove on bottom left edge</b> </li>
+	        		<li>using solo/mute will show the parameters of the soloed/not muted items only </li>
+	        	</ul>
+		        
+		
+		    <h5>SOLO/MUTE</h5>
+		    	<ul>
+	        		<li>exclusive solo		<b>ctrl + click solo</b> </li>
+	        		<li>unmute/unsolo all	<b>ctrl + s</b> </li>
+	        	</ul>
+		
+		    <h5>VARIOUS</h5>
+		    	<ul>
+	        		<li>show/hide main control		<b>ctrl + m</b> </li>
+	        		<li>log received data			<b>ctrl + l</b> </li>
+	        		<li>log sent data				<b>ctrl + r</b> </li>
+	        	</ul>
+		
+		    <h5>MIDI</h5>
+		    	<ul>
+	        		<li>imports midi files of type 1 </li>
+	        	</ul>
+
+
+      <canvas id="cnv_desc" width="350" height="200">
+      </canvas>
+    </div>
+  </body>
+</html>

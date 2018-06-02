@@ -4,6 +4,10 @@ function midi2posX(bar, micro, cent) {
   var x = V.barlen * bar + V.miclen * micro + V.miclen/100 * cent
   return x
 }
+function row2posY(row) {
+  var y = V.win_h - row * V.elem_h - V.elem_h
+  return y
+}
 
 function posX2midi(x) {
   if (!V.use_quant){

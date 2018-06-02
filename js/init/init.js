@@ -84,10 +84,9 @@ class Create_Gui {
 
   clear_all() {
     this.clear_gui()
-    this.clear_vars()
+    items.clear_vars()
     params.clear()
     val_array = []
-    
   }
   
   clear_gui(){
@@ -113,17 +112,6 @@ class Create_Gui {
     var cnv = document.createElement("canvas");
     cnv.id = "scale_y_bg"
     div_scale_y.appendChild(cnv);
-  }
-  
-  clear_vars(){
-    items.selected_item  = null
-    items.selected_item_se  = null
-    items.dragging = false
-    items.drag_start = false
-    items.drag_end = false
-    items.dragging_startend = false
-    items.dict = {}
-    items.items_by_row = {}
   }
   
   clear_sequencer() {
@@ -201,7 +189,8 @@ class Create_Gui {
       params_div.style.width = V.win_w
       
       this.redraw_cnv(params_cnv, V.win_w, V.params_h, V.xAxis_bg_col, 'visible')
-      this.redraw_cnv(bottom_left_cnv, V.scaleY_w, V.params_h, V.yAxis_bg_col, 'visible')
+      this.redraw_cnv(bottom_left_cnv, V.scaleY_w, V.params_h - 10, V.yAxis_bg_col, 'visible')
+      this.redraw_cnv(params_drag, V.scaleY_w, 10,  V.yAxis_bg_col, 'visible')
       this.redraw_cnv(scale_y_bg, V.scaleY_w, V.win_h, V.yAxis_bg_col, 'visible')
       this.redraw_cnv(top_left, V.scaleY_w, V.scaleX_h, V.yAxis_bg_col, 'visible')
 
@@ -210,7 +199,7 @@ class Create_Gui {
 	params_div.style.height = 0
 	params_div.style.top = 0
 	this.redraw_cnv(params_cnv, V.win_w, 0, 'hidden')
-	this.redraw_cnv(bottom_left_cnv, V.scaleY_w, 0, 'hidden')
+	this.redraw_cnv(bottom_left_cnv, V.scaleY_w - 10, 0, 'hidden')
 	this.redraw_cnv(scale_y_bg, V.scaleY_w, V.win_h, V.yAxis_bg_col, 'hidden')
 	this.redraw_cnv(top_left, V.scaleY_w, V.scaleX_h, V.yAxis_bg_col, 'visible')
     }

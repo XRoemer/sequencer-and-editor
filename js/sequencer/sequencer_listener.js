@@ -3,18 +3,6 @@ last_seq_dragging_pos = [0,0,0,0]
 
 function add_listeners_to_sequencer() {
 
-  sequencer.addEventListener("wheel", function(e) {
-    if(items.selected_item != null && e.ctrlKey){
-      var it = items.dict[items.selected_item]
-      dx = e.deltaY / 100
-      V.vol = Math.min(Math.max(it.vol - dx,0),127)
-      it.set_vol(V.vol)
-      main.show_item_pos(it)
-      data.send_item_vol(items.selected_item)
-      params.set_items()
-    }
-  }, false);
-
   sequencer.addEventListener("mousemove", function(e) {
 
     var recta = this.getBoundingClientRect()
@@ -28,20 +16,25 @@ function add_listeners_to_sequencer() {
     var row = posY2row(my)
 
     main.show_mouse_pos(midi_pos.bar, midi_pos.micro, midi_pos.cent,row)
+    
+    
+    if (items.mouse_down && !items.dragging){
+      create_selection_rect(mx,my)
+      select_rect(mx,my,e)
+    } 
     items.set_selected_items()
-
-    if (!items.dragging && !items.dragging_startend
-		&& !e.ctrlKey && !e.shiftKey && !e.altKey) {
-      items.search_for_close_items(mx, row)
-      }
-    else {
-      if (items.dragging && items.selected_item != null) {
-        items.drag_item(items.selected_item, my, mx, dx)
-      }
-      else {if (items.drag_start) {items.dragging_start(dx)}
-        else if (items.drag_end) {items.dragging_end(dx)}
-      }
+    
+    if (items.dragging && items.selected_item != null) {
+	var id = items.selected_item
+	var it = items.dict[id]
+	var curpos = it.curpos
+	if (curpos == 1) items.drag_item(id, my, mx, dx)
+	else if (curpos == 0) items.dragging_start(dx)
+	else if (curpos == 2) items.dragging_end(dx)
+	params.set_items()
+	main.show_item_pos(it)
     }
+    
     if (e.ctrlKey && e.shiftKey && e.srcElement.id == 'sequencer') {
       var pos = posX2midi_quant(e.offsetX)
       var bar = pos.bar
@@ -64,31 +57,91 @@ function add_listeners_to_sequencer() {
   sequencer.addEventListener("mouseup", function(e) {
     if (e.button == 0){
       items.dragging = false
+      items.mouse_down = false
+      remove_selection_rect()
       document.getElementById('sequencer').style.cursor = "default";
-
-      if (items.selected_item != null){
-	items.dict[items.selected_item].set_inactive()
-        items.selected_item = null
-      }
-      items.drag_end = false
-      items.drag_start = false
-      items.dragging_startend = false
     }
   }, false);
 
   sequencer.addEventListener("mousedown", function(e) {
     if (e.button == 0){
-      if (items.drag_end || items.drag_start) {
-        items.dragging_startend = true
-      } else if (e.ctrlKey) {
+      if (e.ctrlKey) {
 	items.create_new_item(e)
-      }
+      } else items.mouse_down = true
     } else if (e.button == 1 && items.selected_item != null) {
       items.delete_item()
-    }
+    } 
   }, false);
 
   sequencer.addEventListener("dblclick", function(e) {
     items.create_new_item(e)
   }, false);
 }
+
+var selection_start = []
+function create_selection_rect(x,y){
+  var sel_rect = document.getElementById('sel_rect')
+  if (sel_rect == null){
+    selection_start = [x,y]
+    var sel_rect = document.createElement("canvas");
+    sel_rect.id = 'sel_rect'
+    sel_rect.style.position = 'absolute'
+    sel_rect.style.left = x
+    sel_rect.style.top = y
+    sequencer.appendChild(sel_rect)
+  }  
+}
+
+function select_rect(x,y,e){
+  var dx = Math.max(x - selection_start[0],0)
+  var dy = Math.max(y - selection_start[1],0)
+
+  sel_rect.width = dx
+  sel_rect.height = dy
+  sel_rect.style.width = dx
+  sel_rect.style.height = dy
+  
+  var ctx = sel_rect.getContext("2d")
+  ctx.clearRect(0, 0, sel_rect.width, sel_rect.height);
+  ctx.fillStyle = 'red'
+  ctx.globalAlpha=0.2;
+  ctx.opacity = 0.5
+  ctx.rect(0,0,dx,dy)
+  ctx.fillRect(0,0,dx,dy)
+  if (!e.shiftKey) {
+    items.selected_items = []
+    items.sel_items_memory = {}
+  }
+  
+  
+  var keys = Object.keys(items.dict)
+  for (var i = 0; i < keys.length; i++){
+    it = items.dict[keys[i]]
+    var it_x = it.x - selection_start[0]
+    var it_y = it.y - selection_start[1]
+    if (items.sel_items_memory[it.id] == null){
+      if (ctx.isPointInPath(it_x,it_y)) {
+	it.set_active()
+	items.selected_items.push(it)
+      } else it.set_inactive()
+    } 
+    
+  }
+  items.set_selected_items_memory()
+  
+}
+
+function remove_selection_rect(){
+  var sel_rect = document.getElementById('sel_rect')
+  if (sel_rect != null){
+    sequencer.removeChild(sel_rect)
+    selection_start = []
+  }
+}
+
+
+
+
+
+
+

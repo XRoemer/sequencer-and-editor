@@ -132,14 +132,3 @@ function set_log_send(e){
   V.log_send = e.srcElement.parentElement.state
 }
 
-function adjust_all(){
-  gui.set_widths_and_heights()
-  gui.clear_gui()
-  gui.create_seqgui()
-  pointer.adjust_transport_stroke()
-  items.adjust_items()
-}
-
-
-
-

@@ -46,9 +46,13 @@ function correct_positions(e) {
 }
 
 function scroll_window_by_wheel(e) {
-
-  if(e.ctrlKey) {
-    if (items.selected_item != null) {return}
+  if (e.shiftKey) return
+  
+  if (e.ctrlKey){
+    V.win_h += e.deltaY / 50
+    data.send_data('settings win_h ' + V.win_h, window.win_nr)
+    adjust_all()
+  } else {
     var scrollX_old = window.scrollX
     var rel = V.win_w / scrollX_old
     V.win_w += e.deltaY
@@ -61,8 +65,15 @@ function scroll_window_by_wheel(e) {
   }
 }
 
-function get_key(e){
+function adjust_all(){
+  gui.set_widths_and_heights()
+  gui.clear_gui()
+  gui.create_seqgui()
+  pointer.adjust_transport_stroke()
+  items.adjust_items()
+}
 
+function get_key(e){
   if (e.ctrlKey && e.key =='l') {V.log_receive = !V.log_receive; log('log '+ V.log_receive)}
   if (e.ctrlKey && e.key =='r') {V.log_send = !V.log_send; log('log send ' + V.log_send)}
   if (e.code == 'Space') {
@@ -71,7 +82,15 @@ function get_key(e){
   }
   if (e.ctrlKey && e.key =='m') main.toggle_main()
   if (e.ctrlKey && e.key =='s') sm.reset_all()
-  if (e.ctrlKey && (e.key =='x' || e.key =='y')) items.set_move_selected_items(e.key)
+  if (e.altKey  && e.key =='x' ) items.select_items_on_row()
+  if (e.ctrlKey && (e.key =='x' || e.key =='y')) {
+    items.move_items_direction = e.key
+    items.mouse_row = main.mouse_pos.row - 1}
+  if (e.ctrlKey && (e.key =='ArrowUp' || e.key =='ArrowDown')) params.change_par_selection(null,e.key)
+  if (e.ctrlKey && e.key =='d') items.repeat_selected()
+  if (e.altKey && e.key =='s') items.snapshot()
+  if (e.ctrlKey && [0,1,2,3,4,5,6,7,8,9].includes(e.key*1)) items.call_snapshot(e.key)
+  if (e.key == 'Backspace' || e.key =='Delete') items.delete_selected()
   if (e.key =='Enter') items.deselect_items()
   if (e.key =='Escape') items.abort_move_items()
 }

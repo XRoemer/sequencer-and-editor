@@ -29,6 +29,8 @@ class Parameters {
     sel.style.textAlignLast = 'center'
     bottom_left_div.appendChild(sel)
     bottom_left_div.appendChild(lbl)
+    //params_drag.ondrag = this.drag_par_hight
+    params_drag.draggable = true
     
     this.create_html_option('vol')
     this.params['vol'] = this.par_default()
@@ -124,10 +126,26 @@ class Parameters {
     par_sel.appendChild(option)
   }
   
-  change_par_selection(e){
-    
-    var ind = e.srcElement.selectedIndex
-    var sel = e.srcElement.options[ind].text
+  change_par_selection(e, arrow){
+    var ind, ind2, sel
+    if (e != null){
+      ind = e.srcElement.selectedIndex
+      sel = e.srcElement.options[ind].text
+    }
+    else {
+      var len = par_sel.options.length 
+      if (len <= 2) return
+      var ind = par_sel.selectedIndex
+      ind = (arrow == 'ArrowUp') ? ind - 1 : ind + 1
+      if (ind == 1){
+        if (arrow == 'ArrowUp') ind -= 1
+        else {ind += 1}
+      }
+      if (ind == -1) ind = len - 1
+      if (ind == len) ind = 0
+      par_sel.selectedIndex = ind
+      sel = par_sel.options[ind].text 
+    }
     
     if (sel == '*new*'){
       var name=prompt("Please enter a name for the new parameter. "+
@@ -255,12 +273,12 @@ class Parameters {
     this.cnv.addEventListener("mousedown", this.mousedown.bind(this),true)
     this.cnv.addEventListener("mouseup", this.mouseup.bind(this),true)
     this.cnv.addEventListener("mouseout", this.mouseup.bind(this),true)
-    params_drag.addEventListener("mousemove", this.drag_cnv.bind(this),true)
+    params_drag.addEventListener("drag", this.drag_cnv.bind(this),true)
   }
   
   drag_cnv(e){
-    if (e.ctrlKey){
-      var dy = e.movementY
+    var dy = e.layerY
+    if (Math.abs(dy) < 10){
       V.params_h = Math.min(Math.max(V.params_h + dy, V.params_min_height), V.params_max_height)
       gui.adjust_view()
       this.set_items()

@@ -4,7 +4,6 @@
   position:fixed;
   top:0px;
   margin:0px;
-  width: 100%;
 }
 .cnv_main {
   height:50px;
@@ -103,7 +102,6 @@
 .par_drag:hover{
 	cursor:row-resize;
 }
-
 
 
 

@@ -1,11 +1,13 @@
 function test() {
 
   try {
+    
+    
+  
+    log(V.win_w)
 
-    log(main.mouse_pos.row)
-
-
-
+    
+    
   }
   catch(e){log(e)}
 }
