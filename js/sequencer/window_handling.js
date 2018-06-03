@@ -89,7 +89,7 @@ function get_key(e){
   if (e.ctrlKey && (e.key =='ArrowUp' || e.key =='ArrowDown')) params.change_par_selection(null,e.key)
   if (e.ctrlKey && e.key =='d') items.repeat_selected()
   if (e.altKey && e.key =='s') items.snapshot()
-  if (e.ctrlKey && [0,1,2,3,4,5,6,7,8,9].includes(e.key*1)) items.call_snapshot(e.key)
+  if (e.ctrlKey && [0,1,2,3,4,5,6,7,8,9].includes(e.key*1)) items.recall_snapshot(e.key)
   if (e.key == 'Backspace' || e.key =='Delete') items.delete_selected()
   if (e.key =='Enter') items.deselect_items()
   if (e.key =='Escape') items.abort_move_items()

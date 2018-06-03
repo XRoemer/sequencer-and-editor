@@ -4,7 +4,7 @@ function test() {
     
     
   
-    log(items.dict)
+    log(items)
 
     
     

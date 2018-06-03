@@ -46,11 +46,6 @@ class Item {
     else new_id = 0
     return new_id
   }
-  set(values){
-    for (var k in values){
-      this[k] = values[k]
-    }
-  }
   set_x(x){
     this.x = x
     this.rect.style.left = x
@@ -69,9 +64,25 @@ class Item {
     this.rect.style.height = h
     this.rect.firstChild.style.height = h
   }
+  set_rect(x,y,w,h){
+    this.set_w(w)
+    this.set_h(h)
+    this.set_x(x)
+    this.set_y(y)
+  }
   set_row(it,row){
     it.row = row
     it.set_y(row2posY(row))
+  }
+  set_midilen(it){
+    this.len_bar = it.len_bar
+    this.len_micro = it.len_micro
+    this.len_cent = it.len_cent
+  }
+  set_midipos(it){
+    this.bar = it.bar 
+    this.micro = it.micro 
+    this.cent = it.cent
   }
 
   delete_rect() {

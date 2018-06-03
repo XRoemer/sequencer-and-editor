@@ -48,20 +48,17 @@ class Items {
       var w = midi2posX(len_bar, len_micro, len_cent)
       var h = V.elem_h
 
-      item.set({bar, micro, cent})
-      item.set({len_bar, len_micro, len_cent})
+      item.set_midipos({bar, micro, cent})
+      item.set_midilen({len_bar, len_micro, len_cent})
       item.id = i
       item.row = row
-      item.set_w(w)
-      item.set_h(h)
+      item.set_rect(x,y,w,h)
       item.set_vol(vol)
-      item.set_x(x)
-      item.set_y(y)
       item.add_listeners(item)
 
       this.dict[i] = item
 
-      document.getElementById('sequencer').appendChild(item.rect);
+      sequencer.appendChild(item.rect);
     }
 
     params.set_items()
@@ -77,19 +74,15 @@ class Items {
       var y = V.win_h - V.elem_h * row - V.elem_h
       var w = midi2posX(len_bar, len_micro, len_cent)
       var h = V.elem_h
-
-      it.set_w(w)
-      it.set_h(h)
-      it.set_x(x)
-      it.set_y(y)
-      document.getElementById('sequencer').appendChild(it.rect);
+      
+      it.set_rect(x,y,w,h)
+      sequencer.appendChild(it.rect);
     }
   }
 
   create_new_item(e,x,y){
     
-    var div = document.getElementById("sequencer");
-    var bound = div.getBoundingClientRect()
+    var bound = sequencer.getBoundingClientRect()
     if (x == null) {
       var x = Math.trunc((e.clientX - bound.left) / V.item_w) * V.item_w
       var y = Math.trunc((e.clientY - bound.top) / V.elem_h) * V.elem_h
@@ -113,55 +106,43 @@ class Items {
     var w = midi2posX(len_bar, len_micro, len_cent)
     var h = V.elem_h
 
-    item.set({bar, micro, cent})
-    item.set({len_bar, len_micro, len_cent})
+    item.set_midipos({bar, micro, cent})
+    item.set_midilen({len_bar, len_micro, len_cent})
     item.id = id
     item.row = row
-    item.set_w(w)
-    item.set_h(h)
     item.set_vol(V.vol)
-    item.set_x(x)
-    item.set_y(y)
+    item.set_rect(x,y,w,h)
     item.add_listeners(item)
 
     this.dict[id] = item
     bar += 1
     micro += 1
     data.send_new_item(id,row,bar,micro,cent,len_bar,len_micro,len_cent,V.vol)
-    document.getElementById('sequencer').appendChild(item.rect)
+    sequencer.appendChild(item.rect)
 
     params.set_items()
     return item
   }
   
   duplicate_item(it, x){
-    
-    var div = document.getElementById("sequencer");
-    var bound = div.getBoundingClientRect()
+
     var item = new Item()
     var midi_pos = posX2midi(x)
+    if (midi_pos.bar > V.amount_bars) return null
     
     item.id = item.get_new_id()
     item.row = it.row
-    item.bar = midi_pos.bar 
-    item.micro = midi_pos.micro 
-    item.cent = midi_pos.cent
-    item.len_bar = it.len_bar
-    item.len_micro = it.len_micro
-    item.len_cent = it.len_cent
+    item.set_midipos(midi_pos)
+    item.set_midilen(it)
     item.set_vol(it.vol)
+    item.set_rect(x,it.y,it.w,it.h)
     item.params = Object.assign({}, it.params)
     item.add_listeners(item)
     
-    item.set_w(it.w)
-    item.set_h(it.h)
-    item.set_x(x)
-    item.set_y(it.y)
-
     this.dict[item.id] = item
 
     data.send_new_item(id,it.row,it.bar+1,it.micro+1,it.cent,it.len_bar,it.len_micro,it.len_cent,it.vol)
-    document.getElementById('sequencer').appendChild(item.rect)
+    sequencer.appendChild(item.rect)
     return item
   }
 
@@ -183,7 +164,7 @@ class Items {
     if (this.snapshots.length > 10) this.snapshots.shift()
   }
   
-  call_snapshot(nr){
+  recall_snapshot(nr){
     this.current_snapshot = nr
     var snsh = this.snapshots[nr]
     if (snsh == null) return
@@ -206,6 +187,7 @@ class Items {
 	new_item = this.create_new_item(null,x,y)
 	new_item.set_row(new_item,it.row)
 	new_item.set_vol(it.vol)
+	new_item.set_midilen(it)
 	new_item.params = it.params
 	skeys = Object.keys(it.params)
 	if (skeys.length != 0) {
@@ -323,7 +305,6 @@ class Items {
       x = highest_x + it.x - lowest_x
       y = it.y
       item = this.duplicate_item(it,x)
-      log(it,item,x)
       it.set_inactive()
       if (item != null){
         item.set_active()

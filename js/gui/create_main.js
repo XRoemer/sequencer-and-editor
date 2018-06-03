@@ -142,8 +142,8 @@ class Main_Gui {
     main_cont.appendChild(btn)
 
 
-    btn = this.create_btn(585, 20, 250 ,250, 1, svg_str.test_str,'player_svg player_click','test')
-    main_cont.appendChild(btn)
+//    btn = this.create_btn(585, 20, 250 ,250, 1, svg_str.test_str,'player_svg player_click','test')
+//    main_cont.appendChild(btn)
   }
 
   call_settings(e) {
