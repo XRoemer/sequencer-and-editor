@@ -14,7 +14,6 @@ class Items {
     
     this.dict = {}
     this.snapshots = []
-    this.current_snapshot = 0
   }
   
   clear_vars(){
@@ -51,10 +50,10 @@ class Items {
       item.set_midipos({bar, micro, cent})
       item.set_midilen({len_bar, len_micro, len_cent})
       item.id = i
-      item.row = row
-      item.set_rect(x,y,w,h)
+      item.set_row(row)
+      item.set_rect(x,w,h)
       item.set_vol(vol)
-      item.add_listeners(item)
+      item.add_listeners()
 
       this.dict[i] = item
 
@@ -75,7 +74,8 @@ class Items {
       var w = midi2posX(len_bar, len_micro, len_cent)
       var h = V.elem_h
       
-      it.set_rect(x,y,w,h)
+      it.set_row(row)
+      it.set_rect(x,w,h)
       sequencer.appendChild(it.rect);
     }
   }
@@ -109,10 +109,10 @@ class Items {
     item.set_midipos({bar, micro, cent})
     item.set_midilen({len_bar, len_micro, len_cent})
     item.id = id
-    item.row = row
+    item.set_row(row)
     item.set_vol(V.vol)
-    item.set_rect(x,y,w,h)
-    item.add_listeners(item)
+    item.set_rect(x,w,h)
+    item.add_listeners()
 
     this.dict[id] = item
     bar += 1
@@ -131,18 +131,29 @@ class Items {
     if (midi_pos.bar > V.amount_bars) return null
     
     item.id = item.get_new_id()
-    item.row = it.row
+    item.set_row(it.row)
     item.set_midipos(midi_pos)
     item.set_midilen(it)
     item.set_vol(it.vol)
-    item.set_rect(x,it.y,it.w,it.h)
+    item.set_rect(x,it.w,it.h)
     item.params = Object.assign({}, it.params)
-    item.add_listeners(item)
+    item.add_listeners()
     
     this.dict[item.id] = item
 
     data.send_new_item(id,it.row,it.bar+1,it.micro+1,it.cent,it.len_bar,it.len_micro,it.len_cent,it.vol)
     sequencer.appendChild(item.rect)
+    return item
+  }
+  
+  new_item(it){
+    var item = new Item()
+    item.id = item.get_new_id()
+    item.set_midi(it)
+    item.row = it.row
+    item.set_vol(it.vol)
+    item.params = it.params
+    item.add_listeners()
     return item
   }
 
@@ -165,35 +176,33 @@ class Items {
   }
   
   recall_snapshot(nr){
-    this.current_snapshot = nr
     var snsh = this.snapshots[nr]
     if (snsh == null) return
-
-    var keys = Object.keys(items.dict)
+    
+    var it, id, item, keys, skeys
+    
+    keys = Object.keys(items.dict)
     for (var i = 0; i < keys.length; i++){
       this.delete_item(keys[i])
     }
-    
+    this.dict = {}
     keys = Object.keys(snsh)
-    var it, it_old, id, x, y, new_item, skeys
+    
     for (var i = 0; i < keys.length; i++){
       id = keys[i]
       it = snsh[id]
-      it_old = items.dict[id]
-      if (it_old == null) {
-	x = midi2posX(it.bar-1, it.micro-1, it.cent)
-	y = row2posY(it.row)
-	
-	new_item = this.create_new_item(null,x,y)
-	new_item.set_row(new_item,it.row)
-	new_item.set_vol(it.vol)
-	new_item.set_midilen(it)
-	new_item.params = it.params
-	skeys = Object.keys(it.params)
-	if (skeys.length != 0) {
-	  for (var k in skeys){
-	    log(skeys[k])
-	  }
+      item = this.new_item(it)
+      this.dict[id] = item
+      	
+      data.send_new_item(item.id,it.row,it.bar+1,it.micro+1,it.cent,
+	  it.len_bar,it.len_micro,it.len_cent,it.vol)
+      	    
+      sequencer.appendChild(item.rect)
+
+      skeys = Object.keys(it.params)
+      if (skeys.length != 0) {
+	for (var k in skeys){
+	  data.send_item_param(item.id, skeys[k], it.params[skeys[k]][0])
 	}
       }
     }
@@ -312,7 +321,6 @@ class Items {
       }
     }
     this.set_selected_items_memory()
-    
   }
   
   move_items_on_yAxis(){
@@ -324,7 +332,7 @@ class Items {
       id = it.id
       orig_row = this.sel_items_memory[id][1]
       new_row = Math.max(orig_row + dx_row,0)
-      it.set_row(it,new_row)
+      it.set_row(new_row)
       data.send_item_row(id,new_row)
     }
   }
@@ -335,7 +343,7 @@ class Items {
       it = this.selected_items[i]
       id = it.id
       row = this.sel_items_memory[id][1]
-      it.set_row(it,row)
+      it.set_row(row)
       data.send_item_row(id,row)
     }
   }
@@ -392,7 +400,7 @@ class Items {
     var old_row = it.row
     var row = Math.max(V.amount_rows - Math.trunc(my / V.elem_h) - 1, 0)
     if (old_row != row) {
-      it.set_row(it,row)
+      it.set_row(row)
       data.send_item_row(id,row)
     }
   }

@@ -5,23 +5,23 @@ class Item {
   constructor() {
     this.id = null
     this.row = null
+    
     this.bar = null
     this.micro = null
     this.cent = null
     this.len_bar = null
     this.len_micro = null
     this.len_cent = null
+    
     this.vol = null
     this.x = null
     this.y = null
     this.w = null
     this.h = null
     this.col = null
-    
     this.curpos = null
 
     this.params = {}
-
     this.rect = this.create_rect()
   }
 
@@ -64,15 +64,14 @@ class Item {
     this.rect.style.height = h
     this.rect.firstChild.style.height = h
   }
-  set_rect(x,y,w,h){
+  set_rect(x,w,h){
     this.set_w(w)
     this.set_h(h)
     this.set_x(x)
-    this.set_y(y)
   }
-  set_row(it,row){
-    it.row = row
-    it.set_y(row2posY(row))
+  set_row(row){
+    this.row = row
+    this.set_y(row2posY(row))
   }
   set_midilen(it){
     this.len_bar = it.len_bar
@@ -83,6 +82,10 @@ class Item {
     this.bar = it.bar 
     this.micro = it.micro 
     this.cent = it.cent
+  }
+  set_midi(it){
+    this.set_midilen(it)
+    this.set_midipos(it)
   }
 
   delete_rect() {
